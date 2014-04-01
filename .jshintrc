@@ -1,0 +1,16 @@
+{
+  "eqeqeq": true,
+  "evil": true,
+  "latedef": "nofunc",
+  "quotmark": "single",
+  "undef": true,
+  "unused": true,
+  "trailing": true,
+
+  "eqnull": true,
+  "evil": true,
+  "globalstrict": true,
+
+  "node": true,
+  "browser": true
+}
