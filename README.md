@@ -1,2 +1,2 @@
-KiwappLib
+kiwapp.js
 =========
