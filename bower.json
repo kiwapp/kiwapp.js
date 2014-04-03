@@ -1,6 +1,6 @@
 {
   "name": "kiwapp.js",
-  "main": "kiwapp.js",
+  "main": "./kiwapp.js",
   "version": "1.4.0",
   "homepage": "kiwapp.github.io/kiwapp.js",
   "authors": [
