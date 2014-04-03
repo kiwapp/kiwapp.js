@@ -30,6 +30,7 @@
 })();
 
 },{"./driver":2}],2:[function(require,module,exports){
+/*global escape: true */
 'use strict';
 (function(){
     /**
@@ -77,7 +78,7 @@
 
         for(var k in args){
             if (i>0) tmp = '&';
-            url = url+tmp+k+'='+encodeURIComponent(JSON.stringify(args[k]) || '');
+            url = url+tmp+k+'='+escape(JSON.stringify(args[k]) || '');
             i++;
         }
 
@@ -162,7 +163,7 @@
      * @return {Driver} The driver object
      */
     Driver.prototype.log = function log(msg){
-        console.log(msg);
+        console.debug('[Driver@log] : ',msg);
         window.Kiwapp.driver().trigger('callApp', {
             call: 'log',
             data: {
@@ -335,10 +336,16 @@
      * @type {Function}
      */
     Web.prototype.exec =  function(url, config){
-        console.log({
-            url : url,
+
+        var log = '';
+        if('call' in config && 'log' === config.call) {
+            log = config.data.message;
+        }
+
+        console.debug('[Web@exec] : simulate native call ' + log, {info : {
+            url    : url,
             config : config
-        });
+        }});
     };
 
     module.exports = Web;
@@ -386,6 +393,14 @@
             loadDriver();
 
         return driver;
+    };
+
+    /**
+     * Return your current environement
+     * @return {String}
+     */
+    Kiwapp.env = function() {
+        return this.driverInstance;
     };
 
     /**
@@ -520,16 +535,25 @@
      */
     function loadDriver(){
         if(config === undefined || config.appParameters === undefined)
-            new Error('You can not load driver if config is not set');
+            throw new Error('You can not load driver if config is not set');
 
         var deviceType = config.appParameters.osID;
 
-        if(deviceType === 'webbrowser')
+        var ua = window.navigator.userAgent;
+        if(ua.indexOf('Mobile') === -1 ||  deviceType === 'webbrowser') {
+            Kiwapp.driverInstance = 'webbrowser';
             driver = new Web();
-        else if(deviceType === 'ios')
+        }
+
+        if( (ua.indexOf('iPhone') > -1 || ua.indexOf('iPad') > -1) ||  deviceType === 'ios') {
+            Kiwapp.driverInstance = 'ios';
             driver = new IOS();
-        else if(deviceType === 'android')
+        }
+
+        if(ua.indexOf('Android') > -1 || deviceType === 'android') {
+            Kiwapp.driverInstance = 'android';
             driver = new AndroidDriver();
+        }
 
         return driver;
     }
@@ -608,6 +632,8 @@
         if(currentIdentifier === undefined){
             currentData = {};
             currentIdentifier = newIdentifier;
+
+            console.debug('[Session@start] : New session fired !');
             if(window.Kiwapp !== undefined){
                 window.Kiwapp.driver().trigger('callApp', {
                     call : 'interaction_start',
@@ -625,6 +651,9 @@
      */
     Session.end = function endSession(){
         if(window.Kiwapp !== undefined && currentIdentifier !== undefined){
+
+            console.debug('[Session@end] : We close the session !');
+
             window.Kiwapp.driver().trigger('callApp', {
                 call : 'interaction_end',
                 data : {}
@@ -645,8 +674,8 @@
     };
 
     /**
-     * Stores data in the current data object  
-     * If a second argument is defined, a 'currentURL' is defined  
+     * Stores data in the current data object
+     * If a second argument is defined, a 'currentURL' is defined
      * This url will be a 'default' url when the send method is called
      * @param  {object} data Data to store
      * @param  {string} url  Default send url
@@ -666,8 +695,8 @@
     };
 
     /**
-     * Calls the native with stored data  
-     * The driver posts it when online come back, or when a ping signal come to the device  
+     * Calls the native with stored data
+     * The driver posts it when online come back, or when a ping signal come to the device
      * @param  {string} url The url to the webservice which recieve data
      * @return {Function}     The Session
      */
@@ -852,6 +881,19 @@
      */
     increase(Storage.prototype, EventEmitter.prototype);
 
+    /**
+     * Get a specific key in the native db.  
+     * Because of asynchronous, you have to listen the 'get' event before use it.  
+     * In your event callback, the first parameter will be the answer as :  
+     * {  
+     *     deviceID : '8764878GI2G8Y2',
+     *     deviceType : 'db_get',
+     *     deviceInfo : 'your requested key',
+     *     deviceData : 'your wanted value'
+     * }  
+     * @param  {string} key The key of the wanted value
+     * @return {Storage}     The storage object
+     */
     Storage.prototype.get = function storageGet(key){
         window.Kiwapp.driver().trigger('callApp', {
             call : 'db_get',
@@ -863,6 +905,12 @@
         return Storage;
     };
 
+    /**
+     * Set a value assiciated to a key in the native db.
+     * @param {string} key   The key of the storde value
+     * @param {multiple} value The value to store
+     * @return {Storage} The Storage object
+     */
     Storage.prototype.set = function storageSet(key, value){
         if(typeof value !== 'string'){
             value = JSON.stringify(value);
@@ -878,6 +926,18 @@
         return Storage;
     };
 
+    /**
+     * Get all the stored keys in the native db.
+     * Because of asynchronous, you have to listen the 'get' event before use it.
+     * In your event callback, the first parameter will be the answer as :  
+     * {  
+     *     deviceID : '8764878GI2G8Y2',
+     *     deviceType : 'db_list_keys',
+     *     deviceInfo : 'the number of key',
+     *     deviceData : ['keyOne', 'keyTwo']
+     * }  
+     * @return {Storage} The Storage object
+     */
     Storage.prototype.keys = function storageKeys(){
         window.Kiwapp.driver().trigger('callApp', {
             call : 'db_list_keys',
@@ -887,6 +947,11 @@
         return Storage;
     };
 
+    /**
+     * Remove a specific key in the native db.
+     * @param  {string} key The key to remove
+     * @return {Storage} The Storage object
+     */
     Storage.prototype.remove = function storageRemove(key){
         window.Kiwapp.driver().trigger('callApp', {
             call : 'db_delete',
@@ -898,6 +963,10 @@
         return Storage;
     };
 
+    /**
+     * Clear the native db
+     * @return {Storage} The Storage object
+     */
     Storage.prototype.clear = function storageClear(){
         window.Kiwapp.driver().trigger('callApp', {
             call : 'db_clear',
@@ -922,7 +991,7 @@
     module.exports = Storage;
 })();
 },{"../../utils/event":12,"../../utils/increaseCapability":15}],9:[function(require,module,exports){
-module.exports = '1.3.2';
+module.exports = '1.4.0';
 
 },{}],10:[function(require,module,exports){
 /*
