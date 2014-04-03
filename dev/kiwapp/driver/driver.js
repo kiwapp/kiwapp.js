@@ -1,3 +1,4 @@
+/*global escape: true */
 'use strict';
 (function(){
     /**
@@ -45,7 +46,7 @@
 
         for(var k in args){
             if (i>0) tmp = '&';
-            url = url+tmp+k+'='+encodeURIComponent(JSON.stringify(args[k]) || '');
+            url = url+tmp+k+'='+escape(JSON.stringify(args[k]) || '');
             i++;
         }
 
@@ -130,7 +131,7 @@
      * @return {Driver} The driver object
      */
     Driver.prototype.log = function log(msg){
-        console.log(msg);
+        console.debug('[Driver@log] : ',msg);
         window.Kiwapp.driver().trigger('callApp', {
             call: 'log',
             data: {

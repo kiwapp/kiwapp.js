@@ -43,6 +43,14 @@
     };
 
     /**
+     * Return your current environement
+     * @return {String}
+     */
+    Kiwapp.env = function() {
+        return this.driverInstance;
+    };
+
+    /**
      * A config getter
      * If value is undefined, we return the whole config (a copy)
      * @param  {string} value the config value to get
@@ -174,16 +182,25 @@
      */
     function loadDriver(){
         if(config === undefined || config.appParameters === undefined)
-            new Error('You can not load driver if config is not set');
+            throw new Error('You can not load driver if config is not set');
 
         var deviceType = config.appParameters.osID;
 
-        if(deviceType === 'webbrowser')
+        var ua = window.navigator.userAgent;
+        if(ua.indexOf('Mobile') === -1 ||  deviceType === 'webbrowser') {
+            Kiwapp.driverInstance = 'webbrowser';
             driver = new Web();
-        else if(deviceType === 'ios')
+        }
+
+        if( (ua.indexOf('iPhone') > -1 || ua.indexOf('iPad') > -1) ||  deviceType === 'ios') {
+            Kiwapp.driverInstance = 'ios';
             driver = new IOS();
-        else if(deviceType === 'android')
+        }
+
+        if(ua.indexOf('Android') > -1 || deviceType === 'android') {
+            Kiwapp.driverInstance = 'android';
             driver = new AndroidDriver();
+        }
 
         return driver;
     }

@@ -25,10 +25,16 @@
      * @type {Function}
      */
     Web.prototype.exec =  function(url, config){
-        console.log({
-            url : url,
+
+        var log = '';
+        if('call' in config && 'log' === config.call) {
+            log = config.data.message;
+        }
+
+        console.debug('[Web@exec] : simulate native call ' + log, {info : {
+            url    : url,
             config : config
-        });
+        }});
     };
 
     module.exports = Web;

@@ -45,6 +45,8 @@
         if(currentIdentifier === undefined){
             currentData = {};
             currentIdentifier = newIdentifier;
+
+            console.debug('[Session@start] : New session fired !');
             if(window.Kiwapp !== undefined){
                 window.Kiwapp.driver().trigger('callApp', {
                     call : 'interaction_start',
@@ -62,6 +64,9 @@
      */
     Session.end = function endSession(){
         if(window.Kiwapp !== undefined && currentIdentifier !== undefined){
+
+            console.debug('[Session@end] : We close the session !');
+
             window.Kiwapp.driver().trigger('callApp', {
                 call : 'interaction_end',
                 data : {}
@@ -82,8 +87,8 @@
     };
 
     /**
-     * Stores data in the current data object  
-     * If a second argument is defined, a 'currentURL' is defined  
+     * Stores data in the current data object
+     * If a second argument is defined, a 'currentURL' is defined
      * This url will be a 'default' url when the send method is called
      * @param  {object} data Data to store
      * @param  {string} url  Default send url
@@ -103,8 +108,8 @@
     };
 
     /**
-     * Calls the native with stored data  
-     * The driver posts it when online come back, or when a ping signal come to the device  
+     * Calls the native with stored data
+     * The driver posts it when online come back, or when a ping signal come to the device
      * @param  {string} url The url to the webservice which recieve data
      * @return {Function}     The Session
      */
