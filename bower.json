@@ -4,7 +4,7 @@
   "version": "1.4.0",
   "homepage": "kiwapp.github.io/kiwapp.js",
   "authors": [
-    "Herzucco adrien@procheo.fr"
+    "Adrien Carta adrien@procheo.fr"
   ],
   "description": "The powerful Kiwapp bridge to native.",
   "keywords": [
@@ -16,6 +16,11 @@
     "node_modules",
     "bower_components",
     "test",
-    "tests"
+    "tests",
+    "gulpfile.js",
+    "bower.json",
+    "package.json",
+    "README.md",
+    "javascripts"
   ]
 }

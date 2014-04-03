@@ -33,6 +33,6 @@ gulp.task('default', function(){
 gulp.task('watch', function(){
     gulp.watch( './dev/**/*.js',function(evt){
         console.log(evt.path, 'changed');
-        gulp.run('build:kiwapp');
+        gulp.run('default');
     });
 });
