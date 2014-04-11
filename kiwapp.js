@@ -978,7 +978,10 @@
      * @return {Storage} The Storage object
      */
     Storage.prototype.clear = function storageClear(){
-        var keys = this.keys();
+
+        var keys = Object.keys(localStorage).filter(function(item) {
+            return /storage_*/.test(item);
+        });
 
         keys.forEach(function(item) {
             localStorage.removeItem(item);
