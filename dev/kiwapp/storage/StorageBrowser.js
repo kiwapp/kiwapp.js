@@ -41,7 +41,7 @@
             self.trigger('get',{
                 deviceID : '8764878GI2G8Y2',
                 deviceType : 'db_get',
-                deviceInfo : 'storage_' + key,
+                deviceInfo : key,
                 deviceData : get
             });
         }, 0);
