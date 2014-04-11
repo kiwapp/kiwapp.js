@@ -33,12 +33,19 @@
      * @return {Storage}     The storage object
      */
     Storage.prototype.get = function storageGet(key){
-        this.trigger('get',{
-            deviceID : '8764878GI2G8Y2',
-            deviceType : 'db_get',
-            deviceInfo : 'storage_' + key,
-            deviceData : localStorage.getItem(key)
-        });
+
+        var self = this,
+            get  = localStorage.getItem('storage_' + key);
+
+        setTimeout(function() {
+            self.trigger('get',{
+                deviceID : '8764878GI2G8Y2',
+                deviceType : 'db_get',
+                deviceInfo : 'storage_' + key,
+                deviceData : get
+            });
+        }, 0);
+
         return Storage;
     };
 
@@ -70,16 +77,19 @@
      */
     Storage.prototype.keys = function storageKeys(){
 
-        var keys = Object.keys(localStorage).filter(function(item) {
-            return /storage_*/.test(item);
-        });
+        var self = this,
+            keys = Object.keys(localStorage).filter(function(item) {
+                return /storage_*/.test(item);
+            });
 
-        this.trigger('keys', {
-            deviceID : '8764878GI2G8Y2',
-            deviceType : 'db_list_keys',
-            deviceInfo : keys.length,
-            deviceData : keys
-        });
+        setTimeout(function() {
+            self.trigger('keys', {
+                deviceID : '8764878GI2G8Y2',
+                deviceType : 'db_list_keys',
+                deviceInfo : keys.length,
+                deviceData : keys
+            });
+        }, 0);
 
         return Storage;
     };
