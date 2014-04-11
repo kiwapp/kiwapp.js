@@ -177,7 +177,7 @@
     module.exports = Driver;
 })();
 
-},{"../../utils/event":12,"../../utils/extend":13,"../../utils/increaseCapability":15,"../../utils/model":17}],3:[function(require,module,exports){
+},{"../../utils/event":14,"../../utils/extend":15,"../../utils/increaseCapability":17,"../../utils/model":19}],3:[function(require,module,exports){
 'use strict';
 (function(){
     //require Driver interface
@@ -364,7 +364,7 @@
     var Web = require('./driver/web');
     var Session = require('./stats/session');
     var Stats = require('./stats/stats');
-    var Storage = require('./storage/storage');
+    var Storage = require('./storage/StorageProxy');
 
     /**
      * store config, storage and driver in private variables to avoid user modifications
@@ -463,9 +463,13 @@
      */
     Kiwapp.storage = function getStorage(){
         if(storage === undefined){
-            storage = new Storage();
-        }
 
+            if('webbrowser' !== this.env()) {
+                storage = new Storage.storage();
+            }else {
+                storage = new Storage.emulation();
+            }
+        }
         return storage;
     };
 
@@ -597,7 +601,7 @@
     return Kiwapp;
 })();
 
-},{"../utils/utils":18,"./driver/android":1,"./driver/iOS":3,"./driver/web":4,"./stats/session":6,"./stats/stats":7,"./storage/storage":8,"./version":9}],6:[function(require,module,exports){
+},{"../utils/utils":20,"./driver/android":1,"./driver/iOS":3,"./driver/web":4,"./stats/session":6,"./stats/stats":7,"./storage/StorageProxy":9,"./version":11}],6:[function(require,module,exports){
 'use strict';
 (function(){
     /**
@@ -762,7 +766,7 @@
     }
     module.exports = Session;
 })();
-},{"../../libs/md5":10,"../../utils/ajax":11,"../../utils/extend":13}],7:[function(require,module,exports){
+},{"../../libs/md5":12,"../../utils/ajax":13,"../../utils/extend":15}],7:[function(require,module,exports){
 'use strict';
 (function(){
 
@@ -872,7 +876,131 @@
     module.exports = Stats;
 })();
             
-},{"../../utils/getDate":14}],8:[function(require,module,exports){
+},{"../../utils/getDate":16}],8:[function(require,module,exports){
+(function(){
+
+    'use strict';
+    /**
+    *  browserify modules dependencies
+    **/
+    var increase = require('../../utils/increaseCapability'),
+        EventEmitter = require('../../utils/event');
+
+    /**
+     * Storage object
+     */
+    function Storage(){
+        EventEmitter.call(this);
+    }
+
+    /**
+     * Adding capabilities to Storage prototype
+     */
+    increase(Storage.prototype, EventEmitter.prototype);
+
+    /**
+     * Get a specific key in the custom browser db.
+     * Because of asynchronous, you have to listen the 'get' event before use it.
+     * In your event callback, the first parameter will be the answer as :
+     * {
+     *     deviceID : '8764878GI2G8Y2',
+     *     deviceType : 'db_get',
+     *     deviceInfo : 'your requested key',
+     *     deviceData : 'your wanted value'
+     * }
+     * @param  {string} key The key of the wanted value
+     * @return {Storage}     The storage object
+     */
+    Storage.prototype.get = function storageGet(key){
+        this.trigger('get',{
+            deviceID : '8764878GI2G8Y2',
+            deviceType : 'db_get',
+            deviceInfo : 'storage_' + key,
+            deviceData : localStorage.getItem(key)
+        });
+        return Storage;
+    };
+
+    /**
+     * Set a value assiciated to a key in the custom browser db.
+     * @param {string} key   The key of the storde value
+     * @param {multiple} value The value to store
+     * @return {Storage} The Storage object
+     */
+    Storage.prototype.set = function storageSet(key, value) {
+        if(typeof value !== 'string'){
+            value = JSON.stringify(value);
+        }
+        localStorage.setItem('storage_' + key, value);
+        return Storage;
+    };
+
+    /**
+     * Get all the stored keys in the custom browser db.
+     * Because of asynchronous, you have to listen the 'get' event before use it.
+     * In your event callback, the first parameter will be the answer as :
+     * {
+     *     deviceID : '8764878GI2G8Y2',
+     *     deviceType : 'db_list_keys',
+     *     deviceInfo : 'the number of key',
+     *     deviceData : ['keyOne', 'keyTwo']
+     * }
+     * @return {Storage} The Storage object
+     */
+    Storage.prototype.keys = function storageKeys(){
+
+        var keys = Object.keys(localStorage).filter(function(item) {
+            return /storage_*/.test(item);
+        });
+
+        this.trigger('keys', {
+            deviceID : '8764878GI2G8Y2',
+            deviceType : 'db_list_keys',
+            deviceInfo : keys.length,
+            deviceData : keys
+        });
+
+        return Storage;
+    };
+
+    /**
+     * Remove a specific key in the custom browser db.
+     * @param  {string} key The key to remove
+     * @return {Storage} The Storage object
+     */
+    Storage.prototype.remove = function storageRemove(key){
+        localStorage.removeItem(key);
+        return Storage;
+    };
+
+    /**
+     * Clear the Localstorage custom db
+     * @return {Storage} The Storage object
+     */
+    Storage.prototype.clear = function storageClear(){
+        var keys = this.keys();
+
+        keys.forEach(function(item) {
+            localStorage.removeItem(item);
+        });
+        return Storage;
+    };
+
+    module.exports = Storage;
+})();
+},{"../../utils/event":14,"../../utils/increaseCapability":17}],9:[function(require,module,exports){
+(function(){
+    'use strict';
+    /**
+     * The export of all utils
+     * @type {Object}
+     */
+    module.exports = {
+        storage : require('./storage'),
+        emulation : require('./StorageBrowser')
+    };
+})();
+},{"./StorageBrowser":8,"./storage":10}],10:[function(require,module,exports){
 'use strict';
 (function(){
     /**
@@ -1003,10 +1131,10 @@
 
     module.exports = Storage;
 })();
-},{"../../utils/event":12,"../../utils/increaseCapability":15}],9:[function(require,module,exports){
-module.exports = '1.4.1';
+},{"../../utils/event":14,"../../utils/increaseCapability":17}],11:[function(require,module,exports){
+module.exports = '1.4.2';
 
-},{}],10:[function(require,module,exports){
+},{}],12:[function(require,module,exports){
 /*
  * A JavaScript implementation of the RSA Data Security, Inc. MD5 Message
  * Digest Algorithm, as defined in RFC 1321.
@@ -1387,7 +1515,7 @@ function bit_rol(num, cnt)
 {
   return (num << cnt) | (num >>> (32 - cnt));
 }
-},{}],11:[function(require,module,exports){
+},{}],13:[function(require,module,exports){
 /* jshint ignore:start */
 'use strict';
 (function(){
@@ -1684,7 +1812,7 @@ function bit_rol(num, cnt)
     }
 })();
 /* jshint ignore:end */
-},{"type-of":19}],12:[function(require,module,exports){
+},{"type-of":21}],14:[function(require,module,exports){
 'use strict';
 (function(){
     function EventEmitter(){
@@ -1740,7 +1868,7 @@ function bit_rol(num, cnt)
 
     module.exports = EventEmitter;
 })();
-},{}],13:[function(require,module,exports){
+},{}],15:[function(require,module,exports){
 'use strict';
 (function(){
     /**
@@ -1755,7 +1883,7 @@ function bit_rol(num, cnt)
         return arguments[0];
     };
 })();
-},{}],14:[function(require,module,exports){
+},{}],16:[function(require,module,exports){
 'use strict';
 (function(){
     /**
@@ -1772,7 +1900,7 @@ function bit_rol(num, cnt)
         return time.getFullYear()+'-'+month+'-'+day + ' ' + time.toTimeString().split(' ')[0];
     };
 })();
-},{}],15:[function(require,module,exports){
+},{}],17:[function(require,module,exports){
 'use strict';
 (function(){
     /**
@@ -1786,7 +1914,7 @@ function bit_rol(num, cnt)
         }
     };
 })();
-},{}],16:[function(require,module,exports){
+},{}],18:[function(require,module,exports){
 'use strict';
 (function(){
     /**
@@ -1809,7 +1937,7 @@ function bit_rol(num, cnt)
     };
 })();
 
-},{}],17:[function(require,module,exports){
+},{}],19:[function(require,module,exports){
 'use strict';
 (function(){
     /**
@@ -1849,7 +1977,7 @@ function bit_rol(num, cnt)
 
     module.exports = Model;
 })();
-},{}],18:[function(require,module,exports){
+},{}],20:[function(require,module,exports){
 'use strict';
 (function(){
     /**
@@ -1866,7 +1994,7 @@ function bit_rol(num, cnt)
         ajax : require('./ajax'),
     };
 })();
-},{"./ajax":11,"./event":12,"./extend":13,"./getDate":14,"./increaseCapability":15,"./loadJS":16,"./model":17}],19:[function(require,module,exports){
+},{"./ajax":13,"./event":14,"./extend":15,"./getDate":16,"./increaseCapability":17,"./loadJS":18,"./model":19}],21:[function(require,module,exports){
 var toString = Object.prototype.toString
 
 module.exports = function(val){
