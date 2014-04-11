@@ -168,8 +168,21 @@
      * Call the native to rotate the webview
      * @return {Kiwapp} Kiwapp itself
      */
-    Kiwapp.rotate = function log(orientation){
+    Kiwapp.rotate = function rotate(orientation){
         Kiwapp.driver().rotate(orientation);
+
+        return Kiwapp;
+    };
+
+    /**
+     * Close the current application
+     * @return {Kiwapp} Kiwapp itself
+     */
+    Kiwapp.close = function close(){
+        Kiwapp.driver().trigger('callApp', {
+            call : 'close_animation',
+            data : {}
+        });
 
         return Kiwapp;
     };
