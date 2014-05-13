@@ -1,32 +1,30 @@
 {
-  "name": "kiwapp.js",
-  "version": "1.3.1",
-  "description": "The Kiwapp core bridge between javacript and native.",
-  "main": "kiwapp.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git://github.com/kiwapp/kiwapp.js.git"
-  },
-  "keywords": [
-    "kiwapp",
-    "bridge"
-  ],
-  "author": "herzucco",
-  "license": "GPLV2",
-  "bugs": {
-    "url": "https://github.com/kiwapp/kiwapp.js/issues"
-  },
-  "homepage": "https://github.com/kiwapp/kiwapp.js",
-  "dependencies": {
-    "gulp": "~3.6.0",
-    "gulp-browserify": "~0.5.0",
-    "jshint-stylish": "~0.1.5",
-    "gulp-jshint": "~1.5.2",
-    "gulp-footer": "~1.0.4",
-    "type-of": "~2.0.1",
-    "gulp-rename": "~1.2.0"
-  }
+    "name": "kiwapp.js",
+    "version": "1.4.2",
+    "description": "The Kiwapp core bridge between javacript and native.",
+    "main": "kiwapp.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git://github.com/kiwapp/kiwapp.js.git"
+    },
+    "keywords": ["kiwapp", "bridge"],
+    "author": "herzucco",
+    "license": "GPLV2",
+    "bugs": {
+        "url": "https://github.com/kiwapp/kiwapp.js/issues"
+    },
+    "homepage": "https://github.com/kiwapp/kiwapp.js",
+    "dependencies": {
+        "gulp": "~3.6.0",
+        "gulp-browserify": "~0.5.0",
+        "jshint-stylish": "~0.1.5",
+        "gulp-jshint": "~1.5.2",
+        "gulp-footer": "~1.0.4",
+        "type-of": "~2.0.1",
+        "gulp-rename": "~1.2.0",
+        "js-beautify": "^1.4.2"
+    }
 }

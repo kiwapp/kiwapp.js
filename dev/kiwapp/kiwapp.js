@@ -11,7 +11,7 @@
     var Web = require('./driver/web');
     var Session = require('./stats/session');
     var Stats = require('./stats/stats');
-    var Storage = require('./storage/storage');
+    var Storage = require('./storage/StorageProxy');
 
     /**
      * store config, storage and driver in private variables to avoid user modifications
@@ -110,9 +110,13 @@
      */
     Kiwapp.storage = function getStorage(){
         if(storage === undefined){
-            storage = new Storage();
-        }
 
+            if('webbrowser' !== this.env()) {
+                storage = new Storage.storage();
+            }else {
+                storage = new Storage.emulation();
+            }
+        }
         return storage;
     };
 
