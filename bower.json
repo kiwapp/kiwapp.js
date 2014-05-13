@@ -1,26 +1,11 @@
 {
-  "name": "kiwapp.js",
-  "main": "./kiwapp.js",
-  "version": "1.4.0",
-  "homepage": "kiwapp.github.io/kiwapp.js",
-  "authors": [
-    "Adrien Carta adrien@procheo.fr"
-  ],
-  "description": "The powerful Kiwapp bridge to native.",
-  "keywords": [
-    "Kiwapp"
-  ],
-  "license": "GPL v2",
-  "ignore": [
-    "**/.*",
-    "node_modules",
-    "bower_components",
-    "test",
-    "tests",
-    "gulpfile.js",
-    "bower.json",
-    "package.json",
-    "README.md",
-    "javascripts"
-  ]
+    "name": "kiwapp.js",
+    "main": "./kiwapp.js",
+    "version": "1.4.2",
+    "homepage": "kiwapp.github.io/kiwapp.js",
+    "authors": ["Adrien Carta adrien@procheo.fr"],
+    "description": "The powerful Kiwapp bridge to native.",
+    "keywords": ["Kiwapp"],
+    "license": "GPL v2",
+    "ignore": ["**/.*", "node_modules", "bower_components", "test", "tests", "gulpfile.js", "bower.json", "package.json", "README.md", "javascripts"]
 }
