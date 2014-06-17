@@ -369,7 +369,7 @@
     /**
      * store config, storage and driver in private variables to avoid user modifications
      */
-    var config, driver, storage;
+    var config = {}, driver, storage;
 
     /**
      * Kiwapp is the function which stores all kiwapp.js features
@@ -1145,7 +1145,7 @@
     module.exports = Storage;
 })();
 },{"../../utils/event":14,"../../utils/increaseCapability":17}],11:[function(require,module,exports){
-module.exports = '1.4.2';
+module.exports = '1.4.3';
 
 },{}],12:[function(require,module,exports){
 /*

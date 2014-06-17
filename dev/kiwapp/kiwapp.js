@@ -16,7 +16,7 @@
     /**
      * store config, storage and driver in private variables to avoid user modifications
      */
-    var config, driver, storage;
+    var config = {}, driver, storage;
 
     /**
      * Kiwapp is the function which stores all kiwapp.js features
