@@ -20,15 +20,15 @@
     increase(Storage.prototype, EventEmitter.prototype);
 
     /**
-     * Get a specific key in the native db.  
-     * Because of asynchronous, you have to listen the 'get' event before use it.  
-     * In your event callback, the first parameter will be the answer as :  
-     * {  
+     * Get a specific key in the native db.
+     * Because of asynchronous, you have to listen the 'get' event before use it.
+     * In your event callback, the first parameter will be the answer as :
+     * {
      *     deviceID : '8764878GI2G8Y2',
      *     deviceType : 'db_get',
      *     deviceInfo : 'your requested key',
      *     deviceData : 'your wanted value'
-     * }  
+     * }
      * @param  {string} key The key of the wanted value
      * @return {Storage}     The storage object
      */
@@ -50,9 +50,7 @@
      * @return {Storage} The Storage object
      */
     Storage.prototype.set = function storageSet(key, value){
-        if(typeof value !== 'string'){
-            value = JSON.stringify(value);
-        }
+
         window.Kiwapp.driver().trigger('callApp', {
             call : 'db_insert',
             data : {
@@ -60,6 +58,7 @@
                 value : value
             }
         });
+        Kiwapp.log('[Storage@set] ' + value);
 
         return Storage;
     };
@@ -67,13 +66,13 @@
     /**
      * Get all the stored keys in the native db.
      * Because of asynchronous, you have to listen the 'get' event before use it.
-     * In your event callback, the first parameter will be the answer as :  
-     * {  
+     * In your event callback, the first parameter will be the answer as :
+     * {
      *     deviceID : '8764878GI2G8Y2',
      *     deviceType : 'db_list_keys',
      *     deviceInfo : 'the number of key',
      *     deviceData : ['keyOne', 'keyTwo']
-     * }  
+     * }
      * @return {Storage} The Storage object
      */
     Storage.prototype.keys = function storageKeys(){
