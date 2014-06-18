@@ -1,6 +1,5 @@
 {
   "eqeqeq": true,
-  "evil": true,
   "latedef": "nofunc",
   "quotmark": "single",
   "undef": true,
@@ -12,5 +11,9 @@
   "globalstrict": true,
 
   "node": true,
-  "browser": true
+  "browser": true,
+
+  "globals": {
+    "Kiwapp": true
+  }
 }
