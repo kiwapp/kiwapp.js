@@ -1145,7 +1145,6 @@
 })();
 },{"../../utils/event":14,"../../utils/increaseCapability":17}],11:[function(require,module,exports){
 module.exports = '1.4.4';
-
 },{}],12:[function(require,module,exports){
 /*
  * A JavaScript implementation of the RSA Data Security, Inc. MD5 Message
