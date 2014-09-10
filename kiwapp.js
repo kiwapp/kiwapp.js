@@ -30,7 +30,6 @@
 })();
 
 },{"./driver":2}],2:[function(require,module,exports){
-/*global escape: true */
 'use strict';
 (function(){
     /**
@@ -78,7 +77,7 @@
 
         for(var k in args){
             if (i>0) tmp = '&';
-            url = url+tmp+k+'='+escape(JSON.stringify(args[k]) || '');
+            url = url+tmp+k+'='+encodeURIComponent(JSON.stringify(args[k]) || '');
             i++;
         }
 
@@ -519,6 +518,26 @@
         }
 
         return Kiwapp;
+    };
+
+    /**
+     * getKDSWriterCredentials getter for kds credential object
+     * @return object
+     */
+    Kiwapp.getKDSWriterCredentials = function getKDSCredentials(){
+    var object   = Kiwapp.get().webHooksParameters;
+    var kdsCredentials = {};
+
+    if(object.KDS_INSTANCIATE_RESPONSE!==undefined){
+        try {
+            kdsCredentials = object.KDS_INSTANCIATE_RESPONSE.app;
+            }
+        catch(e){
+                Kiwapp.log('please verify your credential for writing');
+            }
+        }
+
+    return kdsCredentials;
     };
 
     /**
@@ -1066,7 +1085,9 @@
      * @return {Storage} The Storage object
      */
     Storage.prototype.set = function storageSet(key, value){
-
+        if(typeof value !== 'string'){
+            value = JSON.stringify(value);
+        }
         window.Kiwapp.driver().trigger('callApp', {
             call : 'db_insert',
             data : {
@@ -1144,7 +1165,7 @@
     module.exports = Storage;
 })();
 },{"../../utils/event":14,"../../utils/increaseCapability":17}],11:[function(require,module,exports){
-module.exports = '1.4.4';
+module.exports = '1.4.5';
 },{}],12:[function(require,module,exports){
 /*
  * A JavaScript implementation of the RSA Data Security, Inc. MD5 Message

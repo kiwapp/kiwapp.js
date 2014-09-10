@@ -169,6 +169,26 @@
     };
 
     /**
+     * getKDSWriterCredentials getter for kds credential object
+     * @return object
+     */
+    Kiwapp.getKDSWriterCredentials = function getKDSCredentials(){
+    var object   = Kiwapp.get().webHooksParameters;
+    var kdsCredentials = {};
+
+    if(object.KDS_INSTANCIATE_RESPONSE!==undefined){
+        try {
+            kdsCredentials = object.KDS_INSTANCIATE_RESPONSE.app;
+            }
+        catch(e){
+                Kiwapp.log('please verify your credential for writing');
+            }
+        }
+
+    return kdsCredentials;
+    };
+
+    /**
      * Call the native to rotate the webview
      * @return {Kiwapp} Kiwapp itself
      */
