@@ -128,6 +128,7 @@
             currentData = {};
             var ajaxConfig = {
                 data : copy,
+                contentType: 'application/json; charset=utf-8',
                 url : url,
                 error : function(){
                     window.Kiwapp.driver().post(copy, 'custom', url, btoa(JSON.stringify(options)));

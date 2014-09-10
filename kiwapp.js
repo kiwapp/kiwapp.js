@@ -751,6 +751,7 @@
             currentData = {};
             var ajaxConfig = {
                 data : copy,
+                contentType: 'application/json; charset=utf-8',
                 url : url,
                 error : function(){
                     window.Kiwapp.driver().post(copy, 'custom', url, btoa(JSON.stringify(options)));
@@ -1165,7 +1166,7 @@
     module.exports = Storage;
 })();
 },{"../../utils/event":14,"../../utils/increaseCapability":17}],11:[function(require,module,exports){
-module.exports = '1.4.5';
+module.exports = '1.4.6';
 },{}],12:[function(require,module,exports){
 /*
  * A JavaScript implementation of the RSA Data Security, Inc. MD5 Message
