@@ -50,7 +50,9 @@
      * @return {Storage} The Storage object
      */
     Storage.prototype.set = function storageSet(key, value){
-
+        if(typeof value !== 'string'){
+            value = JSON.stringify(value);
+        }
         window.Kiwapp.driver().trigger('callApp', {
             call : 'db_insert',
             data : {

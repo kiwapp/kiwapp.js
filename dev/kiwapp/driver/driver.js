@@ -46,7 +46,7 @@
 
         for(var k in args){
             if (i>0) tmp = '&';
-            url = url+tmp+k+'='+escape(JSON.stringify(args[k]) || '');
+            url = url+tmp+k+'='+encodeURIComponent(JSON.stringify(args[k]) || '');
             i++;
         }
 
