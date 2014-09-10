@@ -1,4 +1,3 @@
-/*global escape: true */
 'use strict';
 (function(){
     /**
