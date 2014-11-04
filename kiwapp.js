@@ -1,4 +1,35 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);throw new Error("Cannot find module '"+o+"'")}var f=n[o]={exports:{}};t[o][0].call(f.exports,function(e){var n=t[o][1][e];return s(n?n:e)},f,f.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
+var toString = Object.prototype.toString
+
+module.exports = function(val){
+  switch (toString.call(val)) {
+    case '[object Function]': return 'function'
+    case '[object Date]': return 'date'
+    case '[object RegExp]': return 'regexp'
+    case '[object Arguments]': return 'arguments'
+    case '[object Array]': return 'array'
+    case '[object String]': return 'string'
+  }
+
+  if (typeof val == 'object' && val && typeof val.length == 'number') {
+    try {
+      if (typeof val.callee == 'function') return 'arguments';
+    } catch (ex) {
+      if (ex instanceof TypeError) {
+        return 'arguments';
+      }
+    }
+  }
+
+  if (val === null) return 'null'
+  if (val === undefined) return 'undefined'
+  if (val && val.nodeType === 1) return 'element'
+  if (val === Object(val)) return 'object'
+
+  return typeof val
+}
+
+},{}],2:[function(require,module,exports){
 'use strict';
 (function(){
     /**
@@ -29,7 +60,7 @@
     module.exports = AndroidDriver;
 })();
 
-},{"./driver":2}],2:[function(require,module,exports){
+},{"./driver":3}],3:[function(require,module,exports){
 'use strict';
 (function(){
     /**
@@ -176,7 +207,7 @@
     module.exports = Driver;
 })();
 
-},{"../../utils/event":14,"../../utils/extend":15,"../../utils/increaseCapability":17,"../../utils/model":19}],3:[function(require,module,exports){
+},{"../../utils/event":15,"../../utils/extend":16,"../../utils/increaseCapability":18,"../../utils/model":20}],4:[function(require,module,exports){
 'use strict';
 (function(){
     //require Driver interface
@@ -307,7 +338,7 @@
 
     module.exports = iOS;
 })();
-},{"./driver":2}],4:[function(require,module,exports){
+},{"./driver":3}],5:[function(require,module,exports){
 'use strict';
 (function(){
     /**
@@ -349,7 +380,7 @@
 
     module.exports = Web;
 })();
-},{"./driver":2}],5:[function(require,module,exports){
+},{"./driver":3}],6:[function(require,module,exports){
 'use strict';
 (function(){
 
@@ -620,7 +651,7 @@
     return Kiwapp;
 })();
 
-},{"../utils/utils":20,"./driver/android":1,"./driver/iOS":3,"./driver/web":4,"./stats/session":6,"./stats/stats":7,"./storage/StorageProxy":9,"./version":11}],6:[function(require,module,exports){
+},{"../utils/utils":21,"./driver/android":2,"./driver/iOS":4,"./driver/web":5,"./stats/session":7,"./stats/stats":8,"./storage/StorageProxy":10,"./version":12}],7:[function(require,module,exports){
 'use strict';
 (function(){
     /**
@@ -746,14 +777,36 @@
         else{
             url = config;
         }
-        if(window.Kiwapp !== undefined && Object.keys(currentData).length > 0){
+        if(window.Kiwapp !== undefined){
             var copy = JSON.parse(JSON.stringify(currentData));
             currentData = {};
             var ajaxConfig = {
                 data : copy,
                 contentType: 'application/json; charset=utf-8',
                 url : url,
-                error : function(){
+                success : function(success){
+                    if(config.success) {
+                        config.success(success);
+                    }
+                },
+                error : function(jqXHR, exception){
+                    if(config.error) {
+                        if (jqXHR.status === 0) {
+                             config.error('Not connect.\n Verify Network.');
+                         } else if (jqXHR.status === 404) {
+                             config.error('Requested page not found. [404]');
+                         } else if (jqXHR.status === 500) {
+                            config.error('Internal Server Error [500].');
+                         } else if (exception === 'parsererror') {
+                            config.error('Requested JSON parse failed.');
+                         } else if (exception === 'timeout') {
+                            config.error('Time out error.');
+                         } else if (exception === 'abort') {
+                            config.error('Ajax request aborted.');
+                         } else {
+                            config.error('Uncaught Error.\n' + jqXHR.responseText);
+                         }
+                     }
                     window.Kiwapp.driver().post(copy, 'custom', url, btoa(JSON.stringify(options)));
                 }
             };
@@ -786,7 +839,7 @@
     }
     module.exports = Session;
 })();
-},{"../../libs/md5":12,"../../utils/ajax":13,"../../utils/extend":15}],7:[function(require,module,exports){
+},{"../../libs/md5":13,"../../utils/ajax":14,"../../utils/extend":16}],8:[function(require,module,exports){
 'use strict';
 (function(){
 
@@ -896,7 +949,7 @@
     module.exports = Stats;
 })();
             
-},{"../../utils/getDate":16}],8:[function(require,module,exports){
+},{"../../utils/getDate":17}],9:[function(require,module,exports){
 (function(){
 
     'use strict';
@@ -1021,7 +1074,7 @@
 
     module.exports = Storage;
 })();
-},{"../../utils/event":14,"../../utils/increaseCapability":17}],9:[function(require,module,exports){
+},{"../../utils/event":15,"../../utils/increaseCapability":18}],10:[function(require,module,exports){
 (function(){
     'use strict';
     /**
@@ -1033,7 +1086,7 @@
         emulation : require('./StorageBrowser')
     };
 })();
-},{"./StorageBrowser":8,"./storage":10}],10:[function(require,module,exports){
+},{"./StorageBrowser":9,"./storage":11}],11:[function(require,module,exports){
 'use strict';
 (function(){
     /**
@@ -1165,9 +1218,9 @@
 
     module.exports = Storage;
 })();
-},{"../../utils/event":14,"../../utils/increaseCapability":17}],11:[function(require,module,exports){
+},{"../../utils/event":15,"../../utils/increaseCapability":18}],12:[function(require,module,exports){
 module.exports = '1.4.6';
-},{}],12:[function(require,module,exports){
+},{}],13:[function(require,module,exports){
 /*
  * A JavaScript implementation of the RSA Data Security, Inc. MD5 Message
  * Digest Algorithm, as defined in RFC 1321.
@@ -1548,7 +1601,7 @@ function bit_rol(num, cnt)
 {
   return (num << cnt) | (num >>> (32 - cnt));
 }
-},{}],13:[function(require,module,exports){
+},{}],14:[function(require,module,exports){
 /* jshint ignore:start */
 'use strict';
 (function(){
@@ -1845,7 +1898,7 @@ function bit_rol(num, cnt)
     }
 })();
 /* jshint ignore:end */
-},{"type-of":21}],14:[function(require,module,exports){
+},{"type-of":1}],15:[function(require,module,exports){
 'use strict';
 (function(){
     function EventEmitter(){
@@ -1901,7 +1954,7 @@ function bit_rol(num, cnt)
 
     module.exports = EventEmitter;
 })();
-},{}],15:[function(require,module,exports){
+},{}],16:[function(require,module,exports){
 'use strict';
 (function(){
     /**
@@ -1916,7 +1969,7 @@ function bit_rol(num, cnt)
         return arguments[0];
     };
 })();
-},{}],16:[function(require,module,exports){
+},{}],17:[function(require,module,exports){
 'use strict';
 (function(){
     /**
@@ -1933,7 +1986,7 @@ function bit_rol(num, cnt)
         return time.getFullYear()+'-'+month+'-'+day + ' ' + time.toTimeString().split(' ')[0];
     };
 })();
-},{}],17:[function(require,module,exports){
+},{}],18:[function(require,module,exports){
 'use strict';
 (function(){
     /**
@@ -1947,7 +2000,7 @@ function bit_rol(num, cnt)
         }
     };
 })();
-},{}],18:[function(require,module,exports){
+},{}],19:[function(require,module,exports){
 'use strict';
 (function(){
     /**
@@ -1970,7 +2023,7 @@ function bit_rol(num, cnt)
     };
 })();
 
-},{}],19:[function(require,module,exports){
+},{}],20:[function(require,module,exports){
 'use strict';
 (function(){
     /**
@@ -2010,7 +2063,7 @@ function bit_rol(num, cnt)
 
     module.exports = Model;
 })();
-},{}],20:[function(require,module,exports){
+},{}],21:[function(require,module,exports){
 'use strict';
 (function(){
     /**
@@ -2027,35 +2080,4 @@ function bit_rol(num, cnt)
         ajax : require('./ajax'),
     };
 })();
-},{"./ajax":13,"./event":14,"./extend":15,"./getDate":16,"./increaseCapability":17,"./loadJS":18,"./model":19}],21:[function(require,module,exports){
-var toString = Object.prototype.toString
-
-module.exports = function(val){
-  switch (toString.call(val)) {
-    case '[object Function]': return 'function'
-    case '[object Date]': return 'date'
-    case '[object RegExp]': return 'regexp'
-    case '[object Arguments]': return 'arguments'
-    case '[object Array]': return 'array'
-    case '[object String]': return 'string'
-  }
-
-  if (typeof val == 'object' && val && typeof val.length == 'number') {
-    try {
-      if (typeof val.callee == 'function') return 'arguments';
-    } catch (ex) {
-      if (ex instanceof TypeError) {
-        return 'arguments';
-      }
-    }
-  }
-
-  if (val === null) return 'null'
-  if (val === undefined) return 'undefined'
-  if (val && val.nodeType === 1) return 'element'
-  if (val === Object(val)) return 'object'
-
-  return typeof val
-}
-
-},{}]},{},[5]);
+},{"./ajax":14,"./event":15,"./extend":16,"./getDate":17,"./increaseCapability":18,"./loadJS":19,"./model":20}]},{},[6]);
