@@ -89,6 +89,34 @@
     };
 
     /**
+     * post method used to post offline entries
+     * @param  {object} data    data to send
+     * @param  {string} type    define the entry type
+     * @param  {url} url     if type is custom, define the url destination
+     * @param  {options} options if type is custom, define the send options
+     */
+    Driver.prototype.print = function(cardId, cardText){
+        
+        if(!cardText) {
+            console.warn('No text to print');
+
+            return this;
+        }
+        if(!cardId) {
+            cardId = Kiwapp.driver().generateKey();
+        }
+        window.Kiwapp.driver().trigger('callApp', {
+            call : 'printCard',
+            data : {
+                card_id : cardId,
+                card_text : cardText
+            }
+        });
+
+        return this;
+    };
+
+    /**
      * Set the device rotation
      * @param  {string} orientation define the wanted orientation
      * @return {Driver}             the driver object
@@ -141,5 +169,14 @@
         return this;
     };
 
+    Driver.prototype.generateKey = function() {
+        var key = '';
+        var possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+        for( var i=0; i < 5; i++ ) {
+            key += possible.charAt(Math.floor(Math.random() * possible.length));
+        }
+
+        return 'kw_card_' + key + Math.round(new Date().getTime() / 1000);
+    };
     module.exports = Driver;
 })();
