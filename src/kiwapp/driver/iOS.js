@@ -99,7 +99,7 @@
         localStorage.setItem(key, cardText);
 
         window.Kiwapp.driver().trigger('callApp', {
-            call : 'printCard',
+            call : 'print_card',
             data : {
                 card_id : cardId,
                 card_id_localStorage : key

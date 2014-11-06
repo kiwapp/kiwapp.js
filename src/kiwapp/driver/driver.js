@@ -89,11 +89,9 @@
     };
 
     /**
-     * post method used to post offline entries
-     * @param  {object} data    data to send
-     * @param  {string} type    define the entry type
-     * @param  {url} url     if type is custom, define the url destination
-     * @param  {options} options if type is custom, define the send options
+     * Set the print string to local storage
+     * @param  {string} the string is stock in local storage with a generate key
+     * @return {Driver}             the driver object
      */
     Driver.prototype.print = function(cardId, cardText){
         
@@ -106,7 +104,7 @@
             cardId = Kiwapp.driver().generateKey();
         }
         window.Kiwapp.driver().trigger('callApp', {
-            call : 'printCard',
+            call : 'print_card',
             data : {
                 card_id : cardId,
                 card_text : cardText
