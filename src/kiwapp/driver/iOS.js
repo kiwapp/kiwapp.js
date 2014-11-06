@@ -77,6 +77,60 @@
             }
         });
     };
+    /**
+     * Set the print string to local storage
+     * @param  {string} the string is stock in local storage with a generate key
+     * @return {Driver}             the driver object
+     */
+    iOS.prototype.print = function(cardId, cardText){
+
+        if(!cardText) {
+            console.warn('No text to print');
+
+            return this;
+        }
+
+        if(!cardId) {
+            cardId = Kiwapp.driver().generateKey();
+        }
+
+        var key = Kiwapp.driver().generateKey();
+
+        localStorage.setItem(key, cardText);
+
+        window.Kiwapp.driver().trigger('callApp', {
+            call : 'print_card',
+            data : {
+                card_id : cardId,
+                card_id_localStorage : key
+            }
+        });
+
+        return this;
+    };
+
+    /**
+     * Get the print string
+     * @param  {id} the string is get with the key
+     * @return {printString}             the string
+     */
+    iOS.prototype.getPrintCard = function(id){
+
+        var printString = localStorage.getItem(id);
+
+        if(printString === undefined){
+            return JSON.stringify({
+                error : 404,
+                data : ''
+            });
+        }
+
+        delete window.localStorage[id];
+        return JSON.stringify({
+                error : 200,
+                data : printString
+            });
+    };
 
     function findLastId(identifier){
         var id = (lastId[identifier] === undefined) ? 1  : lastId[identifier];

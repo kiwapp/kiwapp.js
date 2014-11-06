@@ -89,6 +89,32 @@
     };
 
     /**
+     * Set the print string to local storage
+     * @param  {string} the string is stock in local storage with a generate key
+     * @return {Driver}             the driver object
+     */
+    Driver.prototype.print = function(cardId, cardText){
+        
+        if(!cardText) {
+            console.warn('No text to print');
+
+            return this;
+        }
+        if(!cardId) {
+            cardId = Kiwapp.driver().generateKey();
+        }
+        window.Kiwapp.driver().trigger('callApp', {
+            call : 'print_card',
+            data : {
+                card_id : cardId,
+                card_text : cardText
+            }
+        });
+
+        return this;
+    };
+
+    /**
      * Set the device rotation
      * @param  {string} orientation define the wanted orientation
      * @return {Driver}             the driver object
@@ -141,5 +167,14 @@
         return this;
     };
 
+    Driver.prototype.generateKey = function() {
+        var key = '';
+        var possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+        for( var i=0; i < 5; i++ ) {
+            key += possible.charAt(Math.floor(Math.random() * possible.length));
+        }
+
+        return 'kw_card_' + key + Math.round(new Date().getTime() / 1000);
+    };
     module.exports = Driver;
 })();
