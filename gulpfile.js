@@ -7,17 +7,18 @@ var gulp          = require('gulp'),
     jshintStylish = require('jshint-stylish'),
     footer        = require('gulp-footer'),
     fs            = require('fs'),
-    jsbeautify    = require('js-beautify').js_beautify;
+    jsbeautify    = require('js-beautify').js_beautify,
+    path          = './src';
 
 gulp.task('browserifyKiwapp', function(){
-    fs.readFile('dev/kiwapp/version.js', 'utf8', function (err,data) {
+    fs.readFile(path + '/kiwapp/version.js', 'utf8', function (err,data) {
 
         if(err) {
             throw err;
         }
 
         var version = data.split('\'')[1].replace(/(?:(?:^|\n)\s+|\s+(?:$|\n))/g,'').replace(/\s+/g,' ');
-      gulp.src('./dev/kiwapp/kiwapp.js')
+        gulp.src(path + '/kiwapp/kiwapp.js')
         .pipe(browserify())
         .pipe(rename('kiwapp.js'))
         .pipe(footer(';'))
@@ -27,7 +28,7 @@ gulp.task('browserifyKiwapp', function(){
 });
 
 gulp.task('checkKiwapp', function () {
-  return gulp.src(['./dev/kiwapp/**/*.js', './dev/utils/*.js'])
+  return gulp.src([path + '/kiwapp/**/*.js', path + '/utils/*.js'])
     .pipe(jshint('.jshintrc'))
     .pipe(jshint.reporter(jshintStylish));
 });
@@ -40,7 +41,7 @@ gulp.task('default', function(){
 
 
 gulp.task('watch', function(){
-    gulp.watch( './dev/**/*.js',function(evt){
+    gulp.watch( path + '/**/*.js',function(evt){
         console.log(evt.path, 'changed');
         gulp.run('default');
     });
@@ -49,7 +50,7 @@ gulp.task('watch', function(){
 // Auto update the version inside bower and package.json
 gulp.task("version", function() {
 
-    fs.readFile('dev/kiwapp/version.js', 'utf8', function (err,data) {
+    fs.readFile(path + '/kiwapp/version.js', 'utf8', function (err,data) {
 
         if(err) {
             throw err;

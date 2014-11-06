@@ -123,14 +123,36 @@
         else{
             url = config;
         }
-        if(window.Kiwapp !== undefined && Object.keys(currentData).length > 0){
+        if(window.Kiwapp !== undefined){
             var copy = JSON.parse(JSON.stringify(currentData));
             currentData = {};
             var ajaxConfig = {
                 data : copy,
                 contentType: 'application/json; charset=utf-8',
                 url : url,
-                error : function(){
+                success : function(success){
+                    if(config.success) {
+                        config.success(success);
+                    }
+                },
+                error : function(jqXHR, exception){
+                    if(config.error) {
+                        if (jqXHR.status === 0) {
+                             config.error('Not connect.\n Verify Network.');
+                         } else if (jqXHR.status === 404) {
+                             config.error('Requested page not found. [404]');
+                         } else if (jqXHR.status === 500) {
+                            config.error('Internal Server Error [500].');
+                         } else if (exception === 'parsererror') {
+                            config.error('Requested JSON parse failed.');
+                         } else if (exception === 'timeout') {
+                            config.error('Time out error.');
+                         } else if (exception === 'abort') {
+                            config.error('Ajax request aborted.');
+                         } else {
+                            config.error('Uncaught Error.\n' + jqXHR.responseText);
+                         }
+                     }
                     window.Kiwapp.driver().post(copy, 'custom', url, btoa(JSON.stringify(options)));
                 }
             };
