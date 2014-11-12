@@ -126,6 +126,22 @@ module.exports = function(val){
     };
 
     /**
+     * Open native app with bridge
+     * post android package name for open native app
+     * @param  {string} packageName    Package name android app
+     */
+    Driver.prototype.openNativeApp = function(packageName){
+       
+        window.Kiwapp.driver().trigger('callApp', {
+        call : 'open_native_app',
+            data : {
+                package_name : packageName
+            }
+        });
+
+    };
+    
+    /**
      * Catch the callApp event and send it to the native
      * @param  {object} config The call config
      */
