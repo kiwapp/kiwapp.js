@@ -67,7 +67,7 @@
      * post android package name for open native app
      * @param  {string} packageName    Package name android app
      */
-    Driver.prototype.openNativeApp = function(packageName){
+    Driver.prototype.openNativeApp = function openNativeApp(packageName){
        
         window.Kiwapp.driver().trigger('callApp', {
         call : 'open_native_app',
@@ -76,6 +76,21 @@
             }
         });
 
+    };
+
+    /**
+     * Open html5 app with bridge
+     * post android package name for open native app
+     * @param  {string} applicationIdentifier    The unique application identifier, this identifier can be found on the Kiwapp manager backoffice
+     */
+    Driver.prototype.openHTML5App = function openHTML5App(applicationIdentifier){
+
+        window.Kiwapp.driver().trigger('callApp', {
+            call : 'open_html5_app',
+            data : {
+                application_identifier : applicationIdentifier
+            }
+        });
     };
     
     /**
