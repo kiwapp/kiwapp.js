@@ -32,7 +32,7 @@
         http.open('HEAD', './config/kiwapp_config.js', false);
         http.send();
         if(http.status !== 200) {
-            console.log('No kiwapp_config.js file found, check within your config folder or add this folder with this file name inside ');
+            console.log('No kiwapp_config.js file found, check within your config folder or add this folder with this file name inside (view README file: https://github.com/kiwapp/kiwapp.js/blob/master/README.md)');
         }
     /**
      * Launch the event listening
