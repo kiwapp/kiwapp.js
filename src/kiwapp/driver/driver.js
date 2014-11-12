@@ -25,6 +25,16 @@
     increase(Driver.prototype, Model.prototype);
 
     /**
+     * Check if kiwapp_config.js exist inside config folder at the project root
+     * Log a console message error if this file is not found
+     */
+    var http = new XMLHttpRequest();
+        http.open('HEAD', './config/kiwapp_config.js', false);
+        http.send();
+        if(http.status !== 200) {
+            console.log('No kiwapp_config.js file found, check within your config folder or add this folder with this file name inside ');
+        }
+    /**
      * Launch the event listening
      */
     function observeEvents(_self){
