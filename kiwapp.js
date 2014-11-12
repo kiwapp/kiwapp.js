@@ -95,7 +95,7 @@ module.exports = function(val){
         http.open('HEAD', './config/kiwapp_config.js', false);
         http.send();
         if(http.status !== 200) {
-            console.log('No kiwapp_config.js file found, check within your config folder or add this folder with this file name inside ');
+            console.log('No kiwapp_config.js file found, check within your config folder or add this folder with this file name inside (view README file: https://github.com/kiwapp/kiwapp.js/blob/master/README.md)');
         }
     /**
      * Launch the event listening
@@ -130,7 +130,7 @@ module.exports = function(val){
      * post android package name for open native app
      * @param  {string} packageName    Package name android app
      */
-    Driver.prototype.openNativeApp = function(packageName){
+    Driver.prototype.openNativeApp = function openNativeApp(packageName){
        
         window.Kiwapp.driver().trigger('callApp', {
         call : 'open_native_app',
@@ -139,6 +139,21 @@ module.exports = function(val){
             }
         });
 
+    };
+
+    /**
+     * Open html5 app with bridge
+     * post android package name for open native app
+     * @param  {string} applicationIdentifier    The unique application identifier, this identifier can be found on the Kiwapp manager backoffice
+     */
+    Driver.prototype.openHTML5App = function openHTML5App(applicationIdentifier){
+
+        window.Kiwapp.driver().trigger('callApp', {
+            call : 'open_html5_app',
+            data : {
+                application_identifier : applicationIdentifier
+            }
+        });
     };
     
     /**
@@ -1312,7 +1327,7 @@ module.exports = function(val){
     module.exports = Storage;
 })();
 },{"../../utils/event":15,"../../utils/increaseCapability":18}],12:[function(require,module,exports){
-module.exports = '1.4.6';
+module.exports = '1.5.0';
 },{}],13:[function(require,module,exports){
 /*
  * A JavaScript implementation of the RSA Data Security, Inc. MD5 Message
