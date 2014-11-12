@@ -5,7 +5,7 @@ kiwapp.js
 
 ### Notice: For use this lib you must have a config folder at the racine of your project and a kiwapp_config.js inside
 
-You can getup this example file inside your config folder:
+You can setup this example file inside your config folder:
 
 	Kiwapp.set({
 	"appParameters":{
