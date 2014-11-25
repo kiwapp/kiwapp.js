@@ -77,12 +77,14 @@
             }
         });
     };
+
     /**
      * Set the print string to local storage
      * @param  {string} the string is stock in local storage with a generate key
+     * @param  {string} The identifier id for the print (this identifier will be send in the callback method and you can identify the cart what you trying to print)
      * @return {Driver}             the driver object
      */
-    iOS.prototype.print = function(cardId, cardText){
+    iOS.prototype.print = function(cardText, cardId){
 
         if(!cardText) {
             console.warn('No text to print');
