@@ -739,18 +739,17 @@ module.exports = function(val){
 
         var deviceType = config.appParameters.osID;
 
-        var ua = window.navigator.userAgent;
-        if(ua.indexOf('Mobile') === -1 ||  deviceType === 'webbrowser') {
+        if(deviceType === 'webbrowser') {
             Kiwapp.driverInstance = 'webbrowser';
             driver = new Web();
         }
 
-        if( (ua.indexOf('iPhone') > -1 || ua.indexOf('iPad') > -1) ||  deviceType === 'ios') {
+        if(deviceType === 'ios') {
             Kiwapp.driverInstance = 'ios';
             driver = new IOS();
         }
 
-        if(ua.indexOf('Android') > -1 || deviceType === 'android') {
+        if(deviceType === 'android') {
             Kiwapp.driverInstance = 'android';
             driver = new AndroidDriver();
         }
@@ -786,10 +785,10 @@ module.exports = function(val){
 
 },{"../utils/utils":21,"./driver/android":2,"./driver/iOS":4,"./driver/web":5,"./stats/session":7,"./stats/stats":8,"./storage/StorageProxy":10,"./version":12}],7:[function(require,module,exports){
 'use strict';
-(function(){
+(function () {
     /**
-    *  browserify modules dependencies
-    **/
+     *  browserify modules dependencies
+     **/
     var hex_md5 = require('../../libs/md5');
     var extend = require('../../utils/extend');
     var ajax = require('../../utils/ajax');
@@ -799,11 +798,15 @@ module.exports = function(val){
      */
     var currentIdentifier, deviceIdentifier, currentURL;
     var currentData = {};
+    // The callback method
+    var callbackMethod;
+    var timerIdentifier;
+    var timeoutTime;
 
     /**
      * Session object
      */
-    function Session(){
+    function Session() {
 
     }
 
@@ -812,32 +815,74 @@ module.exports = function(val){
      * @param  {string} identifier The device identifier
      * @return {string}            The uniqueIdentifier of the session
      */
-    function generateIdentifier(identifier){
+    function generateIdentifier(identifier) {
         var timestamp = Number(new Date());
         return hex_md5(identifier + timestamp);
     }
+
+    /**
+     * Your callback method is stored here
+     * This method will be called when the session timeout time is reached
+     * @param  {function} the callback method
+     * @param  {integer} the timeout in seconds
+     */
+    Session.launchTimeout = function launchTimeout(callback, timeout) {
+
+        if (!timeout) {
+            console.log('You have not specified any time for your callback method');
+            return false;
+        }
+        timeoutTime = timeout;
+
+        if (!callbackMethod) {
+            console.log('You have not specified any method in callback');
+            return false;
+        }
+        callbackMethod = callback;
+
+        timerIdentifier = window.setTimeout(callbackMethod, timeoutTime);
+    };
+
+    /**
+     * Remove your callback
+     * This callback is not losted but it will not trigger anymore
+     * For relaunch it, use the method relaunchTimeout
+     *
+     */
+    Session.resetTimeout = function resetTimeout() {
+        clearInterval(timerIdentifier);
+    };
+
+    /**
+     * Relaunch the timeout
+     */
+    Session.relaunchTimeout = function relaunchTimeout() {
+        this.resetTimeout();
+        this.launchTimeout();
+    };
+
 
     /**
      * Launch a new session if there is no current session (generate a new identifier)
      * @param  {string} identifier The device identifier
      * @return {Function}            The session object
      */
-    Session.start = function startSession(identifier){
-        if(deviceIdentifier === undefined){
+    Session.start = function startSession(identifier) {
+        if (deviceIdentifier === undefined) {
             deviceIdentifier = identifier;
         }
         identifier = identifier || deviceIdentifier;
         var newIdentifier = generateIdentifier(identifier);
 
-        if(currentIdentifier === undefined){
+        if (currentIdentifier === undefined) {
             currentData = {};
             currentIdentifier = newIdentifier;
 
             console.debug('[Session@start] : New session fired !');
-            if(window.Kiwapp !== undefined){
+            if (window.Kiwapp !== undefined) {
                 window.Kiwapp.driver().trigger('callApp', {
-                    call : 'interaction_start',
-                    data : {}
+                    call: 'interaction_start',
+                    data: {}
                 });
             }
         }
@@ -849,14 +894,14 @@ module.exports = function(val){
      * Close the current session
      * @return {Function} The session object
      */
-    Session.end = function endSession(){
-        if(window.Kiwapp !== undefined && currentIdentifier !== undefined){
+    Session.end = function endSession() {
+        if (window.Kiwapp !== undefined && currentIdentifier !== undefined) {
 
             console.debug('[Session@end] : We close the session !');
 
             window.Kiwapp.driver().trigger('callApp', {
-                call : 'interaction_end',
-                data : {}
+                call: 'interaction_end',
+                data: {}
             });
         }
 
@@ -869,7 +914,7 @@ module.exports = function(val){
      * Return the current session identifier
      * @return {string} The current session identifier
      */
-    Session.getIdentifier = function identifierSession(){
+    Session.getIdentifier = function identifierSession() {
         return currentIdentifier;
     };
 
@@ -881,11 +926,11 @@ module.exports = function(val){
      * @param  {string} url  Default send url
      * @return {Function}     The Session
      */
-    Session.store = function storeSession(data, url){
-        if(data === undefined)
+    Session.store = function storeSession(data, url) {
+        if (data === undefined)
             return Object.create(currentData);
 
-        if(Session.getIdentifier() !== undefined){
+        if (Session.getIdentifier() !== undefined) {
             currentData = extend(currentData, data);
         }
 
@@ -900,29 +945,29 @@ module.exports = function(val){
      * @param  {string} url The url to the webservice which recieve data
      * @return {Function}     The Session
      */
-    Session.send = function sendSession(config){
+    Session.send = function sendSession(config) {
         config = config || currentURL;
         var url, options;
-        if(typeof config === 'object'){
+        if (typeof config === 'object') {
             options = manageConfig(config);
             url = config.url;
         }
-        else{
+        else {
             url = config;
         }
-        if(window.Kiwapp !== undefined && Object.keys(currentData).length > 0){
+        if (window.Kiwapp !== undefined && Object.keys(currentData).length > 0) {
             var copy = JSON.parse(JSON.stringify(currentData));
             currentData = {};
             var ajaxConfig = {
-                data : copy,
+                data: copy,
                 contentType: 'application/json; charset=utf-8',
-                url : url,
-                error : function(){
+                url: url,
+                error: function () {
                     window.Kiwapp.driver().post(copy, 'custom', url, btoa(JSON.stringify(options)));
                 }
             };
 
-            for(var i in options){
+            for (var i in options) {
                 ajaxConfig[i] = options[i];
             }
             ajaxConfig.type = ajaxConfig.method;
@@ -938,7 +983,7 @@ module.exports = function(val){
      * @param  {object} data   user data
      * @return {object}        built configuration
      */
-    function manageConfig(config){
+    function manageConfig(config) {
         var options = Object.create(null);
 
         options.method = config.method;
@@ -948,6 +993,7 @@ module.exports = function(val){
 
         return options;
     }
+
     module.exports = Session;
 })();
 },{"../../libs/md5":13,"../../utils/ajax":14,"../../utils/extend":16}],8:[function(require,module,exports){
@@ -1244,15 +1290,12 @@ module.exports = function(val){
     };
 
     /**
-     * Set a value assiciated to a key in the native db.
+     * Set a value associated to a key in the native db.
      * @param {string} key   The key of the storde value
      * @param {multiple} value The value to store
      * @return {Storage} The Storage object
      */
     Storage.prototype.set = function storageSet(key, value){
-        if(typeof value !== 'string'){
-            value = JSON.stringify(value);
-        }
         window.Kiwapp.driver().trigger('callApp', {
             call : 'db_insert',
             data : {
