@@ -1330,7 +1330,7 @@ module.exports = function(val){
     module.exports = Storage;
 })();
 },{"../../utils/event":15,"../../utils/increaseCapability":18}],12:[function(require,module,exports){
-module.exports = '1.5.4';
+module.exports = '1.5.5';
 },{}],13:[function(require,module,exports){
 /*
  * A JavaScript implementation of the RSA Data Security, Inc. MD5 Message

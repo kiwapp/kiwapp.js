@@ -1,6 +1,6 @@
 {
     "name": "kiwapp.js",
-    "version": "1.5.4",
+    "version": "1.5.5",
     "description": "The Kiwapp core bridge between javacript and native.",
     "main": "kiwapp.js",
     "scripts": {
@@ -26,5 +26,8 @@
         "js-beautify": "^1.4.2",
         "jshint-stylish": "~0.1.5",
         "type-of": "~2.0.1"
+    },
+    "devDependencies": {
+        "gulp-util": "~3.0.1"
     }
 }
