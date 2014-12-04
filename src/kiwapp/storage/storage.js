@@ -44,15 +44,12 @@
     };
 
     /**
-     * Set a value assiciated to a key in the native db.
+     * Set a value associated to a key in the native db.
      * @param {string} key   The key of the storde value
      * @param {multiple} value The value to store
      * @return {Storage} The Storage object
      */
     Storage.prototype.set = function storageSet(key, value){
-        if(typeof value !== 'string'){
-            value = JSON.stringify(value);
-        }
         window.Kiwapp.driver().trigger('callApp', {
             call : 'db_insert',
             data : {
