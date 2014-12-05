@@ -605,10 +605,6 @@ module.exports = function(val){
      * @return {Function} The object containing session's management
      */
     Kiwapp.session = function session(){
-        if(Session.getIdentifier() === undefined){
-            Session.start(Kiwapp.get('appParameters').deviceIdentifier);
-        }
-
         return Session;
     };
 
@@ -742,14 +738,10 @@ module.exports = function(val){
         if(deviceType === 'webbrowser') {
             Kiwapp.driverInstance = 'webbrowser';
             driver = new Web();
-        }
-
-        if(deviceType === 'ios') {
+        } else if(deviceType === 'ios') {
             Kiwapp.driverInstance = 'ios';
             driver = new IOS();
-        }
-
-        if(deviceType === 'android') {
+        } else if(deviceType === 'android') {
             Kiwapp.driverInstance = 'android';
             driver = new AndroidDriver();
         }
@@ -828,17 +820,21 @@ module.exports = function(val){
      */
     Session.launchTimeout = function launchTimeout(callback, timeout) {
 
-        if (!timeout) {
+        if (!timeout && !timeoutTime) {
             console.log('You have not specified any time for your callback method');
             return false;
+        } else if (!timeoutTime){
+            timeoutTime = timeout;
         }
-        timeoutTime = timeout;
 
-        if (!callbackMethod) {
+
+        if (!callback && !callbackMethod) {
             console.log('You have not specified any method in callback');
             return false;
+        } else if (!callbackMethod){
+            callbackMethod = callback;
         }
-        callbackMethod = callback;
+
 
         timerIdentifier = window.setTimeout(callbackMethod, timeoutTime);
     };

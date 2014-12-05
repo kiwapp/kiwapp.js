@@ -42,17 +42,20 @@
      */
     Session.launchTimeout = function launchTimeout(callback, timeout) {
 
-        if (!timeout) {
+        if (!timeout && !timeoutTime) {
             console.log('You have not specified any time for your callback method');
             return false;
+        } else if (!timeoutTime){
+            timeoutTime = timeout;
         }
-        timeoutTime = timeout;
 
-        if (!callbackMethod) {
+        if (!callback && !callbackMethod) {
             console.log('You have not specified any method in callback');
             return false;
+        } else if (!callbackMethod){
+            callbackMethod = callback;
         }
-        callbackMethod = callback;
+
 
         timerIdentifier = window.setTimeout(callbackMethod, timeoutTime);
     };
