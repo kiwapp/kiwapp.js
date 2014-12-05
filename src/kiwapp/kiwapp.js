@@ -89,10 +89,6 @@
      * @return {Function} The object containing session's management
      */
     Kiwapp.session = function session(){
-        if(Session.getIdentifier() === undefined){
-            Session.start(Kiwapp.get('appParameters').deviceIdentifier);
-        }
-
         return Session;
     };
 
@@ -223,18 +219,13 @@
 
         var deviceType = config.appParameters.osID;
 
-        var ua = window.navigator.userAgent;
-        if(ua.indexOf('Mobile') === -1 ||  deviceType === 'webbrowser') {
+        if(deviceType === 'webbrowser') {
             Kiwapp.driverInstance = 'webbrowser';
             driver = new Web();
-        }
-
-        if( (ua.indexOf('iPhone') > -1 || ua.indexOf('iPad') > -1) ||  deviceType === 'ios') {
+        } else if(deviceType === 'ios') {
             Kiwapp.driverInstance = 'ios';
             driver = new IOS();
-        }
-
-        if(ua.indexOf('Android') > -1 || deviceType === 'android') {
+        } else if(deviceType === 'android') {
             Kiwapp.driverInstance = 'android';
             driver = new AndroidDriver();
         }

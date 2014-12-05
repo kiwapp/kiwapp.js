@@ -1,6 +1,7 @@
 "use strict";
 
 var gulp          = require('gulp'),
+    gutil    = require('gulp-util'),
     browserify    = require('gulp-browserify'),
     rename        = require('gulp-rename'),
     jshint        = require('gulp-jshint'),
@@ -33,17 +34,19 @@ gulp.task('checkKiwapp', function () {
     .pipe(jshint.reporter(jshintStylish));
 });
 
+gulp.task('prod', ['default']);
+
 gulp.task('default', function(){
-    gulp.run('checkKiwapp');
-    gulp.run('browserifyKiwapp');
-    gulp.run('version');
+    gulp.start('checkKiwapp');
+    gulp.start('browserifyKiwapp');
+    gulp.start('version');
 });
 
 
 gulp.task('watch', function(){
     gulp.watch( path + '/**/*.js',function(evt){
         console.log(evt.path, 'changed');
-        gulp.run('default');
+        gulp.start('default');
     });
 });
 
@@ -57,6 +60,10 @@ gulp.task("version", function() {
         }
 
         var version = data.split('\'')[1].replace(/(?:(?:^|\n)\s+|\s+(?:$|\n))/g,'').replace(/\s+/g,' ');
+        if(gutil.env.version) {
+            version = gutil.env.version;
+            fs.writeFile(path + "/kiwapp/version.js", "module.exports = '" + version + "';");
+        }
 
         fs.readFile('./bower.json', function(err, bower) {
             if(err) {
