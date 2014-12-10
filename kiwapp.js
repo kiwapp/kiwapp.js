@@ -144,14 +144,14 @@ module.exports = function(val){
     /**
      * Open html5 app with bridge
      * post android package name for open native app
-     * @param  {string} applicationIdentifier    The unique application identifier, this identifier can be found on the Kiwapp manager backoffice
+     * @param  {string} sharingKey    The unique application identifier, this identifier can be found on the Kiwapp manager backoffice
      */
-    Driver.prototype.openHTML5App = function openHTML5App(applicationIdentifier){
+    Driver.prototype.openHTML5App = function openHTML5App(sharingKey){
 
         window.Kiwapp.driver().trigger('callApp', {
             call : 'open_html5_app',
             data : {
-                application_identifier : applicationIdentifier
+                sharing_key : sharingKey
             }
         });
     };
@@ -827,7 +827,6 @@ module.exports = function(val){
             timeoutTime = timeout;
         }
 
-
         if (!callback && !callbackMethod) {
             console.log('You have not specified any method in callback');
             return false;
@@ -864,9 +863,12 @@ module.exports = function(val){
      * @return {Function}            The session object
      */
     Session.start = function startSession(identifier) {
-        if (deviceIdentifier === undefined) {
+        if(identifier === undefined && deviceIdentifier === undefined) {
+            deviceIdentifier = Kiwapp.get('appParameters').deviceIdentifier;
+        } else if (deviceIdentifier === undefined) {
             deviceIdentifier = identifier;
         }
+
         identifier = identifier || deviceIdentifier;
         var newIdentifier = generateIdentifier(identifier);
 
@@ -1029,7 +1031,7 @@ module.exports = function(val){
                 deviceIdentifier: config.deviceIdentifier,
                 date: getDate(),
                 appInstanceId : config.appInstanceId,
-                shopId : config.shopId,
+                shopId : config.shopId
             },
             type : type
         };
@@ -1369,7 +1371,7 @@ module.exports = function(val){
     module.exports = Storage;
 })();
 },{"../../utils/event":15,"../../utils/increaseCapability":18}],12:[function(require,module,exports){
-module.exports = '1.5.5';
+module.exports = '1.5.6';
 },{}],13:[function(require,module,exports){
 /*
  * A JavaScript implementation of the RSA Data Security, Inc. MD5 Message

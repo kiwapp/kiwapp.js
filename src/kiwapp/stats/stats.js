@@ -34,7 +34,7 @@
                 deviceIdentifier: config.deviceIdentifier,
                 date: getDate(),
                 appInstanceId : config.appInstanceId,
-                shopId : config.shopId,
+                shopId : config.shopId
             },
             type : type
         };

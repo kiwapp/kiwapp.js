@@ -81,14 +81,14 @@
     /**
      * Open html5 app with bridge
      * post android package name for open native app
-     * @param  {string} applicationIdentifier    The unique application identifier, this identifier can be found on the Kiwapp manager backoffice
+     * @param  {string} sharingKey    The unique application identifier, this identifier can be found on the Kiwapp manager backoffice
      */
-    Driver.prototype.openHTML5App = function openHTML5App(applicationIdentifier){
+    Driver.prototype.openHTML5App = function openHTML5App(sharingKey){
 
         window.Kiwapp.driver().trigger('callApp', {
             call : 'open_html5_app',
             data : {
-                application_identifier : applicationIdentifier
+                sharing_key : sharingKey
             }
         });
     };
