@@ -85,9 +85,12 @@
      * @return {Function}            The session object
      */
     Session.start = function startSession(identifier) {
-        if (deviceIdentifier === undefined) {
+        if(identifier === undefined && deviceIdentifier === undefined) {
+            deviceIdentifier = Kiwapp.get('appParameters').deviceIdentifier;
+        } else if (deviceIdentifier === undefined) {
             deviceIdentifier = identifier;
         }
+
         identifier = identifier || deviceIdentifier;
         var newIdentifier = generateIdentifier(identifier);
 
