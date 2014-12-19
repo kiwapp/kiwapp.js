@@ -206,10 +206,9 @@
     function manageConfig(config) {
         var options = Object.create(null);
 
-        options.method = config.method;
-        options.headers = config.headers;
-        options.username = config.username;
-        options.password = config.password;
+        for(var propeties in config) {
+            options[propeties] = config[propeties];
+        }
 
         return options;
     }
