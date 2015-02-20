@@ -12,20 +12,11 @@ var gulp          = require('gulp'),
     path          = './src';
 
 gulp.task('browserifyKiwapp', function(){
-    fs.readFile(path + '/kiwapp/version.js', 'utf8', function (err,data) {
-
-        if(err) {
-            throw err;
-        }
-
-        var version = data.split('\'')[1].replace(/(?:(?:^|\n)\s+|\s+(?:$|\n))/g,'').replace(/\s+/g,' ');
-        gulp.src(path + '/kiwapp/kiwapp.js')
-        .pipe(browserify())
-        .pipe(rename('kiwapp.js'))
-        .pipe(footer(';'))
-        .pipe(gulp.dest('.'));
-    });
-
+    gulp.src(path + '/kiwapp/kiwapp.js')
+    .pipe(browserify())
+    .pipe(rename('kiwapp.js'))
+    .pipe(footer(';'))
+    .pipe(gulp.dest('.'));
 });
 
 gulp.task('checkKiwapp', function () {
@@ -52,18 +43,8 @@ gulp.task('watch', function(){
 
 // Auto update the version inside bower and package.json
 gulp.task("version", function() {
-
-    fs.readFile(path + '/kiwapp/version.js', 'utf8', function (err,data) {
-
-        if(err) {
-            throw err;
-        }
-
-        var version = data.split('\'')[1].replace(/(?:(?:^|\n)\s+|\s+(?:$|\n))/g,'').replace(/\s+/g,' ');
-        if(gutil.env.version) {
-            version = gutil.env.version;
-            fs.writeFile(path + "/kiwapp/version.js", "module.exports = '" + version + "';");
-        }
+    if(gutil.env.version) {
+        var version = gutil.env.version;
 
         fs.readFile('./bower.json', function(err, bower) {
             if(err) {
@@ -82,6 +63,5 @@ gulp.task("version", function() {
             content.version = version;
             fs.writeFile("./package.json", jsbeautify(JSON.stringify(content)));
         });
-
-    });
+    }
 });
