@@ -88,16 +88,6 @@ module.exports = function(val){
     increase(Driver.prototype, Model.prototype);
 
     /**
-     * Check if kiwapp_config.js exist inside config folder at the project root
-     * Log a console message error if this file is not found
-     */
-    var http = new XMLHttpRequest();
-    http.open('HEAD', '../config/kiwapp_config.js', false);
-    http.send();
-    if (http.status !== 200) {
-        console.log('No kiwapp_config.js file found, check within your config folder or add this folder with this file name inside (view README file: https://github.com/kiwapp/kiwapp.js/blob/master/README.md)');
-    }
-    /**
      * Launch the event listening
      */
     function observeEvents(_self) {
@@ -305,47 +295,6 @@ module.exports = function(val){
         return this;
     };
 
-    /**
-     * Open the kiwapp drawer
-     * @param backgroundImage if exist, the background
-     * @param isSignature if we open the drawer for a signature or not
-     * @returns {Driver} The Driver object
-     */
-    Driver.prototype.openKiwappDriver = function openKiwappDriver(backgroundImage, isSignature) {
-        window.Kiwapp.driver().trigger('callApp', {
-            call: 'open_kw_drawer',
-            data: {
-                background_image: backgroundImage,
-                is_signature: isSignature
-            }
-        });
-
-        return this;
-    };
-
-    /**
-     * Delete drawings save on the device
-     * @param string[] drawings ids to delete
-     * @returns {Driver} the driver object
-     */
-    Driver.prototype.deleteDrawings = function (drawingsId) {
-
-        if (!drawingsId) {
-            console.warn('No drawings to delete');
-
-            return this;
-        }
-
-        window.Kiwapp.driver().trigger('callApp', {
-            call: 'clear_send_draws',
-            data: {
-                ids: drawingsId
-            }
-        });
-
-        return this;
-    };
-
     Driver.prototype.generateKey = function () {
         var key = '';
         var possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
@@ -358,7 +307,7 @@ module.exports = function(val){
     module.exports = Driver;
 })();
 
-},{"../../utils/event":15,"../../utils/extend":16,"../../utils/increaseCapability":18,"../../utils/model":20}],4:[function(require,module,exports){
+},{"../../utils/event":14,"../../utils/extend":15,"../../utils/increaseCapability":17,"../../utils/model":19}],4:[function(require,module,exports){
 'use strict';
 (function(){
     //require Driver interface
@@ -493,28 +442,6 @@ module.exports = function(val){
                 error : 200,
                 data : printString
             });
-    };
-
-    /**
-    * Get drawings
-    * @param {id} drawers to get with the key
-    * @return {drawings} the drawing(s)
-    */
-    iOS.prototype.getDrawsId = function(id) {
-        var drawings = localStorage.getItem(id);
-
-        if(drawings === undefined){
-            return JSON.stringify({
-                error : 404,
-                data : ''
-            });
-        }
-
-        delete window.localStorage[id];
-        return JSON.stringify({
-            error : 200,
-            data : drawings
-        });
     };
 
     function findLastId(identifier){
@@ -669,12 +596,17 @@ module.exports = function(val){
      * @return {multi}       the wanted value/the whole config (copy)
      */
     Kiwapp.get = function get(value){
-        if(value === undefined)
+        if(config === undefined || config.appParameters === undefined) {
+            console.log('No kiwapp_config.js file found, check within your config folder or add this folder with this file name inside (view README file: https://github.com/kiwapp/kiwapp.js/blob/master/README.md)');
+            throw new Error('You can not load driver if config is not set');
+        }
+
+        if(value === undefined) {
             return Object.create(config);
-
-        if(typeof config[value] === 'object')
+        }
+        if(typeof config[value] === 'object') {
             return Object.create(config[value]);
-
+        }
         return config[value];
     };
 
@@ -819,16 +751,15 @@ module.exports = function(val){
         return Kiwapp;
     };
 
-    Kiwapp.version = require('./version');
-
     /**
      * A private method which load the right driver depending on the config (deviceIdentifier)
      * @return {Function} The bridge to communicate with native kiwapp
      */
     function loadDriver(){
-        if(config === undefined || config.appParameters === undefined)
+        if(config === undefined || config.appParameters === undefined) {
+            console.log('No kiwapp_config.js file found, check within your config folder or add this folder with this file name inside (view README file: https://github.com/kiwapp/kiwapp.js/blob/master/README.md)');
             throw new Error('You can not load driver if config is not set');
-
+        }
         var deviceType = config.appParameters.osID;
 
         if(deviceType === 'webbrowser') {
@@ -852,10 +783,11 @@ module.exports = function(val){
      */
     function loadConfig(path, callback){
         config = {};
-        if(typeof path === 'string')
+        if(typeof path === 'string') {
             loadJS(path, callback);
-        else
+        } else {
             Kiwapp.set(path);
+        }
 
         return config;
     }
@@ -871,7 +803,7 @@ module.exports = function(val){
     return Kiwapp;
 })();
 
-},{"../utils/utils":21,"./driver/android":2,"./driver/iOS":4,"./driver/web":5,"./stats/session":7,"./stats/stats":8,"./storage/StorageProxy":10,"./version":12}],7:[function(require,module,exports){
+},{"../utils/utils":20,"./driver/android":2,"./driver/iOS":4,"./driver/web":5,"./stats/session":7,"./stats/stats":8,"./storage/StorageProxy":10}],7:[function(require,module,exports){
 'use strict';
 (function () {
     /**
@@ -1089,7 +1021,7 @@ module.exports = function(val){
 
     module.exports = Session;
 })();
-},{"../../libs/md5":13,"../../utils/ajax":14,"../../utils/extend":16}],8:[function(require,module,exports){
+},{"../../libs/md5":12,"../../utils/ajax":13,"../../utils/extend":15}],8:[function(require,module,exports){
 'use strict';
 (function(){
 
@@ -1199,7 +1131,7 @@ module.exports = function(val){
     module.exports = Stats;
 })();
             
-},{"../../utils/getDate":17}],9:[function(require,module,exports){
+},{"../../utils/getDate":16}],9:[function(require,module,exports){
 (function(){
 
     'use strict';
@@ -1324,7 +1256,7 @@ module.exports = function(val){
 
     module.exports = Storage;
 })();
-},{"../../utils/event":15,"../../utils/increaseCapability":18}],10:[function(require,module,exports){
+},{"../../utils/event":14,"../../utils/increaseCapability":17}],10:[function(require,module,exports){
 (function(){
     'use strict';
     /**
@@ -1465,9 +1397,7 @@ module.exports = function(val){
 
     module.exports = Storage;
 })();
-},{"../../utils/event":15,"../../utils/increaseCapability":18}],12:[function(require,module,exports){
-module.exports = '1.5.7';
-},{}],13:[function(require,module,exports){
+},{"../../utils/event":14,"../../utils/increaseCapability":17}],12:[function(require,module,exports){
 /*
  * A JavaScript implementation of the RSA Data Security, Inc. MD5 Message
  * Digest Algorithm, as defined in RFC 1321.
@@ -1848,7 +1778,7 @@ function bit_rol(num, cnt)
 {
   return (num << cnt) | (num >>> (32 - cnt));
 }
-},{}],14:[function(require,module,exports){
+},{}],13:[function(require,module,exports){
 /* jshint ignore:start */
 'use strict';
 (function(){
@@ -2145,7 +2075,7 @@ function bit_rol(num, cnt)
     }
 })();
 /* jshint ignore:end */
-},{"type-of":1}],15:[function(require,module,exports){
+},{"type-of":1}],14:[function(require,module,exports){
 'use strict';
 (function(){
     function EventEmitter(){
@@ -2201,7 +2131,7 @@ function bit_rol(num, cnt)
 
     module.exports = EventEmitter;
 })();
-},{}],16:[function(require,module,exports){
+},{}],15:[function(require,module,exports){
 'use strict';
 (function(){
     /**
@@ -2216,7 +2146,7 @@ function bit_rol(num, cnt)
         return arguments[0];
     };
 })();
-},{}],17:[function(require,module,exports){
+},{}],16:[function(require,module,exports){
 'use strict';
 (function(){
     /**
@@ -2233,7 +2163,7 @@ function bit_rol(num, cnt)
         return time.getFullYear()+'-'+month+'-'+day + ' ' + time.toTimeString().split(' ')[0];
     };
 })();
-},{}],18:[function(require,module,exports){
+},{}],17:[function(require,module,exports){
 'use strict';
 (function(){
     /**
@@ -2247,7 +2177,7 @@ function bit_rol(num, cnt)
         }
     };
 })();
-},{}],19:[function(require,module,exports){
+},{}],18:[function(require,module,exports){
 'use strict';
 (function(){
     /**
@@ -2270,7 +2200,7 @@ function bit_rol(num, cnt)
     };
 })();
 
-},{}],20:[function(require,module,exports){
+},{}],19:[function(require,module,exports){
 'use strict';
 (function(){
     /**
@@ -2310,7 +2240,7 @@ function bit_rol(num, cnt)
 
     module.exports = Model;
 })();
-},{}],21:[function(require,module,exports){
+},{}],20:[function(require,module,exports){
 'use strict';
 (function(){
     /**
@@ -2327,4 +2257,4 @@ function bit_rol(num, cnt)
         ajax : require('./ajax'),
     };
 })();
-},{"./ajax":14,"./event":15,"./extend":16,"./getDate":17,"./increaseCapability":18,"./loadJS":19,"./model":20}]},{},[6]);
+},{"./ajax":13,"./event":14,"./extend":15,"./getDate":16,"./increaseCapability":17,"./loadJS":18,"./model":19}]},{},[6]);
