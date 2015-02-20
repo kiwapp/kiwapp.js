@@ -57,12 +57,17 @@
      * @return {multi}       the wanted value/the whole config (copy)
      */
     Kiwapp.get = function get(value){
-        if(value === undefined)
+        if(config === undefined || config.appParameters === undefined) {
+            console.log('No kiwapp_config.js file found, check within your config folder or add this folder with this file name inside (view README file: https://github.com/kiwapp/kiwapp.js/blob/master/README.md)');
+            throw new Error('You can not load driver if config is not set');
+        }
+
+        if(value === undefined) {
             return Object.create(config);
-
-        if(typeof config[value] === 'object')
+        }
+        if(typeof config[value] === 'object') {
             return Object.create(config[value]);
-
+        }
         return config[value];
     };
 
@@ -207,16 +212,15 @@
         return Kiwapp;
     };
 
-    Kiwapp.version = require('./version');
-
     /**
      * A private method which load the right driver depending on the config (deviceIdentifier)
      * @return {Function} The bridge to communicate with native kiwapp
      */
     function loadDriver(){
-        if(config === undefined || config.appParameters === undefined)
+        if(config === undefined || config.appParameters === undefined) {
+            console.log('No kiwapp_config.js file found, check within your config folder or add this folder with this file name inside (view README file: https://github.com/kiwapp/kiwapp.js/blob/master/README.md)');
             throw new Error('You can not load driver if config is not set');
-
+        }
         var deviceType = config.appParameters.osID;
 
         if(deviceType === 'webbrowser') {
@@ -240,10 +244,11 @@
      */
     function loadConfig(path, callback){
         config = {};
-        if(typeof path === 'string')
+        if(typeof path === 'string') {
             loadJS(path, callback);
-        else
+        } else {
             Kiwapp.set(path);
+        }
 
         return config;
     }
