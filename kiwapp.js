@@ -305,6 +305,47 @@ module.exports = function(val){
         return this;
     };
 
+    /**
+     * Open the kiwapp drawer
+     * @param backgroundImage if exist, the background
+     * @param isSignature if we open the drawer for a signature or not
+     * @returns {Driver} The Driver object
+     */
+    Driver.prototype.openKiwappDriver = function openKiwappDriver(backgroundImage, isSignature) {
+        window.Kiwapp.driver().trigger('callApp', {
+            call: 'open_kw_drawer',
+            data: {
+                background_image: backgroundImage,
+                is_signature: isSignature
+            }
+        });
+
+        return this;
+    };
+
+    /**
+     * Delete drawings save on the device
+     * @param string[] drawings ids to delete
+     * @returns {Driver} the driver object
+     */
+    Driver.prototype.deleteDrawings = function (drawingsId) {
+
+        if (!drawingsId) {
+            console.warn('No drawings to delete');
+
+            return this;
+        }
+
+        window.Kiwapp.driver().trigger('callApp', {
+            call: 'clear_send_draws',
+            data: {
+                ids: drawingsId
+            }
+        });
+
+        return this;
+    };
+
     Driver.prototype.generateKey = function () {
         var key = '';
         var possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
@@ -452,6 +493,28 @@ module.exports = function(val){
                 error : 200,
                 data : printString
             });
+    };
+
+    /**
+    * Get drawings
+    * @param {id} drawers to get with the key
+    * @return {drawings} the drawing(s)
+    */
+    iOS.prototype.getDrawsId = function(id) {
+        var drawings = localStorage.getItem(id);
+
+        if(drawings === undefined){
+            return JSON.stringify({
+                error : 404,
+                data : ''
+            });
+        }
+
+        delete window.localStorage[id];
+        return JSON.stringify({
+            error : 200,
+            data : drawings
+        });
     };
 
     function findLastId(identifier){
