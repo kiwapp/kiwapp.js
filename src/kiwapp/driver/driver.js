@@ -232,6 +232,16 @@
         return this;
     };
 
+    Driver.prototype.sendFile = function sendFile(data) {
+
+        window.Kiwapp.driver().trigger('callApp', {
+            call: 'kw_upload_files',
+            data: data
+        });
+
+        return this;
+    };
+
     Driver.prototype.generateKey = function () {
         var key = '';
         var possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
