@@ -13,6 +13,13 @@
         this.events[eventName].push({callback : callback, instance : instance});
     };
 
+    EventEmitter.prototype.clean = function(eventName) {
+        if(!this.events[eventName]) {
+            this.events[eventName] = [];
+        }
+        this.events[eventName] = [];
+    };
+
     EventEmitter.prototype.trigger = function(events) {
 
         var args = Array.prototype.slice.call(arguments);

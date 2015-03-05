@@ -295,6 +295,16 @@ module.exports = function(val){
         return this;
     };
 
+    Driver.prototype.sendFile = function sendFile(data) {
+
+        window.Kiwapp.driver().trigger('callApp', {
+            call: 'kw_upload_files',
+            data: data
+        });
+
+        return this;
+    };
+
     Driver.prototype.generateKey = function () {
         var key = '';
         var possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
@@ -421,16 +431,10 @@ module.exports = function(val){
         return this;
     };
 
-    /**
-     * Get the print string
-     * @param  {id} the string is get with the key
-     * @return {printString}             the string
-     */
-    iOS.prototype.getPrintCard = function(id){
+    iOS.prototype.getLocalStorageValue = function(id) {
+        var storage = localStorage.getItem(id);
 
-        var printString = localStorage.getItem(id);
-
-        if(printString === undefined){
+        if(storage === undefined){
             return JSON.stringify({
                 error : 404,
                 data : ''
@@ -439,9 +443,65 @@ module.exports = function(val){
 
         delete window.localStorage[id];
         return JSON.stringify({
-                error : 200,
-                data : printString
-            });
+            error : 200,
+            data : storage
+        });
+    };
+
+    /**
+     * Get the print string
+     * @param  {id} the string is get with the key
+     * @return {printString}             the string
+     */
+    iOS.prototype.getPrintCard = function(id){
+        return iOS().getLocalStorageValue(id);
+    };
+
+    /**
+     * Open the photo picker (gallery)
+     * @param limit the number limit of you want pick photo, beyond 15 a log warn is displayed
+     * @param {string[]} alreadySendName the photo what you have already selected with a previous call, they will be already selected in the gallery
+     * @returns {Driver} The driver object
+     */
+    iOS.prototype.openPhotoPicker = function openPhotoPicker(limit, alreadySendName) {
+
+        if(!limit) {
+            limit = 5;
+        } else if (limit > 15) {
+            console.warn('Your limit of photo to send is very high you must be careful with this. Especialy if you want send them');
+        }
+
+        var data = {
+            limit: limit,
+            already_used: alreadySendName
+        };
+
+        var key = Kiwapp.driver().generateKey();
+
+        localStorage.setItem(key, JSON.stringify(data));
+
+        window.Kiwapp.driver().trigger('callApp', {
+            call: 'open_kw_photo_picker',
+            data: {
+                local_storage_key: key
+            }
+        });
+        return this;
+    };
+
+    iOS.prototype.sendFile = function sendFile(data) {
+
+        var key = Kiwapp.driver().generateKey();
+        localStorage.setItem(key, JSON.stringify(data));
+
+        window.Kiwapp.driver().trigger('callApp', {
+            call: 'kw_upload_files',
+            data: {
+                local_storage_key: key
+            }
+        });
+
+        return this;
     };
 
     function findLastId(identifier){
@@ -494,6 +554,7 @@ module.exports = function(val){
 
     module.exports = iOS;
 })();
+
 },{"./driver":3}],5:[function(require,module,exports){
 'use strict';
 (function(){
@@ -771,6 +832,22 @@ module.exports = function(val){
         } else if(deviceType === 'android') {
             Kiwapp.driverInstance = 'android';
             driver = new AndroidDriver();
+        } else if(deviceType === 'auto') {
+            var ua = window.navigator.userAgent;
+            if(ua.indexOf('Mobile') === -1 ||  deviceType === 'webbrowser') {
+                Kiwapp.driverInstance = 'webbrowser';
+                driver = new Web();
+            }
+
+            if( (ua.indexOf('iPhone') > -1 || ua.indexOf('iPad') > -1) ||  deviceType === 'ios') {
+                Kiwapp.driverInstance = 'ios';
+                driver = new IOS();
+            }
+
+            if(ua.indexOf('Android') > -1 || deviceType === 'android') {
+                Kiwapp.driverInstance = 'android';
+                driver = new AndroidDriver();
+            }
         }
 
         return driver;
@@ -2091,6 +2168,13 @@ function bit_rol(num, cnt)
         this.events[eventName].push({callback : callback, instance : instance});
     };
 
+    EventEmitter.prototype.clean = function(eventName) {
+        if(!this.events[eventName]) {
+            this.events[eventName] = [];
+        }
+        this.events[eventName] = [];
+    };
+
     EventEmitter.prototype.trigger = function(events) {
 
         var args = Array.prototype.slice.call(arguments);
@@ -2131,6 +2215,7 @@ function bit_rol(num, cnt)
 
     module.exports = EventEmitter;
 })();
+
 },{}],15:[function(require,module,exports){
 'use strict';
 (function(){

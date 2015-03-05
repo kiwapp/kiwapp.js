@@ -232,6 +232,22 @@
         } else if(deviceType === 'android') {
             Kiwapp.driverInstance = 'android';
             driver = new AndroidDriver();
+        } else if(deviceType === 'auto') {
+            var ua = window.navigator.userAgent;
+            if(ua.indexOf('Mobile') === -1 ||  deviceType === 'webbrowser') {
+                Kiwapp.driverInstance = 'webbrowser';
+                driver = new Web();
+            }
+
+            if( (ua.indexOf('iPhone') > -1 || ua.indexOf('iPad') > -1) ||  deviceType === 'ios') {
+                Kiwapp.driverInstance = 'ios';
+                driver = new IOS();
+            }
+
+            if(ua.indexOf('Android') > -1 || deviceType === 'android') {
+                Kiwapp.driverInstance = 'android';
+                driver = new AndroidDriver();
+            }
         }
 
         return driver;

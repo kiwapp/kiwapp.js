@@ -111,16 +111,10 @@
         return this;
     };
 
-    /**
-     * Get the print string
-     * @param  {id} the string is get with the key
-     * @return {printString}             the string
-     */
-    iOS.prototype.getPrintCard = function(id){
+    iOS.prototype.getLocalStorageValue = function(id) {
+        var storage = localStorage.getItem(id);
 
-        var printString = localStorage.getItem(id);
-
-        if(printString === undefined){
+        if(storage === undefined){
             return JSON.stringify({
                 error : 404,
                 data : ''
@@ -129,9 +123,65 @@
 
         delete window.localStorage[id];
         return JSON.stringify({
-                error : 200,
-                data : printString
-            });
+            error : 200,
+            data : storage
+        });
+    };
+
+    /**
+     * Get the print string
+     * @param  {id} the string is get with the key
+     * @return {printString}             the string
+     */
+    iOS.prototype.getPrintCard = function(id){
+        return iOS().getLocalStorageValue(id);
+    };
+
+    /**
+     * Open the photo picker (gallery)
+     * @param limit the number limit of you want pick photo, beyond 15 a log warn is displayed
+     * @param {string[]} alreadySendName the photo what you have already selected with a previous call, they will be already selected in the gallery
+     * @returns {Driver} The driver object
+     */
+    iOS.prototype.openPhotoPicker = function openPhotoPicker(limit, alreadySendName) {
+
+        if(!limit) {
+            limit = 5;
+        } else if (limit > 15) {
+            console.warn('Your limit of photo to send is very high you must be careful with this. Especialy if you want send them');
+        }
+
+        var data = {
+            limit: limit,
+            already_used: alreadySendName
+        };
+
+        var key = Kiwapp.driver().generateKey();
+
+        localStorage.setItem(key, JSON.stringify(data));
+
+        window.Kiwapp.driver().trigger('callApp', {
+            call: 'open_kw_photo_picker',
+            data: {
+                local_storage_key: key
+            }
+        });
+        return this;
+    };
+
+    iOS.prototype.sendFile = function sendFile(data) {
+
+        var key = Kiwapp.driver().generateKey();
+        localStorage.setItem(key, JSON.stringify(data));
+
+        window.Kiwapp.driver().trigger('callApp', {
+            call: 'kw_upload_files',
+            data: {
+                local_storage_key: key
+            }
+        });
+
+        return this;
     };
 
     function findLastId(identifier){
