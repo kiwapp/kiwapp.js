@@ -277,7 +277,7 @@ module.exports = function(val){
      * @param {string[]} alreadySendName the photo what you have already selected with a previous call, they will be already selected in the gallery
      * @returns {Driver} The driver object
      */
-    Driver.prototype.openPhotoPicker = function openPhotoPicker(limit, alreadySendName) {
+    Driver.prototype.openPhotoPicker = function openPhotoPicker(limit, alreadySendName, callbackId) {
 
         if(!limit) {
             limit = 5;
@@ -285,13 +285,25 @@ module.exports = function(val){
             console.warn('Your limit of photo to send is very high you must be careful with this. Especialy if you want send them');
         }
 
-        window.Kiwapp.driver().trigger('callApp', {
-            call: 'open_kw_photo_picker',
-            data: {
-                limit: limit,
-                already_used: alreadySendName
-            }
-        });
+        if(callbackId) {
+            window.Kiwapp.driver().trigger('callApp', {
+                call: 'open_kw_photo_picker',
+                data: {
+                    limit: limit,
+                    already_used: alreadySendName,
+                    open_kw_photo_picker_id: callbackId
+                }
+            });
+        } else {
+            window.Kiwapp.driver().trigger('callApp', {
+                call: 'open_kw_photo_picker',
+                data: {
+                    limit: limit,
+                    already_used: alreadySendName
+                }
+            });
+        }
+
         return this;
     };
 
@@ -463,7 +475,7 @@ module.exports = function(val){
      * @param {string[]} alreadySendName the photo what you have already selected with a previous call, they will be already selected in the gallery
      * @returns {Driver} The driver object
      */
-    iOS.prototype.openPhotoPicker = function openPhotoPicker(limit, alreadySendName) {
+    iOS.prototype.openPhotoPicker = function openPhotoPicker(limit, alreadySendName, callbackId) {
 
         if(!limit) {
             limit = 5;
@@ -471,10 +483,19 @@ module.exports = function(val){
             console.warn('Your limit of photo to send is very high you must be careful with this. Especialy if you want send them');
         }
 
-        var data = {
-            limit: limit,
-            already_used: alreadySendName
-        };
+        var data = {};
+        if(callbackId) {
+            data = {
+                limit: limit,
+                already_used: alreadySendName,
+                open_kw_photo_picker_id: callbackId
+            };
+        } else  {
+            data = {
+                limit: limit,
+                already_used: alreadySendName
+            };
+        }
 
         var key = Kiwapp.driver().generateKey();
 
