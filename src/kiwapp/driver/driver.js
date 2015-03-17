@@ -228,12 +228,12 @@
                 data: {
                     limit: limit,
                     already_used: alreadySendName,
-                    open_kw_photo_picker_id: callbackId
+                    kw_photo_picker_id: callbackId
                 }
             });
         } else {
             window.Kiwapp.driver().trigger('callApp', {
-                call: 'open_kw_photo_picker',
+                call: 'kw_open_photo_picker',
                 data: {
                     limit: limit,
                     already_used: alreadySendName
