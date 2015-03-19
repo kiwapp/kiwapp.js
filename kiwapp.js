@@ -287,7 +287,7 @@ module.exports = function(val){
 
         if(callbackId) {
             window.Kiwapp.driver().trigger('callApp', {
-                call: 'open_kw_photo_picker',
+                call: 'kw_open_photo_picker',
                 data: {
                     limit: limit,
                     already_used: alreadySendName,
