@@ -1,6 +1,6 @@
 kiwapp.js
 =========
-[More informations here](http://kiwapp.github.io/kiwapp.js)
+[More informations here](http://developer.kiwapp.com/)
 
 
 ### Notice: For use this lib you must have a config folder at the racine of your project and a kiwapp_config.js inside
