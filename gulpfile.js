@@ -1,7 +1,7 @@
 "use strict";
 
 var gulp          = require('gulp'),
-    gutil    = require('gulp-util'),
+    gutil         = require('gulp-util'),
     browserify    = require('gulp-browserify'),
     rename        = require('gulp-rename'),
     jshint        = require('gulp-jshint'),
@@ -9,6 +9,7 @@ var gulp          = require('gulp'),
     footer        = require('gulp-footer'),
     fs            = require('fs'),
     jsbeautify    = require('js-beautify').js_beautify,
+    doxx          = require('gulp-doxx'),
     path          = './src';
 
 gulp.task('browserifyKiwapp', function(){
@@ -25,7 +26,7 @@ gulp.task('checkKiwapp', function () {
     .pipe(jshint.reporter(jshintStylish));
 });
 
-gulp.task('prod', ['default']);
+gulp.task('prod', ['default', 'doc']);
 
 gulp.task('default', function(){
     gulp.start('checkKiwapp');
@@ -41,8 +42,16 @@ gulp.task('watch', function(){
     });
 });
 
+gulp.task('doc', function() {
+   gulp.src(path + '/kiwapp/**/*.js')
+       .pipe(doxx({
+           title: 'kiwapp.js'
+       }))
+       .pipe(gulp.dest('./doc'));
+});
+
 // Auto update the version inside bower and package.json
-gulp.task("version", function() {
+gulp.task('version', function() {
     if(gutil.env.version) {
         var version = gutil.env.version;
 
@@ -52,7 +61,7 @@ gulp.task("version", function() {
             }
             var content = JSON.parse(bower);
             content.version = version;
-            fs.writeFile("./bower.json", jsbeautify(JSON.stringify(content)));
+            fs.writeFile('./bower.json', jsbeautify(JSON.stringify(content)));
         });
 
         fs.readFile('./package.json', function(err, pck) {
@@ -61,7 +70,7 @@ gulp.task("version", function() {
             }
             var content = JSON.parse(pck);
             content.version = version;
-            fs.writeFile("./package.json", jsbeautify(JSON.stringify(content)));
+            fs.writeFile('./package.json', jsbeautify(JSON.stringify(content)));
         });
     }
 });

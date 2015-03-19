@@ -1,13 +1,14 @@
 'use strict';
 (function(){
     /**
-    *  browserify modules dependencies
+    * Browserify modules dependencies
     **/
     var increase = require('../../utils/increaseCapability'),
         EventEmitter = require('../../utils/event');
 
     /**
      * Storage object
+     * @constructor
      */
     function Storage(){
         EventEmitter.call(this);
@@ -29,8 +30,8 @@
      *     deviceInfo : 'your requested key',
      *     deviceData : 'your wanted value'
      * }
-     * @param  {string} key The key of the wanted value
-     * @return {Storage}     The storage object
+     * @param {string} key The key of the wanted value
+     * @return {Storage} The storage object
      */
     Storage.prototype.get = function storageGet(key){
         window.Kiwapp.driver().trigger('callApp', {
@@ -45,8 +46,8 @@
 
     /**
      * Set a value associated to a key in the native db.
-     * @param {string} key   The key of the storde value
-     * @param {multiple} value The value to store
+     * @param {string} key The key of the stored value
+     * @param {*} value The value to store
      * @return {Storage} The Storage object
      */
     Storage.prototype.set = function storageSet(key, value){
@@ -85,7 +86,7 @@
 
     /**
      * Remove a specific key in the native db.
-     * @param  {string} key The key to remove
+     * @param {string} key The key to remove
      * @return {Storage} The Storage object
      */
     Storage.prototype.remove = function storageRemove(key){

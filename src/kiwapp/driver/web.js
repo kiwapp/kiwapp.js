@@ -6,9 +6,11 @@
     var Driver = require('./driver');
 
     /**
-    *  Web object
-    *  Constructor create the bridge (iframe)
-    **/
+     * Web object
+     * Constructor create the bridge (iframe)
+     *
+     * @constructor
+     */
     function Web(){
         var _self = this;
 
@@ -22,7 +24,8 @@
 
     /**
      * Final method to simulate call to native, tracing it in console
-     * @type {Function}
+     * @param {string} url
+     * @param {*} config
      */
     Web.prototype.exec =  function(url, config){
 

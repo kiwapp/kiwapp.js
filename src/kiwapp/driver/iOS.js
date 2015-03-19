@@ -1,16 +1,19 @@
 'use strict';
-(function(){
-    //require Driver interface
+(function () {
+    // Require Driver interface
     var Driver = require('./driver');
 
-    //memorize the last offline entry ids to earn performances
+    // Memorize the last offline entry ids to earn performances
     var lastId = Object.create(null);
 
+    //Driver interface implementation
+    IOS.prototype = Object.create(Driver.prototype);
+
     /**
-     * iOS Driver constructor
+     * IOS Driver constructor
+     * @constructor
      */
-    function iOS(){
-        /*jshint validthis:true */
+    function IOS() {
         var _self = this;
         Driver.call(_self);
 
@@ -19,15 +22,10 @@
     }
 
     /**
-     * Driver interface implementation
-     */
-    iOS.prototype = Object.create(Driver.prototype);
-
-    /**
      * method which prepare native call sending on ios
-     * @param  {string} url url describing the call
+     * @param {string} url url describing the call
      */
-    iOS.prototype.exec = function execIOS(url){
+    IOS.prototype.exec = function execIOS(url) {
         var _self = this;
 
         addToQueue(_self, url);
@@ -36,15 +34,15 @@
     /**
      * method used by native to get stored offline entries in local storage
      * if the given id is false, return a bad entry with error code 404
-     * @param  {string} id the entry id to find in local storage
-     * @return {object}    offline entry
+     * @param {string} id the entry id to find in local storage
+     * @return {*} offline entry
      */
-    iOS.prototype.entry = function entryIOS(id){
+    IOS.prototype.entry = function entryIOS(id) {
         var entry = window.localStorage[id];
-        if(entry === undefined){
+        if (entry === undefined) {
             return JSON.stringify({
-                error : 404,
-                data : ''
+                error: 404,
+                data: ''
             });
         }
         entry = JSON.parse(entry);
@@ -54,45 +52,50 @@
     };
 
     /**
-     * send offline entry call to native, saving it in local storage
-     * post method used to post offline entries
-     * @param  {object} data    data to send
-     * @param  {string} type    define the entry type
-     * @param  {url} url     if type is custom, define the url destination
-     * @param  {options} options if type is custom, define the send options
+     * Send offline entry call to native, saving it in local storage
+     * Post method used to post offline entries
+     *
+     * @param {*} data data to send
+     * @param {string} type define the entry type
+     * @param {string} url if type is custom, define the url destination
+     * @param {*} options if type is custom, define the send options
+     *
+     * @override
      */
-    iOS.prototype.post = function postIOS(data, type, url, options){
+    IOS.prototype.post = function postIOS(data, type, url, options) {
         var id = findLastId(window.Kiwapp.session().getIdentifier());
         window.localStorage[id] = JSON.stringify({
-            data : data
+            data: data
         });
 
         window.Kiwapp.driver().trigger('callApp', {
-            call : 'store_offline_entry',
-            data : {
-                id : id,
-                type : type,
-                url : url,
-                options : options
+            call: 'store_offline_entry',
+            data: {
+                id: id,
+                type: type,
+                url: url,
+                options: options
             }
         });
     };
 
     /**
      * Set the print string to local storage
-     * @param  {string} the string is stock in local storage with a generate key
-     * @param  {string} The identifier id for the print (this identifier will be send in the callback method and you can identify the cart what you trying to print)
-     * @return {Driver}             the driver object
+     * @param {string} The string is stock in local storage with a generate key
+     * @param {string} The identifier id for the print (this identifier will be send in the callback method and you can identify the cart what you trying to print)
+     * @return {Driver} The driver object
+     *
+     * @override
      */
-    iOS.prototype.print = function(cardText, cardId){
+    IOS.prototype.print = function (cardText, cardId) {
 
-        if(!cardText) {
+        if (!cardText) {
             console.warn('No text to print');
 
             return this;
         }
 
-        if(!cardId) {
+        if (!cardId) {
             cardId = Kiwapp.driver().generateKey();
         }
 
@@ -101,64 +104,73 @@
         localStorage.setItem(key, cardText);
 
         window.Kiwapp.driver().trigger('callApp', {
-            call : 'print_card',
-            data : {
-                card_id : cardId,
-                card_id_localStorage : key
+            call: 'print_card',
+            data: {
+                card_id: cardId,
+                card_id_localStorage: key
             }
         });
 
         return this;
     };
 
-    iOS.prototype.getLocalStorageValue = function(id) {
+    /**
+     * This method is for allow the iOS driver to retrieve the local storage content of this application,
+     * Is used when we use the bridge with many params (more than 1024 characters)
+     * @param {number} id
+     * @return {*}
+     */
+    IOS.prototype.getLocalStorageValue = function (id) {
         var storage = localStorage.getItem(id);
 
-        if(storage === undefined){
+        if (storage === undefined) {
             return JSON.stringify({
-                error : 404,
-                data : ''
+                error: 404,
+                data: ''
             });
         }
 
         delete window.localStorage[id];
         return JSON.stringify({
-            error : 200,
-            data : storage
+            error: 200,
+            data: storage
         });
     };
 
     /**
-     * Get the print string
-     * @param  {id} the string is get with the key
-     * @return {printString}             the string
+     * Get the print string in the local storage (the card can be very long)
+     * @param  {number} id the string is get with the key
+     * @return {string} the string of the card
      */
-    iOS.prototype.getPrintCard = function(id){
-        return iOS().getLocalStorageValue(id);
+    IOS.prototype.getPrintCard = function (id) {
+        return IOS().getLocalStorageValue(id);
     };
 
     /**
      * Open the photo picker (gallery)
-     * @param limit the number limit of you want pick photo, beyond 15 a log warn is displayed
-     * @param {string[]} alreadySendName the photo what you have already selected with a previous call, they will be already selected in the gallery
-     * @returns {Driver} The driver object
+     * @param {number} limit the number limit of you want pick photo, beyond 15 a log warn is displayed
+     * @param {Array<string>} alreadySendName the photo what you have already selected with a previous call, they will be already selected in the gallery
+     * @param {number} callbackId
+     * @return {Driver} The driver object
+     *
+     * @override
      */
-    iOS.prototype.openPhotoPicker = function openPhotoPicker(limit, alreadySendName, callbackId) {
+    IOS.prototype.openPhotoPicker = function openPhotoPicker(limit, alreadySendName, callbackId) {
 
-        if(!limit) {
+        if (!limit) {
             limit = 5;
         } else if (limit > 15) {
             console.warn('Your limit of photo to send is very high you must be careful with this. Especialy if you want send them');
         }
 
         var data = {};
-        if(callbackId) {
+        if (callbackId) {
             data = {
                 limit: limit,
                 already_used: alreadySendName,
                 kw_photo_picker_id: callbackId
             };
-        } else  {
+        } else {
             data = {
                 limit: limit,
                 already_used: alreadySendName
@@ -178,7 +190,14 @@
         return this;
     };
 
-    iOS.prototype.sendFile = function sendFile(data) {
+    /**
+     * Send a file to the storage Kiwapp
+     * @param data
+     * @return {IOS}
+     *
+     * @override
+     */
+    IOS.prototype.sendFile = function sendFile(data) {
 
         var key = Kiwapp.driver().generateKey();
         localStorage.setItem(key, JSON.stringify(data));
@@ -193,9 +212,13 @@
         return this;
     };
 
-    function findLastId(identifier){
-        var id = (lastId[identifier] === undefined) ? 1  : lastId[identifier];
-        while(window.localStorage[identifier + id] !== undefined) {
+    /*******************
+     * PRIVATES METHODS
+     ******************/
+
+    function findLastId(identifier) {
+        var id = (lastId[identifier] === undefined) ? 1 : lastId[identifier];
+        while (window.localStorage[identifier + id] !== undefined) {
             id++;
         }
 
@@ -210,28 +233,28 @@
         iframe.src = 'basesrc';
         document.documentElement.appendChild(iframe);
 
-        _self.set({messagingIframe : iframe});
-        _self.set({sendMessageQueue : []});
+        _self.set({messagingIframe: iframe});
+        _self.set({sendMessageQueue: []});
     }
 
     //play the last member of the call app queue
-    function playQueue(){
+    function playQueue() {
         /*jshint validthis:true */
         var _self = this;
         var sendMessageQueue = _self.get('sendMessageQueue');
 
-        if(sendMessageQueue.length > 1)
+        if (sendMessageQueue.length > 1)
             setTimeout(playQueue, 50);
 
         send(_self, sendMessageQueue.shift());
     }
 
-    function addToQueue(_self, message){
+    function addToQueue(_self, message) {
         var sendMessageQueue = _self.get('sendMessageQueue');
 
         sendMessageQueue.push(message);
-        if(sendMessageQueue.length === 1){
-          setTimeout(playQueue, 50);
+        if (sendMessageQueue.length === 1) {
+            setTimeout(playQueue, 50);
         }
     }
 
@@ -241,5 +264,5 @@
         messagingIframe.src = message;
     }
 
-    module.exports = iOS;
+    module.exports = IOS;
 })();

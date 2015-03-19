@@ -1,13 +1,14 @@
 'use strict';
 (function(){
     /**
-    *  browserify modules dependencies
+    *  Browserify modules dependencies
     **/
     var Driver = require('./driver');
     var extend = require('../../utils/extend');
 
     /**
      * The Cordova object
+     * @constructor
      */
     function CordovaDriver(){
         Driver.call(this);
@@ -30,12 +31,16 @@
 
     /**
      * Final method to send call to native
-     * @param {string} url The call to native
+     * @param {string} config The call to native
      */
     CordovaDriver.prototype.exec =  function exec(config){
         window.cordova.exec(function() {}, function() {}, 'Kiwapp', config.call, [config.data]);
     };
 
+    /**
+     * Get all the call to the bridge (force all call in the method when you use Cordova bridge)
+     * @param {*} config
+     */
     CordovaDriver.prototype.catchCallApp = function CordovaCatchCallApp(config){
         var _self = this;
 

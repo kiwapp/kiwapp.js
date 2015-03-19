@@ -9,6 +9,7 @@
 
     /**
      * Storage object
+     * @constructor
      */
     function Storage(){
         EventEmitter.call(this);

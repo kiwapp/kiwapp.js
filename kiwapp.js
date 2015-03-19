@@ -32,22 +32,21 @@ module.exports = function(val){
 },{}],2:[function(require,module,exports){
 'use strict';
 (function(){
-    /**
-    *  browserify modules dependencies
-    **/
+
+    // Browserify modules dependencies
     var Driver = require('./driver');
+
+    // Get the driver prototype
+    AndroidDriver.prototype = Object.create(Driver.prototype);
 
     /**
      * The Android object
+     * @constructor
      */
     function AndroidDriver(){
         Driver.call(this);
     }
 
-    /**
-     * Get the driver prototype
-     */
-    AndroidDriver.prototype = Object.create(Driver.prototype);
 
     /**
      * Final method to send call to native
@@ -64,7 +63,7 @@ module.exports = function(val){
 'use strict';
 (function () {
     /**
-     *  browserify modules dependencies
+     *  Browserify modules dependencies
      **/
     var increase = require('../../utils/increaseCapability');
     var extend = require('../../utils/extend');
@@ -73,6 +72,7 @@ module.exports = function(val){
 
     /**
      * The Driver object
+     * @constructor
      */
     function Driver() {
         EventEmitter.call(this);
@@ -95,9 +95,9 @@ module.exports = function(val){
     }
 
     /**
-     * Compute a right url to make a kiwapp driver call
-     * @param  {object} config The config to compute the url
-     * @return {string}        The processed url
+     * Compute a right url to make a Kiwapp driver call
+     * @param {*} config The config to compute the url
+     * @return {string} The processed url
      */
     Driver.prototype.getDriverUrl = function (config) {
         var args = config.data;
@@ -116,8 +116,8 @@ module.exports = function(val){
 
     /**
      * Open native app with bridge
-     * post android package name for open native app
-     * @param  {string} packageName    Package name android app
+     * Post android package name for open native app
+     * @param {string} packageName Package name android app
      */
     Driver.prototype.openNativeApp = function openNativeApp(packageName) {
 
@@ -133,7 +133,7 @@ module.exports = function(val){
     /**
      * Open html5 app with bridge
      * post android package name for open native app
-     * @param  {object} params The config parameters for the open external application HTML 5
+     * @param {*} params The config parameters for the open external application HTML 5
      */
     Driver.prototype.openHTML5App = function openHTML5App(params) {
 
@@ -145,7 +145,7 @@ module.exports = function(val){
 
     /**
      * Catch the callApp event and send it to the native
-     * @param  {object} config The call config
+     * @param  {*} config The call config
      */
     Driver.prototype.catchCallApp = function (config) {
         var _self = this;
@@ -159,11 +159,11 @@ module.exports = function(val){
     };
 
     /**
-     * post method used to post offline entries
-     * @param  {object} data    data to send
-     * @param  {string} type    define the entry type
-     * @param  {url} url     if type is custom, define the url destination
-     * @param  {options} options if type is custom, define the send options
+     * Post method used to post offline entries
+     * @param {*} data data to send
+     * @param {string} type define the entry type
+     * @param {string} url if type is custom, define the url destination
+     * @param {*} options if type is custom, define the send options
      */
     Driver.prototype.post = function (data, type, url, options) {
         window.Kiwapp.driver().trigger('callApp', {
@@ -181,9 +181,9 @@ module.exports = function(val){
 
     /**
      * Set the print string to local storage
-     * @param  {string} the string is stock in local storage with a generate key
+     * @param  {string} The string is stock in local storage with a generate key
      * @param  {string} The identifier id for the print (this identifier will be send in the callback method and you can identify the cart what you trying to print)
-     * @return {Driver}             the driver object
+     * @return {Driver} The driver object
      */
     Driver.prototype.print = function (cardText, cardId) {
 
@@ -208,8 +208,8 @@ module.exports = function(val){
 
     /**
      * Set the device rotation
-     * @param  {string} orientation define the wanted orientation
-     * @return {Driver}             the driver object
+     * @param {string} Orientation define the wanted orientation
+     * @return {Driver} The driver object
      */
     Driver.prototype.rotate = function (orientation) {
         switch (orientation) {
@@ -245,6 +245,7 @@ module.exports = function(val){
 
     /**
      * Log a message to the driver
+     * @param {string} The message to log
      * @return {Driver} The driver object
      */
     Driver.prototype.log = function log(msg) {
@@ -261,7 +262,7 @@ module.exports = function(val){
 
     /**
      * Close the current HTML 5 application and return on the launcher's driver page
-     * @returns {Driver} The driver object
+     * @return {Driver} The driver object
      */
     Driver.prototype.closeApplication = function closeApplication() {
         window.Kiwapp.driver().trigger('callApp', {
@@ -273,9 +274,10 @@ module.exports = function(val){
 
     /**
      * Open the photo picker (gallery)
-     * @param limit the number limit of you want pick photo, beyond 15 a log warn is displayed
-     * @param {string[]} alreadySendName the photo what you have already selected with a previous call, they will be already selected in the gallery
-     * @returns {Driver} The driver object
+     * @param {number} limit the number limit of you want pick photo, beyond 15 a log warn is displayed
+     * @param {Array<string>} alreadySendName the photo what you have already selected with a previous call, they will be already selected in the gallery
+     * @param {number} the callback Id this picker, this callback is useful when you have many photo picker in your application, the response will contained this id
+     * @return {Driver} The driver object
      */
     Driver.prototype.openPhotoPicker = function openPhotoPicker(limit, alreadySendName, callbackId) {
 
@@ -307,6 +309,11 @@ module.exports = function(val){
         return this;
     };
 
+    /**
+     *
+     * @param {Array<{file_type: string, file_id: number, file_path: string, file_url: string}>} the data to send, it will be contain the type of file, the path, an id, and the url where you want send this file
+     * @return {Driver}
+     */
     Driver.prototype.sendFile = function sendFile(data) {
 
         window.Kiwapp.driver().trigger('callApp', {
@@ -317,6 +324,10 @@ module.exports = function(val){
         return this;
     };
 
+    /**
+     * Generate an unique key
+     * @return {string}
+     */
     Driver.prototype.generateKey = function () {
         var key = '';
         var possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
@@ -331,18 +342,21 @@ module.exports = function(val){
 
 },{"../../utils/event":14,"../../utils/extend":15,"../../utils/increaseCapability":17,"../../utils/model":19}],4:[function(require,module,exports){
 'use strict';
-(function(){
-    //require Driver interface
+(function () {
+    // Require Driver interface
     var Driver = require('./driver');
 
-    //memorize the last offline entry ids to earn performances
+    // Memorize the last offline entry ids to earn performances
     var lastId = Object.create(null);
 
+    //Driver interface implementation
+    IOS.prototype = Object.create(Driver.prototype);
+
     /**
-     * iOS Driver constructor
+     * IOS Driver constructor
+     * @constructor
      */
-    function iOS(){
-        /*jshint validthis:true */
+    function IOS() {
         var _self = this;
         Driver.call(_self);
 
@@ -351,15 +365,10 @@ module.exports = function(val){
     }
 
     /**
-     * Driver interface implementation
-     */
-    iOS.prototype = Object.create(Driver.prototype);
-
-    /**
      * method which prepare native call sending on ios
-     * @param  {string} url url describing the call
+     * @param {string} url url describing the call
      */
-    iOS.prototype.exec = function execIOS(url){
+    IOS.prototype.exec = function execIOS(url) {
         var _self = this;
 
         addToQueue(_self, url);
@@ -368,15 +377,15 @@ module.exports = function(val){
     /**
      * method used by native to get stored offline entries in local storage
      * if the given id is false, return a bad entry with error code 404
-     * @param  {string} id the entry id to find in local storage
-     * @return {object}    offline entry
+     * @param {string} id the entry id to find in local storage
+     * @return {*} offline entry
      */
-    iOS.prototype.entry = function entryIOS(id){
+    IOS.prototype.entry = function entryIOS(id) {
         var entry = window.localStorage[id];
-        if(entry === undefined){
+        if (entry === undefined) {
             return JSON.stringify({
-                error : 404,
-                data : ''
+                error: 404,
+                data: ''
             });
         }
         entry = JSON.parse(entry);
@@ -386,45 +395,50 @@ module.exports = function(val){
     };
 
     /**
-     * send offline entry call to native, saving it in local storage
-     * post method used to post offline entries
-     * @param  {object} data    data to send
-     * @param  {string} type    define the entry type
-     * @param  {url} url     if type is custom, define the url destination
-     * @param  {options} options if type is custom, define the send options
+     * Send offline entry call to native, saving it in local storage
+     * Post method used to post offline entries
+     *
+     * @param {*} data data to send
+     * @param {string} type define the entry type
+     * @param {string} url if type is custom, define the url destination
+     * @param {*} options if type is custom, define the send options
+     *
+     * @override
      */
-    iOS.prototype.post = function postIOS(data, type, url, options){
+    IOS.prototype.post = function postIOS(data, type, url, options) {
         var id = findLastId(window.Kiwapp.session().getIdentifier());
         window.localStorage[id] = JSON.stringify({
-            data : data
+            data: data
         });
 
         window.Kiwapp.driver().trigger('callApp', {
-            call : 'store_offline_entry',
-            data : {
-                id : id,
-                type : type,
-                url : url,
-                options : options
+            call: 'store_offline_entry',
+            data: {
+                id: id,
+                type: type,
+                url: url,
+                options: options
             }
         });
     };
 
     /**
      * Set the print string to local storage
-     * @param  {string} the string is stock in local storage with a generate key
-     * @param  {string} The identifier id for the print (this identifier will be send in the callback method and you can identify the cart what you trying to print)
-     * @return {Driver}             the driver object
+     * @param {string} The string is stock in local storage with a generate key
+     * @param {string} The identifier id for the print (this identifier will be send in the callback method and you can identify the cart what you trying to print)
+     * @return {Driver} The driver object
+     *
+     * @override
      */
-    iOS.prototype.print = function(cardText, cardId){
+    IOS.prototype.print = function (cardText, cardId) {
 
-        if(!cardText) {
+        if (!cardText) {
             console.warn('No text to print');
 
             return this;
         }
 
-        if(!cardId) {
+        if (!cardId) {
             cardId = Kiwapp.driver().generateKey();
         }
 
@@ -433,64 +447,73 @@ module.exports = function(val){
         localStorage.setItem(key, cardText);
 
         window.Kiwapp.driver().trigger('callApp', {
-            call : 'print_card',
-            data : {
-                card_id : cardId,
-                card_id_localStorage : key
+            call: 'print_card',
+            data: {
+                card_id: cardId,
+                card_id_localStorage: key
             }
         });
 
         return this;
     };
 
-    iOS.prototype.getLocalStorageValue = function(id) {
+    /**
+     * This method is for allow the iOS driver to retrieve the local storage content of this application,
+     * Is used when we use the bridge with many params (more than 1024 characters)
+     * @param {number} id
+     * @return {*}
+     */
+    IOS.prototype.getLocalStorageValue = function (id) {
         var storage = localStorage.getItem(id);
 
-        if(storage === undefined){
+        if (storage === undefined) {
             return JSON.stringify({
-                error : 404,
-                data : ''
+                error: 404,
+                data: ''
             });
         }
 
         delete window.localStorage[id];
         return JSON.stringify({
-            error : 200,
-            data : storage
+            error: 200,
+            data: storage
         });
     };
 
     /**
-     * Get the print string
-     * @param  {id} the string is get with the key
-     * @return {printString}             the string
+     * Get the print string in the local storage (the card can be very long)
+     * @param  {number} id the string is get with the key
+     * @return {string} the string of the card
      */
-    iOS.prototype.getPrintCard = function(id){
-        return iOS().getLocalStorageValue(id);
+    IOS.prototype.getPrintCard = function (id) {
+        return IOS().getLocalStorageValue(id);
     };
 
     /**
      * Open the photo picker (gallery)
-     * @param limit the number limit of you want pick photo, beyond 15 a log warn is displayed
-     * @param {string[]} alreadySendName the photo what you have already selected with a previous call, they will be already selected in the gallery
-     * @returns {Driver} The driver object
+     * @param {number} limit the number limit of you want pick photo, beyond 15 a log warn is displayed
+     * @param {Array<string>} alreadySendName the photo what you have already selected with a previous call, they will be already selected in the gallery
+     * @param {number} callbackId
+     * @return {Driver} The driver object
+     *
+     * @override
      */
-    iOS.prototype.openPhotoPicker = function openPhotoPicker(limit, alreadySendName, callbackId) {
+    IOS.prototype.openPhotoPicker = function openPhotoPicker(limit, alreadySendName, callbackId) {
 
-        if(!limit) {
+        if (!limit) {
             limit = 5;
         } else if (limit > 15) {
             console.warn('Your limit of photo to send is very high you must be careful with this. Especialy if you want send them');
         }
 
         var data = {};
-        if(callbackId) {
+        if (callbackId) {
             data = {
                 limit: limit,
                 already_used: alreadySendName,
                 kw_photo_picker_id: callbackId
             };
-        } else  {
+        } else {
             data = {
                 limit: limit,
                 already_used: alreadySendName
@@ -510,7 +533,14 @@ module.exports = function(val){
         return this;
     };
 
-    iOS.prototype.sendFile = function sendFile(data) {
+    /**
+     * Send a file to the storage Kiwapp
+     * @param data
+     * @return {IOS}
+     *
+     * @override
+     */
+    IOS.prototype.sendFile = function sendFile(data) {
 
         var key = Kiwapp.driver().generateKey();
         localStorage.setItem(key, JSON.stringify(data));
@@ -525,9 +555,13 @@ module.exports = function(val){
         return this;
     };
 
-    function findLastId(identifier){
-        var id = (lastId[identifier] === undefined) ? 1  : lastId[identifier];
-        while(window.localStorage[identifier + id] !== undefined) {
+    /*******************
+     * PRIVATES METHODS
+     ******************/
+
+    function findLastId(identifier) {
+        var id = (lastId[identifier] === undefined) ? 1 : lastId[identifier];
+        while (window.localStorage[identifier + id] !== undefined) {
             id++;
         }
 
@@ -542,28 +576,28 @@ module.exports = function(val){
         iframe.src = 'basesrc';
         document.documentElement.appendChild(iframe);
 
-        _self.set({messagingIframe : iframe});
-        _self.set({sendMessageQueue : []});
+        _self.set({messagingIframe: iframe});
+        _self.set({sendMessageQueue: []});
     }
 
     //play the last member of the call app queue
-    function playQueue(){
+    function playQueue() {
         /*jshint validthis:true */
         var _self = this;
         var sendMessageQueue = _self.get('sendMessageQueue');
 
-        if(sendMessageQueue.length > 1)
+        if (sendMessageQueue.length > 1)
             setTimeout(playQueue, 50);
 
         send(_self, sendMessageQueue.shift());
     }
 
-    function addToQueue(_self, message){
+    function addToQueue(_self, message) {
         var sendMessageQueue = _self.get('sendMessageQueue');
 
         sendMessageQueue.push(message);
-        if(sendMessageQueue.length === 1){
-          setTimeout(playQueue, 50);
+        if (sendMessageQueue.length === 1) {
+            setTimeout(playQueue, 50);
         }
     }
 
@@ -573,7 +607,7 @@ module.exports = function(val){
         messagingIframe.src = message;
     }
 
-    module.exports = iOS;
+    module.exports = IOS;
 })();
 
 },{"./driver":3}],5:[function(require,module,exports){
@@ -585,9 +619,11 @@ module.exports = function(val){
     var Driver = require('./driver');
 
     /**
-    *  Web object
-    *  Constructor create the bridge (iframe)
-    **/
+     * Web object
+     * Constructor create the bridge (iframe)
+     *
+     * @constructor
+     */
     function Web(){
         var _self = this;
 
@@ -601,7 +637,8 @@ module.exports = function(val){
 
     /**
      * Final method to simulate call to native, tracing it in console
-     * @type {Function}
+     * @param {string} url
+     * @param {*} config
      */
     Web.prototype.exec =  function(url, config){
 
@@ -618,13 +655,12 @@ module.exports = function(val){
 
     module.exports = Web;
 })();
+
 },{"./driver":3}],6:[function(require,module,exports){
 'use strict';
 (function(){
 
-    /**
-    *  browserify modules dependencies
-    **/
+    // Browserify modules dependencies
     var utils = require('../utils/utils');
     var loadJS = utils.loadJS;
     var AndroidDriver = require('./driver/android');
@@ -634,16 +670,14 @@ module.exports = function(val){
     var Stats = require('./stats/stats');
     var Storage = require('./storage/StorageProxy');
 
-    /**
-     * store config, storage and driver in private variables to avoid user modifications
-     */
+    // Store config, storage and driver in private variables to avoid user modifications
     var config = {}, driver, storage;
 
     /**
      * Kiwapp is the function which stores all kiwapp.js features
      * To launch it, a path to the 'config.js' file is needed and an optionnal callback because of async loading
      * It's possible to give a simple javascript object instead of a path, for debugging
-     * @param {string/object}   path     The path to a config file, or an object with the config
+     * @param {string|object}   path     The path to a config file, or an object with the config
      * @param {Function} callback Optionnal callback because of async loading
      * @return {Function} Kiwapp
      */
@@ -654,17 +688,18 @@ module.exports = function(val){
 
     /**
      * The driver object getter
-     * @return {Function} The bridge to communicate with native kiwapp
+     * @return {Function} The bridge to communicate with native Kiwapp
      */
     Kiwapp.driver = function(){
-        if(driver === undefined)
+        if(driver === undefined) {
             loadDriver();
+        }
 
         return driver;
     };
 
     /**
-     * Return your current environement
+     * Return your current environment
      * @return {String}
      */
     Kiwapp.env = function() {
@@ -890,14 +925,10 @@ module.exports = function(val){
         return config;
     }
 
-    /**
-     * add Kiwapp to window
-     * @type {Function}
-     */
+    // Add Kiwapp to window
     window.Kiwapp = Kiwapp;
-
+    // Export the window
     module.exports = Kiwapp;
-
     return Kiwapp;
 })();
 
@@ -905,7 +936,7 @@ module.exports = function(val){
 'use strict';
 (function () {
     /**
-     *  browserify modules dependencies
+     * Browserify modules dependencies
      **/
     var hex_md5 = require('../../libs/md5');
     var extend = require('../../utils/extend');
@@ -923,6 +954,7 @@ module.exports = function(val){
 
     /**
      * Session object
+     * @constructor
      */
     function Session() {
 
@@ -930,8 +962,8 @@ module.exports = function(val){
 
     /**
      * A private method to generate the identifier depending on the deviceIdentifier
-     * @param  {string} identifier The device identifier
-     * @return {string}            The uniqueIdentifier of the session
+     * @param {string} identifier The device identifier
+     * @return {string} The unique identifier for the session
      */
     function generateIdentifier(identifier) {
         var timestamp = Number(new Date());
@@ -941,8 +973,8 @@ module.exports = function(val){
     /**
      * Your callback method is stored here
      * This method will be called when the session timeout time is reached
-     * @param  {function} the callback method
-     * @param  {integer} the timeout in seconds
+     * @param {Function} callback the callback method
+     * @param {number} timeout the timeout in seconds
      */
     Session.launchTimeout = function launchTimeout(callback, timeout) {
 
@@ -966,7 +998,7 @@ module.exports = function(val){
 
     /**
      * Remove your callback
-     * This callback is not losted but it will not trigger anymore
+     * This callback is not lost but it will not trigger anymore
      * For relaunch it, use the method relaunchTimeout
      *
      */
@@ -985,8 +1017,8 @@ module.exports = function(val){
 
     /**
      * Launch a new session if there is no current session (generate a new identifier)
-     * @param  {string} identifier The device identifier
-     * @return {Function}            The session object
+     * @param {string} identifier The device identifier
+     * @return {Function} The session object
      */
     Session.start = function startSession(identifier) {
         if(identifier === undefined && deviceIdentifier === undefined) {
@@ -1046,9 +1078,9 @@ module.exports = function(val){
      * Stores data in the current data object
      * If a second argument is defined, a 'currentURL' is defined
      * This url will be a 'default' url when the send method is called
-     * @param  {object} data Data to store
+     * @param  {*} data Data to store
      * @param  {string} url  Default send url
-     * @return {Function}     The Session
+     * @return {Session} The Session
      */
     Session.store = function storeSession(data, url) {
         if (data === undefined)
@@ -1066,8 +1098,8 @@ module.exports = function(val){
     /**
      * Calls the native with stored data
      * The driver posts it when online come back, or when a ping signal come to the device
-     * @param  {string} url The url to the webservice which recieve data
-     * @return {Function}     The Session
+     * @param {string} url The url to the webservice which recieve data
+     * @return {Session} The Session
      */
     Session.send = function sendSession(config) {
         config = config || currentURL;
@@ -1103,9 +1135,8 @@ module.exports = function(val){
 
     /**
      * create send configuration
-     * @param  {object} config user configuration
-     * @param  {object} data   user data
-     * @return {object}        built configuration
+     * @param {*} config user configuration
+     * @return {Object} built configuration
      */
     function manageConfig(config) {
         var options = Object.create(null);
@@ -1119,46 +1150,61 @@ module.exports = function(val){
 
     module.exports = Session;
 })();
+
 },{"../../libs/md5":12,"../../utils/ajax":13,"../../utils/extend":15}],8:[function(require,module,exports){
 'use strict';
-(function(){
+(function () {
 
     /**
-    *  browserify modules dependencies
-    **/
+     * Browserify modules dependencies
+     **/
     var getDate = require('../../utils/getDate');
 
     /**
-     * store stats history in private variables to avoid user modifications
+     * Store stats history in private variables to avoid user modifications
+     * @type {Object}
      */
     var stats = Object.create(null);
 
     /**
      * Stats object
+     * @constructor
      */
-    function Stats(){
+    function Stats() {
 
     }
 
     /**
-     * Prepare the data format to send it to the native
-     * @param  {string} info   The page or the event to send
-     * @param  {string} type   Define if it's an event or a page
-     * @param  {object} config The Kiwapp config 
-     * @return {object}        The final prepared data
+     * Check if the current user have already a session
+     * If not this will print a warning and create one
      */
-    function prepareData(info, type, config){
+    function checkSession() {
+        if(window.Kiwapp.session().getIdentifier() === undefined) {
+            // Warn the user (for the application developer)
+            console.log('Warning : you haven\'t a session opened, we open one for you. See Kiwapp best practice to http://developer.kiwapp.com/');
+            window.Kiwapp.session().start();
+        }
+    }
+
+    /**
+     * Prepare the data format to send it to the native
+     * @param {string} info The page or the event to send
+     * @param {string} type Define if it's an event or a page
+     * @param {*} config The Kiwapp config
+     * @return {*} The final prepared data
+     */
+    function prepareData(info, type, config) {
 
         var data = {
-            data : {
+            data: {
                 uniqueIdentifier: config.uniqueIdentifier,
                 path: info,
                 deviceIdentifier: config.deviceIdentifier,
                 date: getDate(),
-                appInstanceId : config.appInstanceId,
-                shopId : config.shopId
+                appInstanceId: config.appInstanceId,
+                shopId: config.shopId
             },
-            type : type
+            type: type
         };
 
         return data;
@@ -1166,24 +1212,27 @@ module.exports = function(val){
 
     /**
      * Send the offline stats to the native and store it in history
-     * @param  {object} data The data object sent to native
+     * @param {*} data The data object sent to native
      */
-    function callNative(data){
+    function callNative(data) {
         window.Kiwapp.driver().post(data.data, data.type);
-        if(stats[data.data.identifierInteraction] === undefined){
+        if (stats[data.data.identifierInteraction] === undefined) {
             stats[data.data.identifierInteraction] = {};
         }
         stats[data.data.identifierInteraction][data.data.date] = data;
     }
-    
+
     /**
      * Save a stat of type : page
-     * @param  {string} page The page name
-     * @return {function}    The stats object
+     * @param {string} page The page name
+     * @return {Stats} The stats object
      */
-    Stats.page = function sendPage(page){
-        if(window.Kiwapp !== undefined){
+    Stats.page = function sendPage(page) {
+        if (window.Kiwapp !== undefined) {
             var config = window.Kiwapp.get('appParameters');
+
+            // Check if a session exist (the session are required for the stats), if we haven't yet you open one
+            checkSession();
             config.uniqueIdentifier = window.Kiwapp.session().getIdentifier();
             var data = prepareData(page, 'page', config);
             callNative(data);
@@ -1194,12 +1243,15 @@ module.exports = function(val){
 
     /**
      * Save a stat of type : event
-     * @param  {string} page The event name
-     * @return {function}    The stats object
+     * @param {string} page The event name
+     * @return {Stats} The stats object
      */
-    Stats.event = function sendEvent(e){
-        if(window.Kiwapp !== undefined){
+    Stats.event = function sendEvent(e) {
+        if (window.Kiwapp !== undefined) {
             var config = window.Kiwapp.get('appParameters');
+
+            // Check if a session exist (the session are required for the stats), if we haven't yet you open one
+            checkSession();
             config.uniqueIdentifier = window.Kiwapp.session().getIdentifier();
             var data = prepareData(e, 'event', config);
             callNative(data);
@@ -1210,17 +1262,17 @@ module.exports = function(val){
 
     /**
      * The stats history getter
-     * @return {object} Stats history
+     * @return {Object} Stats history
      */
-    Stats.history = function getHistory(){
+    Stats.history = function getHistory() {
         return Object.create(stats);
     };
 
     /**
-     * clear history
-     * @return {function} Stats object
+     * Clear history
+     * @return {Stats} Stats object
      */
-    Stats.clear = function clearStats(){
+    Stats.clear = function clearStats() {
         stats = Object.create(null);
 
         return Stats;
@@ -1228,7 +1280,7 @@ module.exports = function(val){
 
     module.exports = Stats;
 })();
-            
+
 },{"../../utils/getDate":16}],9:[function(require,module,exports){
 (function(){
 
@@ -1241,6 +1293,7 @@ module.exports = function(val){
 
     /**
      * Storage object
+     * @constructor
      */
     function Storage(){
         EventEmitter.call(this);
@@ -1354,6 +1407,7 @@ module.exports = function(val){
 
     module.exports = Storage;
 })();
+
 },{"../../utils/event":14,"../../utils/increaseCapability":17}],10:[function(require,module,exports){
 (function(){
     'use strict';
@@ -1370,13 +1424,14 @@ module.exports = function(val){
 'use strict';
 (function(){
     /**
-    *  browserify modules dependencies
+    * Browserify modules dependencies
     **/
     var increase = require('../../utils/increaseCapability'),
         EventEmitter = require('../../utils/event');
 
     /**
      * Storage object
+     * @constructor
      */
     function Storage(){
         EventEmitter.call(this);
@@ -1398,8 +1453,8 @@ module.exports = function(val){
      *     deviceInfo : 'your requested key',
      *     deviceData : 'your wanted value'
      * }
-     * @param  {string} key The key of the wanted value
-     * @return {Storage}     The storage object
+     * @param {string} key The key of the wanted value
+     * @return {Storage} The storage object
      */
     Storage.prototype.get = function storageGet(key){
         window.Kiwapp.driver().trigger('callApp', {
@@ -1414,8 +1469,8 @@ module.exports = function(val){
 
     /**
      * Set a value associated to a key in the native db.
-     * @param {string} key   The key of the storde value
-     * @param {multiple} value The value to store
+     * @param {string} key The key of the stored value
+     * @param {*} value The value to store
      * @return {Storage} The Storage object
      */
     Storage.prototype.set = function storageSet(key, value){
@@ -1454,7 +1509,7 @@ module.exports = function(val){
 
     /**
      * Remove a specific key in the native db.
-     * @param  {string} key The key to remove
+     * @param {string} key The key to remove
      * @return {Storage} The Storage object
      */
     Storage.prototype.remove = function storageRemove(key){
@@ -1495,6 +1550,7 @@ module.exports = function(val){
 
     module.exports = Storage;
 })();
+
 },{"../../utils/event":14,"../../utils/increaseCapability":17}],12:[function(require,module,exports){
 /*
  * A JavaScript implementation of the RSA Data Security, Inc. MD5 Message

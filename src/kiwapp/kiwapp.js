@@ -1,9 +1,7 @@
 'use strict';
 (function(){
 
-    /**
-    *  browserify modules dependencies
-    **/
+    // Browserify modules dependencies
     var utils = require('../utils/utils');
     var loadJS = utils.loadJS;
     var AndroidDriver = require('./driver/android');
@@ -13,16 +11,14 @@
     var Stats = require('./stats/stats');
     var Storage = require('./storage/StorageProxy');
 
-    /**
-     * store config, storage and driver in private variables to avoid user modifications
-     */
+    // Store config, storage and driver in private variables to avoid user modifications
     var config = {}, driver, storage;
 
     /**
      * Kiwapp is the function which stores all kiwapp.js features
      * To launch it, a path to the 'config.js' file is needed and an optionnal callback because of async loading
      * It's possible to give a simple javascript object instead of a path, for debugging
-     * @param {string/object}   path     The path to a config file, or an object with the config
+     * @param {string|object}   path     The path to a config file, or an object with the config
      * @param {Function} callback Optionnal callback because of async loading
      * @return {Function} Kiwapp
      */
@@ -33,17 +29,18 @@
 
     /**
      * The driver object getter
-     * @return {Function} The bridge to communicate with native kiwapp
+     * @return {Function} The bridge to communicate with native Kiwapp
      */
     Kiwapp.driver = function(){
-        if(driver === undefined)
+        if(driver === undefined) {
             loadDriver();
+        }
 
         return driver;
     };
 
     /**
-     * Return your current environement
+     * Return your current environment
      * @return {String}
      */
     Kiwapp.env = function() {
@@ -269,13 +266,9 @@
         return config;
     }
 
-    /**
-     * add Kiwapp to window
-     * @type {Function}
-     */
+    // Add Kiwapp to window
     window.Kiwapp = Kiwapp;
-
+    // Export the window
     module.exports = Kiwapp;
-
     return Kiwapp;
 })();

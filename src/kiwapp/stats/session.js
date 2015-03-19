@@ -1,7 +1,7 @@
 'use strict';
 (function () {
     /**
-     *  browserify modules dependencies
+     * Browserify modules dependencies
      **/
     var hex_md5 = require('../../libs/md5');
     var extend = require('../../utils/extend');
@@ -19,6 +19,7 @@
 
     /**
      * Session object
+     * @constructor
      */
     function Session() {
 
@@ -26,8 +27,8 @@
 
     /**
      * A private method to generate the identifier depending on the deviceIdentifier
-     * @param  {string} identifier The device identifier
-     * @return {string}            The uniqueIdentifier of the session
+     * @param {string} identifier The device identifier
+     * @return {string} The unique identifier for the session
      */
     function generateIdentifier(identifier) {
         var timestamp = Number(new Date());
@@ -37,8 +38,8 @@
     /**
      * Your callback method is stored here
      * This method will be called when the session timeout time is reached
-     * @param  {function} the callback method
-     * @param  {integer} the timeout in seconds
+     * @param {Function} callback the callback method
+     * @param {number} timeout the timeout in seconds
      */
     Session.launchTimeout = function launchTimeout(callback, timeout) {
 
@@ -62,7 +63,7 @@
 
     /**
      * Remove your callback
-     * This callback is not losted but it will not trigger anymore
+     * This callback is not lost but it will not trigger anymore
      * For relaunch it, use the method relaunchTimeout
      *
      */
@@ -81,8 +82,8 @@
 
     /**
      * Launch a new session if there is no current session (generate a new identifier)
-     * @param  {string} identifier The device identifier
-     * @return {Function}            The session object
+     * @param {string} identifier The device identifier
+     * @return {Function} The session object
      */
     Session.start = function startSession(identifier) {
         if(identifier === undefined && deviceIdentifier === undefined) {
@@ -142,9 +143,9 @@
      * Stores data in the current data object
      * If a second argument is defined, a 'currentURL' is defined
      * This url will be a 'default' url when the send method is called
-     * @param  {object} data Data to store
+     * @param  {*} data Data to store
      * @param  {string} url  Default send url
-     * @return {Function}     The Session
+     * @return {Session} The Session
      */
     Session.store = function storeSession(data, url) {
         if (data === undefined)
@@ -162,8 +163,8 @@
     /**
      * Calls the native with stored data
      * The driver posts it when online come back, or when a ping signal come to the device
-     * @param  {string} url The url to the webservice which recieve data
-     * @return {Function}     The Session
+     * @param {string} url The url to the webservice which recieve data
+     * @return {Session} The Session
      */
     Session.send = function sendSession(config) {
         config = config || currentURL;
@@ -199,9 +200,8 @@
 
     /**
      * create send configuration
-     * @param  {object} config user configuration
-     * @param  {object} data   user data
-     * @return {object}        built configuration
+     * @param {*} config user configuration
+     * @return {Object} built configuration
      */
     function manageConfig(config) {
         var options = Object.create(null);

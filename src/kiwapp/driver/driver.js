@@ -1,7 +1,7 @@
 'use strict';
 (function () {
     /**
-     *  browserify modules dependencies
+     *  Browserify modules dependencies
      **/
     var increase = require('../../utils/increaseCapability');
     var extend = require('../../utils/extend');
@@ -10,6 +10,7 @@
 
     /**
      * The Driver object
+     * @constructor
      */
     function Driver() {
         EventEmitter.call(this);
@@ -32,9 +33,9 @@
     }
 
     /**
-     * Compute a right url to make a kiwapp driver call
-     * @param  {object} config The config to compute the url
-     * @return {string}        The processed url
+     * Compute a right url to make a Kiwapp driver call
+     * @param {*} config The config to compute the url
+     * @return {string} The processed url
      */
     Driver.prototype.getDriverUrl = function (config) {
         var args = config.data;
@@ -53,8 +54,8 @@
 
     /**
      * Open native app with bridge
-     * post android package name for open native app
-     * @param  {string} packageName    Package name android app
+     * Post android package name for open native app
+     * @param {string} packageName Package name android app
      */
     Driver.prototype.openNativeApp = function openNativeApp(packageName) {
 
@@ -70,7 +71,7 @@
     /**
      * Open html5 app with bridge
      * post android package name for open native app
-     * @param  {object} params The config parameters for the open external application HTML 5
+     * @param {*} params The config parameters for the open external application HTML 5
      */
     Driver.prototype.openHTML5App = function openHTML5App(params) {
 
@@ -82,7 +83,7 @@
 
     /**
      * Catch the callApp event and send it to the native
-     * @param  {object} config The call config
+     * @param  {*} config The call config
      */
     Driver.prototype.catchCallApp = function (config) {
         var _self = this;
@@ -96,11 +97,11 @@
     };
 
     /**
-     * post method used to post offline entries
-     * @param  {object} data    data to send
-     * @param  {string} type    define the entry type
-     * @param  {url} url     if type is custom, define the url destination
-     * @param  {options} options if type is custom, define the send options
+     * Post method used to post offline entries
+     * @param {*} data data to send
+     * @param {string} type define the entry type
+     * @param {string} url if type is custom, define the url destination
+     * @param {*} options if type is custom, define the send options
      */
     Driver.prototype.post = function (data, type, url, options) {
         window.Kiwapp.driver().trigger('callApp', {
@@ -118,9 +119,9 @@
 
     /**
      * Set the print string to local storage
-     * @param  {string} the string is stock in local storage with a generate key
+     * @param  {string} The string is stock in local storage with a generate key
      * @param  {string} The identifier id for the print (this identifier will be send in the callback method and you can identify the cart what you trying to print)
-     * @return {Driver}             the driver object
+     * @return {Driver} The driver object
      */
     Driver.prototype.print = function (cardText, cardId) {
 
@@ -145,8 +146,8 @@
 
     /**
      * Set the device rotation
-     * @param  {string} orientation define the wanted orientation
-     * @return {Driver}             the driver object
+     * @param {string} Orientation define the wanted orientation
+     * @return {Driver} The driver object
      */
     Driver.prototype.rotate = function (orientation) {
         switch (orientation) {
@@ -182,6 +183,7 @@
 
     /**
      * Log a message to the driver
+     * @param {string} The message to log
      * @return {Driver} The driver object
      */
     Driver.prototype.log = function log(msg) {
@@ -198,7 +200,7 @@
 
     /**
      * Close the current HTML 5 application and return on the launcher's driver page
-     * @returns {Driver} The driver object
+     * @return {Driver} The driver object
      */
     Driver.prototype.closeApplication = function closeApplication() {
         window.Kiwapp.driver().trigger('callApp', {
@@ -210,9 +212,10 @@
 
     /**
      * Open the photo picker (gallery)
-     * @param limit the number limit of you want pick photo, beyond 15 a log warn is displayed
-     * @param {string[]} alreadySendName the photo what you have already selected with a previous call, they will be already selected in the gallery
-     * @returns {Driver} The driver object
+     * @param {number} limit the number limit of you want pick photo, beyond 15 a log warn is displayed
+     * @param {Array<string>} alreadySendName the photo what you have already selected with a previous call, they will be already selected in the gallery
+     * @param {number} the callback Id this picker, this callback is useful when you have many photo picker in your application, the response will contained this id
+     * @return {Driver} The driver object
      */
     Driver.prototype.openPhotoPicker = function openPhotoPicker(limit, alreadySendName, callbackId) {
 
@@ -244,6 +247,11 @@
         return this;
     };
 
+    /**
+     *
+     * @param {Array<{file_type: string, file_id: number, file_path: string, file_url: string}>} the data to send, it will be contain the type of file, the path, an id, and the url where you want send this file
+     * @return {Driver}
+     */
     Driver.prototype.sendFile = function sendFile(data) {
 
         window.Kiwapp.driver().trigger('callApp', {
@@ -254,6 +262,10 @@
         return this;
     };
 
+    /**
+     * Generate an unique key
+     * @return {string}
+     */
     Driver.prototype.generateKey = function () {
         var key = '';
         var possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';

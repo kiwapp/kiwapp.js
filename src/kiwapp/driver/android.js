@@ -1,21 +1,20 @@
 'use strict';
 (function(){
-    /**
-    *  browserify modules dependencies
-    **/
+
+    // Browserify modules dependencies
     var Driver = require('./driver');
+
+    // Get the driver prototype
+    AndroidDriver.prototype = Object.create(Driver.prototype);
 
     /**
      * The Android object
+     * @constructor
      */
     function AndroidDriver(){
         Driver.call(this);
     }
 
-    /**
-     * Get the driver prototype
-     */
-    AndroidDriver.prototype = Object.create(Driver.prototype);
 
     /**
      * Final method to send call to native
