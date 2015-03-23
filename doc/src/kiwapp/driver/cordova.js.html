@@ -89,21 +89,15 @@
             <li><a href="/kiwapp.js/doc\src\kiwapp\driver\driver.js.html">driver\driver.js</a></li>
             <li><a href="/kiwapp.js/doc\src\kiwapp\driver\iOS.js.html">driver\iOS.js</a></li>
             <li><a href="/kiwapp.js/doc\src\kiwapp\driver\web.js.html">driver\web.js</a></li>
+              <li><a href="/kiwapp.js/doc\src\kiwapp\stats\session.js.html">stats\session.js</a></li>
+              <li><a href="/kiwapp.js/doc\src\kiwapp\stats\stats.js.html">stats\stats.js</a></li>
             <li><a href="/kiwapp.js/doc\src\kiwapp\storage\StorageBrowser.js.html">storage\StorageBrowser.js</a></li>
             <li><a href="/kiwapp.js/doc\src\kiwapp\storage\StorageProxy.js.html">storage\StorageProxy.js</a></li>
             <li><a href="/kiwapp.js/doc\src\kiwapp\storage\storage.js.html">storage\storage.js</a></li>
-            <li><a href="/kiwapp.js/doc\src\kiwapp\stats\session.js.html">stats\session.js</a></li>
-            <li><a href="/kiwapp.js/doc\src\kiwapp\stats\stats.js.html">stats\stats.js</a></li>
           </ul>
           <div class="scrollspy">
             <ul class="nav nav-list bs-docs-sidenav affix-top">
-              <li><a href="#Driver"><i class="alert alert-success"></i><span>Driver</span></a>
-              </li>
               <li><a href="#CordovaDriver"><i class="alert alert-info"></i><span>CordovaDriver</span></a>
-              </li>
-              <li><a href="#observeEvents"><i class="alert alert-info"></i><span>observeEvents</span></a>
-              </li>
-              <li><a href="#prototype"><i class="alert alert-success"></i><span>prototype</span></a>
               </li>
               <li><a href="#exec"><i class="alert alert-info"></i><span>exec</span></a>
               </li>
@@ -113,16 +107,6 @@
           </div>
         </div>
         <div class="span9">
-          <section id="Driver">
-            <h1>Driver</h1>
-            <h5 class="subheader"></h5>
-            <p>
-              <div class="label label-success radius ctx-type">declaration</div><span>Driver</span>
-            </p>
-          </section>
-          <div class="description"><p>Browserify modules dependencies</p> </div>
-          <pre><code class="language-javascript">var Driver = require('./driver');
-    var extend = require('../../utils/extend');</code></pre>
           <section id="CordovaDriver">
             <h1>CordovaDriver</h1>
             <h5 class="subheader"></h5>
@@ -137,26 +121,6 @@
         delete this.events.callApp;
         observeEvents(this);
     }</code></pre>
-          <section id="observeEvents">
-            <h1>observeEvents</h1>
-            <h5 class="subheader"></h5>
-            <p>
-              <div class="label label-info radius ctx-type">function</div><span>observeEvents()</span>
-            </p>
-          </section>
-          <div class="description"><p>Launch the event listening</p> </div>
-          <pre><code class="language-javascript">function observeEvents(_self){
-        _self.on('callApp', _self.catchCallApp, _self);
-    }</code></pre>
-          <section id="prototype">
-            <h1>prototype</h1>
-            <h5 class="subheader"></h5>
-            <p>
-              <div class="label label-success radius ctx-type">property</div><span>CordovaDriver.prototype</span>
-            </p>
-          </section>
-          <div class="description"><p>Get the driver prototype</p> </div>
-          <pre><code class="language-javascript">CordovaDriver.prototype = Object.create(Driver.prototype);</code></pre>
           <section id="exec">
             <h1>exec</h1>
             <h5 class="subheader"></h5>

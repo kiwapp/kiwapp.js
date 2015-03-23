@@ -1,8 +1,6 @@
 'use strict';
 (function(){
-    /**
-    *  Browserify modules dependencies
-    **/
+    // Browserify modules dependencies
     var Driver = require('./driver');
     var extend = require('../../utils/extend');
 
@@ -17,16 +15,14 @@
         observeEvents(this);
     }
 
-    /**
+    /*!
      * Launch the event listening
      */
     function observeEvents(_self){
         _self.on('callApp', _self.catchCallApp, _self);
     }
 
-    /**
-     * Get the driver prototype
-     */
+    //Get the driver prototype
     CordovaDriver.prototype = Object.create(Driver.prototype);
 
     /**
