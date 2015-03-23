@@ -31,7 +31,7 @@ module.exports = function(val){
 
 },{}],2:[function(require,module,exports){
 'use strict';
-(function(){
+(function () {
 
     // Browserify modules dependencies
     var Driver = require('./driver');
@@ -40,19 +40,21 @@ module.exports = function(val){
     AndroidDriver.prototype = Object.create(Driver.prototype);
 
     /**
-     * The Android object
+     * The Android Driver object
      * @constructor
      */
-    function AndroidDriver(){
+    function AndroidDriver() {
         Driver.call(this);
     }
 
 
     /**
      * Final method to send call to native
+     * This method will override the driver/driver.js method
      * @param {string} url The call to native
+     * @override
      */
-    AndroidDriver.prototype.exec =  function exec(url){
+    AndroidDriver.prototype.exec = function exec(url) {
         window.Android.execute(url);
     };
 
@@ -62,16 +64,14 @@ module.exports = function(val){
 },{"./driver":3}],3:[function(require,module,exports){
 'use strict';
 (function () {
-    /**
-     *  Browserify modules dependencies
-     **/
+    //Browserify modules dependencies
     var increase = require('../../utils/increaseCapability');
     var extend = require('../../utils/extend');
     var EventEmitter = require('../../utils/event');
     var Model = require('../../utils/model');
 
     /**
-     * The Driver object
+     * The Driver object (this class is abstract and will be extended by AndroidDriver, iOSDriver, CordovaDriver or WebDriver)
      * @constructor
      */
     function Driver() {
@@ -81,25 +81,21 @@ module.exports = function(val){
         observeEvents(this);
     }
 
-    /**
-     * Adding capabilities to Driver prototype
-     */
+    // Adding capabilities to Driver prototype
     increase(Driver.prototype, EventEmitter.prototype);
     increase(Driver.prototype, Model.prototype);
 
-    /**
-     * Launch the event listening
-     */
+    //Launch the event listening
     function observeEvents(_self) {
         _self.on('callApp', _self.catchCallApp, _self);
     }
 
-    /**
+    /*!
      * Compute a right url to make a Kiwapp driver call
      * @param {*} config The config to compute the url
      * @return {string} The processed url
      */
-    Driver.prototype.getDriverUrl = function (config) {
+    Driver.prototype.getDriverUrl = function getDriverUrl(config) {
         var args = config.data;
         var url = 'kiwapp://' + config.call + '?';
         var i = 0;
@@ -143,11 +139,11 @@ module.exports = function(val){
         });
     };
 
-    /**
+    /*!
      * Catch the callApp event and send it to the native
      * @param  {*} config The call config
      */
-    Driver.prototype.catchCallApp = function (config) {
+    Driver.prototype.catchCallApp = function catchCallApp(config) {
         var _self = this;
 
         var defaults = {'data': {}};
@@ -165,7 +161,7 @@ module.exports = function(val){
      * @param {string} url if type is custom, define the url destination
      * @param {*} options if type is custom, define the send options
      */
-    Driver.prototype.post = function (data, type, url, options) {
+    Driver.prototype.post = function post(data, type, url, options) {
         window.Kiwapp.driver().trigger('callApp', {
             call: 'store_offline_entry',
             data: {
@@ -185,7 +181,7 @@ module.exports = function(val){
      * @param  {string} The identifier id for the print (this identifier will be send in the callback method and you can identify the cart what you trying to print)
      * @return {Driver} The driver object
      */
-    Driver.prototype.print = function (cardText, cardId) {
+    Driver.prototype.print = function print(cardText, cardId) {
 
         if (!cardText) {
             console.warn('No text to print');
@@ -211,7 +207,7 @@ module.exports = function(val){
      * @param {string} Orientation define the wanted orientation
      * @return {Driver} The driver object
      */
-    Driver.prototype.rotate = function (orientation) {
+    Driver.prototype.rotate = function rotate(orientation) {
         switch (orientation) {
             case 'landscape':
                 orientation = 10;
@@ -324,11 +320,11 @@ module.exports = function(val){
         return this;
     };
 
-    /**
+    /*!
      * Generate an unique key
      * @return {string}
      */
-    Driver.prototype.generateKey = function () {
+    Driver.prototype.generateKey = function generateKey() {
         var key = '';
         var possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
         for (var i = 0; i < 5; i++) {
@@ -365,7 +361,8 @@ module.exports = function(val){
     }
 
     /**
-     * method which prepare native call sending on ios
+     * Method which prepare native call sending on ios
+     * This method will override the driver/driver.js method
      * @param {string} url url describing the call
      */
     IOS.prototype.exec = function execIOS(url) {
@@ -375,7 +372,7 @@ module.exports = function(val){
     };
 
     /**
-     * method used by native to get stored offline entries in local storage
+     * Method used by native to get stored offline entries in local storage
      * if the given id is false, return a bad entry with error code 404
      * @param {string} id the entry id to find in local storage
      * @return {*} offline entry
@@ -637,6 +634,7 @@ module.exports = function(val){
 
     /**
      * Final method to simulate call to native, tracing it in console
+     * This method will override the driver/driver.js method
      * @param {string} url
      * @param {*} config
      */
@@ -675,10 +673,10 @@ module.exports = function(val){
 
     /**
      * Kiwapp is the function which stores all kiwapp.js features
-     * To launch it, a path to the 'config.js' file is needed and an optionnal callback because of async loading
-     * It's possible to give a simple javascript object instead of a path, for debugging
-     * @param {string|object}   path     The path to a config file, or an object with the config
-     * @param {Function} callback Optionnal callback because of async loading
+     * To launch it, a path to the 'config/kiwapp_config.js' file is needed and an optional callback because of async loading
+     * In debug : it's possible to give a simple javascript object instead of a path
+     * @param {string|object} path The path to a config file, or an object with the config
+     * @param {Function} callback Optional callback because of async loading
      * @return {Function} Kiwapp
      */
     function Kiwapp(path, callback){
@@ -687,10 +685,10 @@ module.exports = function(val){
     }
 
     /**
-     * The driver object getter
+     * The driver object getter, this driver Object is typed by OS (android, ios or webbrowser)
      * @return {Function} The bridge to communicate with native Kiwapp
      */
-    Kiwapp.driver = function(){
+    Kiwapp.driver = function driver(){
         if(driver === undefined) {
             loadDriver();
         }
@@ -700,17 +698,18 @@ module.exports = function(val){
 
     /**
      * Return your current environment
-     * @return {String}
+     * @return {String} the name of the current environment (android, ios or webbrowser)
      */
-    Kiwapp.env = function() {
+    Kiwapp.env = function env() {
         return this.driverInstance;
     };
 
     /**
-     * A config getter
-     * If value is undefined, we return the whole config (a copy)
-     * @param  {string} value the config value to get
-     * @return {multi}       the wanted value/the whole config (copy)
+     * Get the config used by Kiwapp
+     * In debug this will return the config/kiwapp_config.js content
+     * In production this will return the value given by the retail manager (like for example the shop name or the user email)
+     * @param {string} value the config value to get, If value is undefined, we return the a copy of the whole config
+     * @return {*} the wanted value/the whole config (copy)
      */
     Kiwapp.get = function get(value){
         if(config === undefined || config.appParameters === undefined) {
@@ -728,9 +727,10 @@ module.exports = function(val){
     };
 
     /**
-     * A config setter
-     * @param {string/object} key   if a string, this is the value to modify, if an object, this is a set of key : value to modify
+     * Set a debug configuration to kiwapp.js (this will modify the driver instance)
+     * @param {string|object} key if a string, this is the value to modify, if an object, this is a set of key : value to modify
      * @param {multi} value the value to associate to the key
+     * @return {object} The current configuration used by kiwapp.js
      */
     Kiwapp.set = function set(key, value){
         if(typeof key === 'object'){
@@ -747,7 +747,7 @@ module.exports = function(val){
 
     /**
      * The session object getter
-     * @return {Function} The object containing session's management
+     * @return {Session} The object containing session's management
      */
     Kiwapp.session = function session(){
         return Session;
@@ -755,7 +755,7 @@ module.exports = function(val){
 
     /**
      * The stats object getter
-     * @return {Function} The object containing stats's management
+     * @return {Stats} The object containing stats's management
      */
     Kiwapp.stats = function stats(){
         return Stats;
@@ -763,7 +763,7 @@ module.exports = function(val){
 
     /**
      * The storage object getter
-     * @return {Function} The object containing storage's management
+     * @return {Storage} The object containing storage's management
      */
     Kiwapp.storage = function getStorage(){
         if(storage === undefined){
@@ -792,7 +792,8 @@ module.exports = function(val){
 
     /**
      * Log a message to the driver
-     * @return {Kiwapp} Kiwapp itself
+     * This message will be displayed in the debug console on the device
+     * @return {Kiwapp} Kiwapp
      */
     Kiwapp.log = function log(msg){
         Kiwapp.driver().trigger('callApp', {
@@ -826,28 +827,31 @@ module.exports = function(val){
     };
 
     /**
-     * getKDSWriterCredentials getter for kds credential object
+     * KDS
+     * GetKDSWriterCredentials getter for kds credential object
      * @return object
      */
-    Kiwapp.getKDSWriterCredentials = function getKDSCredentials(){
-    var object   = Kiwapp.get().webHooksParameters;
-    var kdsCredentials = {};
+    Kiwapp.getKDSWriterCredentials = function getKDSWriterCredentials() {
+        var object = Kiwapp.get().webHooksParameters;
+        var kdsCredentials = {};
 
-    if(object.KDS_INSTANCIATE_RESPONSE!==undefined){
-        try {
-            kdsCredentials = object.KDS_INSTANCIATE_RESPONSE.app;
+        if (object.KDS_INSTANCIATE_RESPONSE !== undefined) {
+            try {
+                kdsCredentials = object.KDS_INSTANCIATE_RESPONSE.app;
             }
-        catch(e){
-                Kiwapp.log('please verify your credential for writing');
+            catch (e) {
+                Kiwapp.log('Please verify your credential for writing in KDS');
             }
         }
 
-    return kdsCredentials;
+        return kdsCredentials;
     };
 
     /**
      * Call the native to rotate the webview
-     * @return {Kiwapp} Kiwapp itself
+     *
+     * @param {string|number} orientation the possible values are 'landscape', 'portrait', 'landscape-left', 'landscape-right', 'portrait-up', 'portrait-down':
+     * @return {Kiwapp} Kiwapp
      */
     Kiwapp.rotate = function rotate(orientation){
         Kiwapp.driver().rotate(orientation);
@@ -857,7 +861,7 @@ module.exports = function(val){
 
     /**
      * Close the current application
-     * @return {Kiwapp} Kiwapp itself
+     * @return {Kiwapp} Kiwapp
      */
     Kiwapp.close = function close(){
         Kiwapp.driver().trigger('callApp', {
@@ -910,7 +914,7 @@ module.exports = function(val){
     }
     /**
      * A private method to load a jsFile or a js object and return the config object
-     * @param {string/object}   path     The path to a config file, or an object with the config
+     * @param {string | object}   path     The path to a config file, or an object with the config
      * @param {Function} callback Optionnal callback because of async loading
      * @return {object}            the loaded/assigned config
      */
@@ -1223,7 +1227,7 @@ module.exports = function(val){
     }
 
     /**
-     * Save a stat of type : page
+     * Save a stat of type page
      * @param {string} page The page name
      * @return {Stats} The stats object
      */
@@ -1242,7 +1246,7 @@ module.exports = function(val){
     };
 
     /**
-     * Save a stat of type : event
+     * Save a stat of type event
      * @param {string} page The event name
      * @return {Stats} The stats object
      */
@@ -1285,9 +1289,7 @@ module.exports = function(val){
 (function(){
 
     'use strict';
-    /**
-    *  browserify modules dependencies
-    **/
+    //browserify modules dependencies/
     var increase = require('../../utils/increaseCapability'),
         EventEmitter = require('../../utils/event');
 
@@ -1299,9 +1301,7 @@ module.exports = function(val){
         EventEmitter.call(this);
     }
 
-    /**
-     * Adding capabilities to Storage prototype
-     */
+    // Adding capabilities to Storage prototype
     increase(Storage.prototype, EventEmitter.prototype);
 
     /**
@@ -1315,7 +1315,7 @@ module.exports = function(val){
      *     deviceData : 'your wanted value'
      * }
      * @param  {string} key The key of the wanted value
-     * @return {Storage}     The storage object
+     * @return {Storage} The storage object
      */
     Storage.prototype.get = function storageGet(key){
 
@@ -1420,12 +1420,11 @@ module.exports = function(val){
         emulation : require('./StorageBrowser')
     };
 })();
+
 },{"./StorageBrowser":9,"./storage":11}],11:[function(require,module,exports){
 'use strict';
 (function(){
-    /**
-    * Browserify modules dependencies
-    **/
+    //Browserify modules dependencies
     var increase = require('../../utils/increaseCapability'),
         EventEmitter = require('../../utils/event');
 
@@ -1438,9 +1437,7 @@ module.exports = function(val){
         observeEvents(this);
     }
 
-    /**
-     * Adding capabilities to Storage prototype
-     */
+    // Adding capabilities to Storage prototype
     increase(Storage.prototype, EventEmitter.prototype);
 
     /**
@@ -1536,7 +1533,7 @@ module.exports = function(val){
         return Storage;
     };
 
-    /**
+    /*!
      * Launch the event listening
      */
     function observeEvents(_self){

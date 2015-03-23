@@ -24,6 +24,7 @@
 
     /**
      * Final method to simulate call to native, tracing it in console
+     * This method will override the driver/driver.js method
      * @param {string} url
      * @param {*} config
      */

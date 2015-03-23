@@ -7,7 +7,7 @@
     var extend = require('../../utils/extend');
 
     /**
-     * The Cordova object
+     * The Cordova Driver object
      * @constructor
      */
     function CordovaDriver(){
@@ -31,6 +31,7 @@
 
     /**
      * Final method to send call to native
+     * This method will override the driver/driver.js method
      * @param {string} config The call to native
      */
     CordovaDriver.prototype.exec =  function exec(config){

@@ -1,9 +1,7 @@
 (function(){
 
     'use strict';
-    /**
-    *  browserify modules dependencies
-    **/
+    //browserify modules dependencies/
     var increase = require('../../utils/increaseCapability'),
         EventEmitter = require('../../utils/event');
 
@@ -15,9 +13,7 @@
         EventEmitter.call(this);
     }
 
-    /**
-     * Adding capabilities to Storage prototype
-     */
+    // Adding capabilities to Storage prototype
     increase(Storage.prototype, EventEmitter.prototype);
 
     /**
@@ -31,7 +27,7 @@
      *     deviceData : 'your wanted value'
      * }
      * @param  {string} key The key of the wanted value
-     * @return {Storage}     The storage object
+     * @return {Storage} The storage object
      */
     Storage.prototype.get = function storageGet(key){
 

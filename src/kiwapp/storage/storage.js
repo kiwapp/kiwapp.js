@@ -1,8 +1,6 @@
 'use strict';
 (function(){
-    /**
-    * Browserify modules dependencies
-    **/
+    //Browserify modules dependencies
     var increase = require('../../utils/increaseCapability'),
         EventEmitter = require('../../utils/event');
 
@@ -15,9 +13,7 @@
         observeEvents(this);
     }
 
-    /**
-     * Adding capabilities to Storage prototype
-     */
+    // Adding capabilities to Storage prototype
     increase(Storage.prototype, EventEmitter.prototype);
 
     /**
@@ -113,7 +109,7 @@
         return Storage;
     };
 
-    /**
+    /*!
      * Launch the event listening
      */
     function observeEvents(_self){

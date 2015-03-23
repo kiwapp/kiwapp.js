@@ -69,7 +69,7 @@
     }
 
     /**
-     * Save a stat of type : page
+     * Save a stat of type page
      * @param {string} page The page name
      * @return {Stats} The stats object
      */
@@ -88,7 +88,7 @@
     };
 
     /**
-     * Save a stat of type : event
+     * Save a stat of type event
      * @param {string} page The event name
      * @return {Stats} The stats object
      */

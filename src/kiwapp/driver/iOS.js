@@ -22,7 +22,8 @@
     }
 
     /**
-     * method which prepare native call sending on ios
+     * Method which prepare native call sending on ios
+     * This method will override the driver/driver.js method
      * @param {string} url url describing the call
      */
     IOS.prototype.exec = function execIOS(url) {
@@ -32,7 +33,7 @@
     };
 
     /**
-     * method used by native to get stored offline entries in local storage
+     * Method used by native to get stored offline entries in local storage
      * if the given id is false, return a bad entry with error code 404
      * @param {string} id the entry id to find in local storage
      * @return {*} offline entry

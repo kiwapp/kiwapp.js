@@ -48,6 +48,18 @@
       }
       
       footer iframe{vertical-align:middle;}
+      .nav-list > .active > a, .nav-list > .active > a:hover, .nav-list > .active > a:focus {background-color:#0facad;}
+      .jumbotron {background:#0facad; box-shadow: none;}
+      
+      a {color:#f09e46}
+      a:hover, a:focus {color:#f09e46}
+      
+      .bs-docs-sidenav > .active > a {background-color#f09e46;}
+      
+      .navbar .brand {
+        display:none;
+      }
+      
       
     </style>
   </head>
@@ -71,33 +83,25 @@
       <div class="row">
         <div class="span3 bs-docs-sidebar">
           <ul class="nav nav-list bs-docs-sidenav affix-top">
-            <li><a href="kiwapp.js.html">kiwapp.js</a></li>
-            <li><a href="driver\android.js.html">driver\android.js</a></li>
-            <li><a href="driver\cordova.js.html">driver\cordova.js</a></li>
-            <li class="active"><a href="driver\driver.js.html">driver\driver.js</a></li>
-            <li><a href="driver\iOS.js.html">driver\iOS.js</a></li>
-            <li><a href="driver\web.js.html">driver\web.js</a></li>
-            <li><a href="stats\session.js.html">stats\session.js</a></li>
-            <li><a href="stats\stats.js.html">stats\stats.js</a></li>
-            <li><a href="storage\StorageBrowser.js.html">storage\StorageBrowser.js</a></li>
-            <li><a href="storage\StorageProxy.js.html">storage\StorageProxy.js</a></li>
-            <li><a href="storage\storage.js.html">storage\storage.js</a></li>
+            <li><a href="/kiwapp.js/doc\src\kiwapp\kiwapp.js.html">kiwapp.js</a></li>
+            <li><a href="/kiwapp.js/doc\src\kiwapp\driver\android.js.html">driver\android.js</a></li>
+            <li><a href="/kiwapp.js/doc\src\kiwapp\driver\cordova.js.html">driver\cordova.js</a></li>
+            <li class="active"><a href="/kiwapp.js/doc\src\kiwapp\driver\driver.js.html">driver\driver.js</a></li>
+            <li><a href="/kiwapp.js/doc\src\kiwapp\driver\iOS.js.html">driver\iOS.js</a></li>
+            <li><a href="/kiwapp.js/doc\src\kiwapp\driver\web.js.html">driver\web.js</a></li>
+            <li><a href="/kiwapp.js/doc\src\kiwapp\storage\StorageBrowser.js.html">storage\StorageBrowser.js</a></li>
+            <li><a href="/kiwapp.js/doc\src\kiwapp\storage\StorageProxy.js.html">storage\StorageProxy.js</a></li>
+            <li><a href="/kiwapp.js/doc\src\kiwapp\storage\storage.js.html">storage\storage.js</a></li>
+            <li><a href="/kiwapp.js/doc\src\kiwapp\stats\session.js.html">stats\session.js</a></li>
+            <li><a href="/kiwapp.js/doc\src\kiwapp\stats\stats.js.html">stats\stats.js</a></li>
           </ul>
           <div class="scrollspy">
             <ul class="nav nav-list bs-docs-sidenav affix-top">
-              <li><a href="#increase"><i class="alert alert-success"></i><span>increase</span></a>
-              </li>
               <li><a href="#Driver"><i class="alert alert-info"></i><span>Driver</span></a>
-              </li>
-              <li><a href="#observeEvents"><i class="alert alert-info"></i><span>observeEvents</span></a>
-              </li>
-              <li><a href="#getDriverUrl"><i class="alert alert-info"></i><span>getDriverUrl</span></a>
               </li>
               <li><a href="#openNativeApp"><i class="alert alert-info"></i><span>openNativeApp</span></a>
               </li>
               <li><a href="#openHTML5App"><i class="alert alert-info"></i><span>openHTML5App</span></a>
-              </li>
-              <li><a href="#catchCallApp"><i class="alert alert-info"></i><span>catchCallApp</span></a>
               </li>
               <li><a href="#post"><i class="alert alert-info"></i><span>post</span></a>
               </li>
@@ -113,24 +117,10 @@
               </li>
               <li><a href="#sendFile"><i class="alert alert-info"></i><span>sendFile</span></a>
               </li>
-              <li><a href="#generateKey"><i class="alert alert-info"></i><span>generateKey</span></a>
-              </li>
             </ul>
           </div>
         </div>
         <div class="span9">
-          <section id="increase">
-            <h1>increase</h1>
-            <h5 class="subheader"></h5>
-            <p>
-              <div class="label label-success radius ctx-type">declaration</div><span>increase</span>
-            </p>
-          </section>
-          <div class="description"><p>Browserify modules dependencies</p> </div>
-          <pre><code class="language-javascript">var increase = require('../../utils/increaseCapability');
-    var extend = require('../../utils/extend');
-    var EventEmitter = require('../../utils/event');
-    var Model = require('../../utils/model');</code></pre>
           <section id="Driver">
             <h1>Driver</h1>
             <h5 class="subheader"></h5>
@@ -138,65 +128,22 @@
               <div class="label label-info radius ctx-type">function</div><span>Driver()</span>
             </p>
           </section>
-          <div class="description"><p>The Driver object</p> </div>
+          <div class="description"><p>The Driver object (this class is abstract and will be extended by AndroidDriver, iOSDriver, CordovaDriver or WebDriver)</p> </div>
           <pre><code class="language-javascript">function Driver() {
         EventEmitter.call(this);
         Model.call(this);
 
         observeEvents(this);
-    }</code></pre>
-          <div class="description"><p>Adding capabilities to Driver prototype</p> </div>
-          <pre><code class="language-javascript">increase(Driver.prototype, EventEmitter.prototype);
-    increase(Driver.prototype, Model.prototype);</code></pre>
-          <section id="observeEvents">
-            <h1>observeEvents</h1>
-            <h5 class="subheader"></h5>
-            <p>
-              <div class="label label-info radius ctx-type">function</div><span>observeEvents()</span>
-            </p>
-          </section>
-          <div class="description"><p>Launch the event listening</p> </div>
-          <pre><code class="language-javascript">function observeEvents(_self) {
+    }
+
+    // Adding capabilities to Driver prototype
+    increase(Driver.prototype, EventEmitter.prototype);
+    increase(Driver.prototype, Model.prototype);
+
+    //Launch the event listening
+    function observeEvents(_self) {
         _self.on('callApp', _self.catchCallApp, _self);
     }</code></pre>
-          <section id="getDriverUrl">
-            <h1>getDriverUrl</h1>
-            <h5 class="subheader"></h5>
-            <p>
-              <div class="label label-info radius ctx-type">method</div><span>Driver.prototype.getDriverUrl()</span> -><span>string</span>
-            </p>
-          </section>
-          <table class="table table-bordered table-striped">
-            <thead>
-              <tr>
-                <th style="width:20%">Option name</th>
-                <th style="width:20%">Type</th>
-                <th>Description</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>config</td>
-                <td>*</td>
-                <td>The config to compute the url</td>
-              </tr>
-            </tbody>
-          </table>
-          <div class="description"><p>Compute a right url to make a Kiwapp driver call</p> </div>
-          <pre><code class="language-javascript">Driver.prototype.getDriverUrl = function (config) {
-        var args = config.data;
-        var url = 'kiwapp://' + config.call + '?';
-        var i = 0;
-        var tmp = '';
-
-        for (var k in args) {
-            if (i &gt; 0) tmp = '&amp;';
-            url = url + tmp + k + '=' + encodeURIComponent(JSON.stringify(args[k]) || '');
-            i++;
-        }
-
-        return url;
-    };</code></pre>
           <section id="openNativeApp">
             <h1>openNativeApp</h1>
             <h5 class="subheader"></h5>
@@ -262,40 +209,6 @@
             data: params
         });
     };</code></pre>
-          <section id="catchCallApp">
-            <h1>catchCallApp</h1>
-            <h5 class="subheader"></h5>
-            <p>
-              <div class="label label-info radius ctx-type">method</div><span>Driver.prototype.catchCallApp()</span>
-            </p>
-          </section>
-          <table class="table table-bordered table-striped">
-            <thead>
-              <tr>
-                <th style="width:20%">Option name</th>
-                <th style="width:20%">Type</th>
-                <th>Description</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>config</td>
-                <td>*</td>
-                <td>The call config</td>
-              </tr>
-            </tbody>
-          </table>
-          <div class="description"><p>Catch the callApp event and send it to the native</p> </div>
-          <pre><code class="language-javascript">Driver.prototype.catchCallApp = function (config) {
-        var _self = this;
-
-        var defaults = {'data': {}};
-        config = extend({}, defaults, config);
-
-        var url = _self.getDriverUrl(config);
-
-        _self.exec(url, config);
-    };</code></pre>
           <section id="post">
             <h1>post</h1>
             <h5 class="subheader"></h5>
@@ -335,7 +248,7 @@
             </tbody>
           </table>
           <div class="description"><p>Post method used to post offline entries</p> </div>
-          <pre><code class="language-javascript">Driver.prototype.post = function (data, type, url, options) {
+          <pre><code class="language-javascript">Driver.prototype.post = function post(data, type, url, options) {
         window.Kiwapp.driver().trigger('callApp', {
             call: 'store_offline_entry',
             data: {
@@ -377,7 +290,7 @@
             </tbody>
           </table>
           <div class="description"><p>Set the print string to local storage</p> </div>
-          <pre><code class="language-javascript">Driver.prototype.print = function (cardText, cardId) {
+          <pre><code class="language-javascript">Driver.prototype.print = function print(cardText, cardId) {
 
         if (!cardText) {
             console.warn('No text to print');
@@ -421,7 +334,7 @@
             </tbody>
           </table>
           <div class="description"><p>Set the device rotation</p> </div>
-          <pre><code class="language-javascript">Driver.prototype.rotate = function (orientation) {
+          <pre><code class="language-javascript">Driver.prototype.rotate = function rotate(orientation) {
         switch (orientation) {
             case 'landscape':
                 orientation = 10;
@@ -582,35 +495,9 @@
 
         return this;
     };</code></pre>
-          <section id="generateKey">
-            <h1>generateKey</h1>
-            <h5 class="subheader"></h5>
-            <p>
-              <div class="label label-info radius ctx-type">method</div><span>Driver.prototype.generateKey()</span> -><span>string</span>
-            </p>
-          </section>
-          <div class="description"><p>Generate an unique key</p> </div>
-          <pre><code class="language-javascript">Driver.prototype.generateKey = function () {
-        var key = '';
-        var possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-        for (var i = 0; i &lt; 5; i++) {
-            key += possible.charAt(Math.floor(Math.random() * possible.length));
-        }
-
-        return 'kw_card_' + key + Math.round(new Date().getTime() / 1000);
-    };
-    module.exports = Driver;
-})();</code></pre>
         </div>
       </div>
     </div>
-    <footer class="footer">
-      <div class="container">
-        <p>Documentation generated with<a href="https://github.com/FGRibreau/doxx">Doxx</a>created by<a href="https://twitter.com/FGRibreau" data-show-count="false" class="twitter-follow-button">Francois-Guillaume Ribreau</a></p>
-        <p>Doxx is sponsored by<a href="http://bringr.net/?btt" title="Outil d'analyse des réseaux sociaux" class="bringr">Bringr</a>and<a href="https://redsmin.com/?btt" title="Full Redis GUI" class="redsmin">Redsmin</a></p>
-        <p>Theme borrowed from Twitter Bootstrap</p>
-      </div>
-    </footer>
     <script src="http://platform.twitter.com/widgets.js"></script>
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8/jquery.min.js"></script>
     <script src="http://leaverou.github.com/prefixfree/prefixfree.js"></script>

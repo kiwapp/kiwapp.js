@@ -48,6 +48,18 @@
       }
       
       footer iframe{vertical-align:middle;}
+      .nav-list > .active > a, .nav-list > .active > a:hover, .nav-list > .active > a:focus {background-color:#0facad;}
+      .jumbotron {background:#0facad; box-shadow: none;}
+      
+      a {color:#f09e46}
+      a:hover, a:focus {color:#f09e46}
+      
+      .bs-docs-sidenav > .active > a {background-color#f09e46;}
+      
+      .navbar .brand {
+        display:none;
+      }
+      
       
     </style>
   </head>
@@ -71,21 +83,21 @@
       <div class="row">
         <div class="span3 bs-docs-sidebar">
           <ul class="nav nav-list bs-docs-sidenav affix-top">
-            <li><a href="kiwapp.js.html">kiwapp.js</a></li>
-            <li><a href="driver\android.js.html">driver\android.js</a></li>
-            <li><a href="driver\cordova.js.html">driver\cordova.js</a></li>
-            <li><a href="driver\driver.js.html">driver\driver.js</a></li>
-            <li class="active"><a href="driver\iOS.js.html">driver\iOS.js</a></li>
-            <li><a href="driver\web.js.html">driver\web.js</a></li>
-            <li><a href="stats\session.js.html">stats\session.js</a></li>
-            <li><a href="stats\stats.js.html">stats\stats.js</a></li>
-            <li><a href="storage\StorageBrowser.js.html">storage\StorageBrowser.js</a></li>
-            <li><a href="storage\StorageProxy.js.html">storage\StorageProxy.js</a></li>
-            <li><a href="storage\storage.js.html">storage\storage.js</a></li>
+            <li><a href="/kiwapp.js/doc\src\kiwapp\kiwapp.js.html">kiwapp.js</a></li>
+            <li><a href="/kiwapp.js/doc\src\kiwapp\driver\android.js.html">driver\android.js</a></li>
+            <li><a href="/kiwapp.js/doc\src\kiwapp\driver\cordova.js.html">driver\cordova.js</a></li>
+            <li><a href="/kiwapp.js/doc\src\kiwapp\driver\driver.js.html">driver\driver.js</a></li>
+            <li class="active"><a href="/kiwapp.js/doc\src\kiwapp\driver\iOS.js.html">driver\iOS.js</a></li>
+            <li><a href="/kiwapp.js/doc\src\kiwapp\driver\web.js.html">driver\web.js</a></li>
+            <li><a href="/kiwapp.js/doc\src\kiwapp\storage\StorageBrowser.js.html">storage\StorageBrowser.js</a></li>
+            <li><a href="/kiwapp.js/doc\src\kiwapp\storage\StorageProxy.js.html">storage\StorageProxy.js</a></li>
+            <li><a href="/kiwapp.js/doc\src\kiwapp\storage\storage.js.html">storage\storage.js</a></li>
+            <li><a href="/kiwapp.js/doc\src\kiwapp\stats\session.js.html">stats\session.js</a></li>
+            <li><a href="/kiwapp.js/doc\src\kiwapp\stats\stats.js.html">stats\stats.js</a></li>
           </ul>
           <div class="scrollspy">
             <ul class="nav nav-list bs-docs-sidenav affix-top">
-              <li><a href="#iOS"><i class="alert alert-info"></i><span>iOS</span></a>
+              <li><a href="#IOS"><i class="alert alert-info"></i><span>IOS</span></a>
               </li>
               <li><a href="#exec"><i class="alert alert-info"></i><span>exec</span></a>
               </li>
@@ -111,20 +123,26 @@
           </div>
         </div>
         <div class="span9">
-          <section id="iOS">
-            <h1>iOS</h1>
+          <section id="IOS">
+            <h1>IOS</h1>
             <h5 class="subheader"></h5>
             <p>
-              <div class="label label-info radius ctx-type">function</div><span>iOS()</span>
+              <div class="label label-info radius ctx-type">function</div><span>IOS()</span>
             </p>
           </section>
-          <div class="description"><p>iOS Driver constructor</p> </div>
-          <pre><code class="language-javascript">function iOS(){</code></pre>
+          <div class="description"><p>IOS Driver constructor</p> </div>
+          <pre><code class="language-javascript">function IOS() {
+        var _self = this;
+        Driver.call(_self);
+
+        createBridge(_self);
+        playQueue = playQueue.bind(_self);
+    }</code></pre>
           <section id="exec">
             <h1>exec</h1>
             <h5 class="subheader"></h5>
             <p>
-              <div class="label label-info radius ctx-type">method</div><span>iOS.prototype.exec()</span>
+              <div class="label label-info radius ctx-type">method</div><span>IOS.prototype.exec()</span>
             </p>
           </section>
           <table class="table table-bordered table-striped">
@@ -143,8 +161,8 @@
               </tr>
             </tbody>
           </table>
-          <div class="description"><p>method which prepare native call sending on ios</p> </div>
-          <pre><code class="language-javascript">iOS.prototype.exec = function execIOS(url){
+          <div class="description"><p>Method which prepare native call sending on ios<br />This method will override the driver/driver.js method</p> </div>
+          <pre><code class="language-javascript">IOS.prototype.exec = function execIOS(url) {
         var _self = this;
 
         addToQueue(_self, url);
@@ -153,7 +171,7 @@
             <h1>entry</h1>
             <h5 class="subheader"></h5>
             <p>
-              <div class="label label-info radius ctx-type">method</div><span>iOS.prototype.entry()</span> -><span>*</span>
+              <div class="label label-info radius ctx-type">method</div><span>IOS.prototype.entry()</span> -><span>*</span>
             </p>
           </section>
           <table class="table table-bordered table-striped">
@@ -172,13 +190,13 @@
               </tr>
             </tbody>
           </table>
-          <div class="description"><p>method used by native to get stored offline entries in local storage<br />if the given id is false, return a bad entry with error code 404</p> </div>
-          <pre><code class="language-javascript">iOS.prototype.entry = function entryIOS(id){
+          <div class="description"><p>Method used by native to get stored offline entries in local storage<br />if the given id is false, return a bad entry with error code 404</p> </div>
+          <pre><code class="language-javascript">IOS.prototype.entry = function entryIOS(id) {
         var entry = window.localStorage[id];
-        if(entry === undefined){
+        if (entry === undefined) {
             return JSON.stringify({
-                error : 404,
-                data : ''
+                error: 404,
+                data: ''
             });
         }
         entry = JSON.parse(entry);
@@ -190,7 +208,7 @@
             <h1>post</h1>
             <h5 class="subheader"></h5>
             <p>
-              <div class="label label-info radius ctx-type">method</div><span>iOS.prototype.post()</span>
+              <div class="label label-info radius ctx-type">method</div><span>IOS.prototype.post()</span>
             </p>
           </section>
           <table class="table table-bordered table-striped">
@@ -225,19 +243,19 @@
             </tbody>
           </table>
           <div class="description"><p>Send offline entry call to native, saving it in local storage<br />Post method used to post offline entries</p> </div>
-          <pre><code class="language-javascript">iOS.prototype.post = function postIOS(data, type, url, options){
+          <pre><code class="language-javascript">IOS.prototype.post = function postIOS(data, type, url, options) {
         var id = findLastId(window.Kiwapp.session().getIdentifier());
         window.localStorage[id] = JSON.stringify({
-            data : data
+            data: data
         });
 
         window.Kiwapp.driver().trigger('callApp', {
-            call : 'store_offline_entry',
-            data : {
-                id : id,
-                type : type,
-                url : url,
-                options : options
+            call: 'store_offline_entry',
+            data: {
+                id: id,
+                type: type,
+                url: url,
+                options: options
             }
         });
     };</code></pre>
@@ -245,7 +263,7 @@
             <h1>print</h1>
             <h5 class="subheader"></h5>
             <p>
-              <div class="label label-info radius ctx-type">method</div><span>iOS.prototype.print()</span> -><span>Driver</span>
+              <div class="label label-info radius ctx-type">method</div><span>IOS.prototype.print()</span> -><span>Driver</span>
             </p>
           </section>
           <table class="table table-bordered table-striped">
@@ -270,15 +288,15 @@
             </tbody>
           </table>
           <div class="description"><p>Set the print string to local storage</p> </div>
-          <pre><code class="language-javascript">iOS.prototype.print = function(cardText, cardId){
+          <pre><code class="language-javascript">IOS.prototype.print = function (cardText, cardId) {
 
-        if(!cardText) {
+        if (!cardText) {
             console.warn('No text to print');
 
             return this;
         }
 
-        if(!cardId) {
+        if (!cardId) {
             cardId = Kiwapp.driver().generateKey();
         }
 
@@ -287,10 +305,10 @@
         localStorage.setItem(key, cardText);
 
         window.Kiwapp.driver().trigger('callApp', {
-            call : 'print_card',
-            data : {
-                card_id : cardId,
-                card_id_localStorage : key
+            call: 'print_card',
+            data: {
+                card_id: cardId,
+                card_id_localStorage: key
             }
         });
 
@@ -300,7 +318,7 @@
             <h1>getLocalStorageValue</h1>
             <h5 class="subheader"></h5>
             <p>
-              <div class="label label-info radius ctx-type">method</div><span>iOS.prototype.getLocalStorageValue()</span> -><span>*</span>
+              <div class="label label-info radius ctx-type">method</div><span>IOS.prototype.getLocalStorageValue()</span> -><span>*</span>
             </p>
           </section>
           <table class="table table-bordered table-striped">
@@ -320,27 +338,27 @@
             </tbody>
           </table>
           <div class="description"><p>This method is for allow the iOS driver to retrieve the local storage content of this application,<br />Is used when we use the bridge with many params (more than 1024 characters)</p> </div>
-          <pre><code class="language-javascript">iOS.prototype.getLocalStorageValue = function(id) {
+          <pre><code class="language-javascript">IOS.prototype.getLocalStorageValue = function (id) {
         var storage = localStorage.getItem(id);
 
-        if(storage === undefined){
+        if (storage === undefined) {
             return JSON.stringify({
-                error : 404,
-                data : ''
+                error: 404,
+                data: ''
             });
         }
 
         delete window.localStorage[id];
         return JSON.stringify({
-            error : 200,
-            data : storage
+            error: 200,
+            data: storage
         });
     };</code></pre>
           <section id="getPrintCard">
             <h1>getPrintCard</h1>
             <h5 class="subheader"></h5>
             <p>
-              <div class="label label-info radius ctx-type">method</div><span>iOS.prototype.getPrintCard()</span> -><span>string</span>
+              <div class="label label-info radius ctx-type">method</div><span>IOS.prototype.getPrintCard()</span> -><span>string</span>
             </p>
           </section>
           <table class="table table-bordered table-striped">
@@ -360,14 +378,14 @@
             </tbody>
           </table>
           <div class="description"><p>Get the print string in the local storage (the card can be very long)</p> </div>
-          <pre><code class="language-javascript">iOS.prototype.getPrintCard = function(id){
-        return iOS().getLocalStorageValue(id);
+          <pre><code class="language-javascript">IOS.prototype.getPrintCard = function (id) {
+        return IOS().getLocalStorageValue(id);
     };</code></pre>
           <section id="openPhotoPicker">
             <h1>openPhotoPicker</h1>
             <h5 class="subheader"></h5>
             <p>
-              <div class="label label-info radius ctx-type">method</div><span>iOS.prototype.openPhotoPicker()</span> -><span>Driver</span>
+              <div class="label label-info radius ctx-type">method</div><span>IOS.prototype.openPhotoPicker()</span> -><span>Driver</span>
             </p>
           </section>
           <table class="table table-bordered table-striped">
@@ -397,22 +415,22 @@
             </tbody>
           </table>
           <div class="description"><p>Open the photo picker (gallery)</p> </div>
-          <pre><code class="language-javascript">iOS.prototype.openPhotoPicker = function openPhotoPicker(limit, alreadySendName, callbackId) {
+          <pre><code class="language-javascript">IOS.prototype.openPhotoPicker = function openPhotoPicker(limit, alreadySendName, callbackId) {
 
-        if(!limit) {
+        if (!limit) {
             limit = 5;
         } else if (limit &gt; 15) {
             console.warn('Your limit of photo to send is very high you must be careful with this. Especialy if you want send them');
         }
 
         var data = {};
-        if(callbackId) {
+        if (callbackId) {
             data = {
                 limit: limit,
                 already_used: alreadySendName,
                 kw_photo_picker_id: callbackId
             };
-        } else  {
+        } else {
             data = {
                 limit: limit,
                 already_used: alreadySendName
@@ -435,7 +453,7 @@
             <h1>sendFile</h1>
             <h5 class="subheader"></h5>
             <p>
-              <div class="label label-info radius ctx-type">method</div><span>iOS.prototype.sendFile()</span> -><span>iOS</span>
+              <div class="label label-info radius ctx-type">method</div><span>IOS.prototype.sendFile()</span> -><span>IOS</span>
             </p>
           </section>
           <table class="table table-bordered table-striped">
@@ -455,7 +473,7 @@
             </tbody>
           </table>
           <div class="description"><p>Send a file to the storage Kiwapp</p> </div>
-          <pre><code class="language-javascript">iOS.prototype.sendFile = function sendFile(data) {
+          <pre><code class="language-javascript">IOS.prototype.sendFile = function sendFile(data) {
 
         var key = Kiwapp.driver().generateKey();
         localStorage.setItem(key, JSON.stringify(data));
@@ -479,9 +497,9 @@
           <div class="description"><hr>
 <p>PRIVATES METHODS</p><hr>
  </div>
-          <pre><code class="language-javascript">function findLastId(identifier){
-        var id = (lastId[identifier] === undefined) ? 1  : lastId[identifier];
-        while(window.localStorage[identifier + id] !== undefined) {
+          <pre><code class="language-javascript">function findLastId(identifier) {
+        var id = (lastId[identifier] === undefined) ? 1 : lastId[identifier];
+        while (window.localStorage[identifier + id] !== undefined) {
             id++;
         }
 
@@ -496,12 +514,12 @@
         iframe.src = 'basesrc';
         document.documentElement.appendChild(iframe);
 
-        _self.set({messagingIframe : iframe});
-        _self.set({sendMessageQueue : []});
+        _self.set({messagingIframe: iframe});
+        _self.set({sendMessageQueue: []});
     }
 
     //play the last member of the call app queue
-    function playQueue(){</code></pre>
+    function playQueue() {</code></pre>
           <section id="_self">
             <h1>_self</h1>
             <h5 class="subheader"></h5>
@@ -513,18 +531,18 @@
           <pre><code class="language-javascript">var _self = this;
         var sendMessageQueue = _self.get('sendMessageQueue');
 
-        if(sendMessageQueue.length &gt; 1)
+        if (sendMessageQueue.length &gt; 1)
             setTimeout(playQueue, 50);
 
         send(_self, sendMessageQueue.shift());
     }
 
-    function addToQueue(_self, message){
+    function addToQueue(_self, message) {
         var sendMessageQueue = _self.get('sendMessageQueue');
 
         sendMessageQueue.push(message);
-        if(sendMessageQueue.length === 1){
-          setTimeout(playQueue, 50);
+        if (sendMessageQueue.length === 1) {
+            setTimeout(playQueue, 50);
         }
     }
 
@@ -534,18 +552,11 @@
         messagingIframe.src = message;
     }
 
-    module.exports = iOS;
+    module.exports = IOS;
 })();</code></pre>
         </div>
       </div>
     </div>
-    <footer class="footer">
-      <div class="container">
-        <p>Documentation generated with<a href="https://github.com/FGRibreau/doxx">Doxx</a>created by<a href="https://twitter.com/FGRibreau" data-show-count="false" class="twitter-follow-button">Francois-Guillaume Ribreau</a></p>
-        <p>Doxx is sponsored by<a href="http://bringr.net/?btt" title="Outil d'analyse des réseaux sociaux" class="bringr">Bringr</a>and<a href="https://redsmin.com/?btt" title="Full Redis GUI" class="redsmin">Redsmin</a></p>
-        <p>Theme borrowed from Twitter Bootstrap</p>
-      </div>
-    </footer>
     <script src="http://platform.twitter.com/widgets.js"></script>
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8/jquery.min.js"></script>
     <script src="http://leaverou.github.com/prefixfree/prefixfree.js"></script>

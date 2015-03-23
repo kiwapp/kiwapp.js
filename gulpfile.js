@@ -45,7 +45,9 @@ gulp.task('watch', function(){
 gulp.task('doc', function() {
    gulp.src(path + '/kiwapp/**/*.js')
        .pipe(doxx({
-           title: 'kiwapp.js'
+           title: 'kiwapp.js',
+           urlPrefix: '/kiwapp.js/doc',
+           template: 'doc/template/template.jade'
        }))
        .pipe(gulp.dest('./doc'));
 });

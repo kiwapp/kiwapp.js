@@ -48,6 +48,18 @@
       }
       
       footer iframe{vertical-align:middle;}
+      .nav-list > .active > a, .nav-list > .active > a:hover, .nav-list > .active > a:focus {background-color:#0facad;}
+      .jumbotron {background:#0facad; box-shadow: none;}
+      
+      a {color:#f09e46}
+      a:hover, a:focus {color:#f09e46}
+      
+      .bs-docs-sidenav > .active > a {background-color#f09e46;}
+      
+      .navbar .brand {
+        display:none;
+      }
+      
       
     </style>
   </head>
@@ -71,22 +83,20 @@
       <div class="row">
         <div class="span3 bs-docs-sidebar">
           <ul class="nav nav-list bs-docs-sidenav affix-top">
-            <li><a href="kiwapp.js.html">kiwapp.js</a></li>
-            <li><a href="driver\android.js.html">driver\android.js</a></li>
-            <li><a href="driver\cordova.js.html">driver\cordova.js</a></li>
-            <li><a href="driver\driver.js.html">driver\driver.js</a></li>
-            <li><a href="driver\iOS.js.html">driver\iOS.js</a></li>
-            <li><a href="driver\web.js.html">driver\web.js</a></li>
-            <li><a href="stats\session.js.html">stats\session.js</a></li>
-            <li><a href="stats\stats.js.html">stats\stats.js</a></li>
-            <li class="active"><a href="storage\StorageBrowser.js.html">storage\StorageBrowser.js</a></li>
-            <li><a href="storage\StorageProxy.js.html">storage\StorageProxy.js</a></li>
-            <li><a href="storage\storage.js.html">storage\storage.js</a></li>
+            <li><a href="/kiwapp.js/doc\src\kiwapp\kiwapp.js.html">kiwapp.js</a></li>
+            <li><a href="/kiwapp.js/doc\src\kiwapp\driver\android.js.html">driver\android.js</a></li>
+            <li><a href="/kiwapp.js/doc\src\kiwapp\driver\cordova.js.html">driver\cordova.js</a></li>
+            <li><a href="/kiwapp.js/doc\src\kiwapp\driver\driver.js.html">driver\driver.js</a></li>
+            <li><a href="/kiwapp.js/doc\src\kiwapp\driver\iOS.js.html">driver\iOS.js</a></li>
+            <li><a href="/kiwapp.js/doc\src\kiwapp\driver\web.js.html">driver\web.js</a></li>
+            <li class="active"><a href="/kiwapp.js/doc\src\kiwapp\storage\StorageBrowser.js.html">storage\StorageBrowser.js</a></li>
+            <li><a href="/kiwapp.js/doc\src\kiwapp\storage\StorageProxy.js.html">storage\StorageProxy.js</a></li>
+            <li><a href="/kiwapp.js/doc\src\kiwapp\storage\storage.js.html">storage\storage.js</a></li>
+            <li><a href="/kiwapp.js/doc\src\kiwapp\stats\session.js.html">stats\session.js</a></li>
+            <li><a href="/kiwapp.js/doc\src\kiwapp\stats\stats.js.html">stats\stats.js</a></li>
           </ul>
           <div class="scrollspy">
             <ul class="nav nav-list bs-docs-sidenav affix-top">
-              <li><a href="#increase"><i class="alert alert-success"></i><span>increase</span></a>
-              </li>
               <li><a href="#Storage"><i class="alert alert-info"></i><span>Storage</span></a>
               </li>
               <li><a href="#get"><i class="alert alert-info"></i><span>get</span></a>
@@ -103,16 +113,6 @@
           </div>
         </div>
         <div class="span9">
-          <section id="increase">
-            <h1>increase</h1>
-            <h5 class="subheader"></h5>
-            <p>
-              <div class="label label-success radius ctx-type">declaration</div><span>increase</span>
-            </p>
-          </section>
-          <div class="description"><p>browserify modules dependencies</p> </div>
-          <pre><code class="language-javascript">var increase = require('../../utils/increaseCapability'),
-        EventEmitter = require('../../utils/event');</code></pre>
           <section id="Storage">
             <h1>Storage</h1>
             <h5 class="subheader"></h5>
@@ -123,9 +123,10 @@
           <div class="description"><p>Storage object</p> </div>
           <pre><code class="language-javascript">function Storage(){
         EventEmitter.call(this);
-    }</code></pre>
-          <div class="description"><p>Adding capabilities to Storage prototype</p> </div>
-          <pre><code class="language-javascript">increase(Storage.prototype, EventEmitter.prototype);</code></pre>
+    }
+
+    // Adding capabilities to Storage prototype
+    increase(Storage.prototype, EventEmitter.prototype);</code></pre>
           <section id="get">
             <h1>get</h1>
             <h5 class="subheader"></h5>
@@ -281,13 +282,6 @@
         </div>
       </div>
     </div>
-    <footer class="footer">
-      <div class="container">
-        <p>Documentation generated with<a href="https://github.com/FGRibreau/doxx">Doxx</a>created by<a href="https://twitter.com/FGRibreau" data-show-count="false" class="twitter-follow-button">Francois-Guillaume Ribreau</a></p>
-        <p>Doxx is sponsored by<a href="http://bringr.net/?btt" title="Outil d'analyse des réseaux sociaux" class="bringr">Bringr</a>and<a href="https://redsmin.com/?btt" title="Full Redis GUI" class="redsmin">Redsmin</a></p>
-        <p>Theme borrowed from Twitter Bootstrap</p>
-      </div>
-    </footer>
     <script src="http://platform.twitter.com/widgets.js"></script>
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8/jquery.min.js"></script>
     <script src="http://leaverou.github.com/prefixfree/prefixfree.js"></script>

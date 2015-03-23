@@ -48,6 +48,18 @@
       }
       
       footer iframe{vertical-align:middle;}
+      .nav-list > .active > a, .nav-list > .active > a:hover, .nav-list > .active > a:focus {background-color:#0facad;}
+      .jumbotron {background:#0facad; box-shadow: none;}
+      
+      a {color:#f09e46}
+      a:hover, a:focus {color:#f09e46}
+      
+      .bs-docs-sidenav > .active > a {background-color#f09e46;}
+      
+      .navbar .brand {
+        display:none;
+      }
+      
       
     </style>
   </head>
@@ -71,17 +83,17 @@
       <div class="row">
         <div class="span3 bs-docs-sidebar">
           <ul class="nav nav-list bs-docs-sidenav affix-top">
-            <li class="active"><a href="kiwapp.js.html">kiwapp.js</a></li>
-            <li><a href="driver\android.js.html">driver\android.js</a></li>
-            <li><a href="driver\cordova.js.html">driver\cordova.js</a></li>
-            <li><a href="driver\driver.js.html">driver\driver.js</a></li>
-            <li><a href="driver\iOS.js.html">driver\iOS.js</a></li>
-            <li><a href="driver\web.js.html">driver\web.js</a></li>
-            <li><a href="stats\session.js.html">stats\session.js</a></li>
-            <li><a href="stats\stats.js.html">stats\stats.js</a></li>
-            <li><a href="storage\StorageBrowser.js.html">storage\StorageBrowser.js</a></li>
-            <li><a href="storage\StorageProxy.js.html">storage\StorageProxy.js</a></li>
-            <li><a href="storage\storage.js.html">storage\storage.js</a></li>
+            <li class="active"><a href="/kiwapp.js/doc\src\kiwapp\kiwapp.js.html">kiwapp.js</a></li>
+            <li><a href="/kiwapp.js/doc\src\kiwapp\driver\android.js.html">driver\android.js</a></li>
+            <li><a href="/kiwapp.js/doc\src\kiwapp\driver\cordova.js.html">driver\cordova.js</a></li>
+            <li><a href="/kiwapp.js/doc\src\kiwapp\driver\driver.js.html">driver\driver.js</a></li>
+            <li><a href="/kiwapp.js/doc\src\kiwapp\driver\iOS.js.html">driver\iOS.js</a></li>
+            <li><a href="/kiwapp.js/doc\src\kiwapp\driver\web.js.html">driver\web.js</a></li>
+            <li><a href="/kiwapp.js/doc\src\kiwapp\storage\StorageBrowser.js.html">storage\StorageBrowser.js</a></li>
+            <li><a href="/kiwapp.js/doc\src\kiwapp\storage\StorageProxy.js.html">storage\StorageProxy.js</a></li>
+            <li><a href="/kiwapp.js/doc\src\kiwapp\storage\storage.js.html">storage\storage.js</a></li>
+            <li><a href="/kiwapp.js/doc\src\kiwapp\stats\session.js.html">stats\session.js</a></li>
+            <li><a href="/kiwapp.js/doc\src\kiwapp\stats\stats.js.html">stats\stats.js</a></li>
           </ul>
           <div class="scrollspy">
             <ul class="nav nav-list bs-docs-sidenav affix-top">
@@ -145,11 +157,11 @@
               <tr>
                 <td>callback</td>
                 <td>Function</td>
-                <td>Optionnal callback because of async loading</td>
+                <td>Optional callback because of async loading</td>
               </tr>
             </tbody>
           </table>
-          <div class="description"><p>Kiwapp is the function which stores all kiwapp.js features<br />To launch it, a path to the &#39;config.js&#39; file is needed and an optionnal callback because of async loading<br />It&#39;s possible to give a simple javascript object instead of a path, for debugging</p> </div>
+          <div class="description"><p>Kiwapp is the function which stores all kiwapp.js features<br />To launch it, a path to the &#39;config/kiwapp_config.js&#39; file is needed and an optional callback because of async loading<br />In debug : it&#39;s possible to give a simple javascript object instead of a path</p> </div>
           <pre><code class="language-javascript">function Kiwapp(path, callback){
         loadConfig(path, callback);
         return Kiwapp;
@@ -161,8 +173,8 @@
               <div class="label label-info radius ctx-type">method</div><span>Kiwapp.driver()</span> -><span>Function</span>
             </p>
           </section>
-          <div class="description"><p>The driver object getter</p> </div>
-          <pre><code class="language-javascript">Kiwapp.driver = function(){
+          <div class="description"><p>The driver object getter, this driver Object is typed by OS (android, ios or webbrowser)</p> </div>
+          <pre><code class="language-javascript">Kiwapp.driver = function driver(){
         if(driver === undefined) {
             loadDriver();
         }
@@ -177,14 +189,14 @@
             </p>
           </section>
           <div class="description"><p>Return your current environment</p> </div>
-          <pre><code class="language-javascript">Kiwapp.env = function() {
+          <pre><code class="language-javascript">Kiwapp.env = function env() {
         return this.driverInstance;
     };</code></pre>
           <section id="get">
             <h1>get</h1>
             <h5 class="subheader"></h5>
             <p>
-              <div class="label label-info radius ctx-type">method</div><span>Kiwapp.get()</span> -><span>multi</span>
+              <div class="label label-info radius ctx-type">method</div><span>Kiwapp.get()</span> -><span>*</span>
             </p>
           </section>
           <table class="table table-bordered table-striped">
@@ -199,11 +211,11 @@
               <tr>
                 <td>value</td>
                 <td>string</td>
-                <td>the config value to get</td>
+                <td>the config value to get, If value is undefined, we return the a copy of the whole config</td>
               </tr>
             </tbody>
           </table>
-          <div class="description"><p>A config getter<br />If value is undefined, we return the whole config (a copy)</p> </div>
+          <div class="description"><p>Get the config used by Kiwapp<br />In debug this will return the config/kiwapp_config.js content<br />In production this will return the value given by the retail manager (like for example the shop name or the user email)</p> </div>
           <pre><code class="language-javascript">Kiwapp.get = function get(value){
         if(config === undefined || config.appParameters === undefined) {
             console.log('No kiwapp_config.js file found, check within your config folder or add this folder with this file name inside (view README file: https://github.com/kiwapp/kiwapp.js/blob/master/README.md)');
@@ -222,7 +234,7 @@
             <h1>set</h1>
             <h5 class="subheader"></h5>
             <p>
-              <div class="label label-info radius ctx-type">method</div><span>Kiwapp.set()</span>
+              <div class="label label-info radius ctx-type">method</div><span>Kiwapp.set()</span> -><span>object</span>
             </p>
           </section>
           <table class="table table-bordered table-striped">
@@ -246,7 +258,7 @@
               </tr>
             </tbody>
           </table>
-          <div class="description"><p>A config setter</p> </div>
+          <div class="description"><p>Set a debug configuration to kiwapp.js (this will modify the driver instance)</p> </div>
           <pre><code class="language-javascript">Kiwapp.set = function set(key, value){
         if(typeof key === 'object'){
             for(var i in key){
@@ -263,7 +275,7 @@
             <h1>session</h1>
             <h5 class="subheader"></h5>
             <p>
-              <div class="label label-info radius ctx-type">method</div><span>Kiwapp.session()</span> -><span>Function</span>
+              <div class="label label-info radius ctx-type">method</div><span>Kiwapp.session()</span> -><span>Session</span>
             </p>
           </section>
           <div class="description"><p>The session object getter</p> </div>
@@ -274,7 +286,7 @@
             <h1>stats</h1>
             <h5 class="subheader"></h5>
             <p>
-              <div class="label label-info radius ctx-type">method</div><span>Kiwapp.stats()</span> -><span>Function</span>
+              <div class="label label-info radius ctx-type">method</div><span>Kiwapp.stats()</span> -><span>Stats</span>
             </p>
           </section>
           <div class="description"><p>The stats object getter</p> </div>
@@ -285,7 +297,7 @@
             <h1>storage</h1>
             <h5 class="subheader"></h5>
             <p>
-              <div class="label label-info radius ctx-type">method</div><span>Kiwapp.storage()</span> -><span>Function</span>
+              <div class="label label-info radius ctx-type">method</div><span>Kiwapp.storage()</span> -><span>Storage</span>
             </p>
           </section>
           <div class="description"><p>The storage object getter</p> </div>
@@ -323,7 +335,7 @@
               <div class="label label-info radius ctx-type">method</div><span>Kiwapp.log()</span> -><span>Kiwapp</span>
             </p>
           </section>
-          <div class="description"><p>Log a message to the driver</p> </div>
+          <div class="description"><p>Log a message to the driver<br />This message will be displayed in the debug console on the device</p> </div>
           <pre><code class="language-javascript">Kiwapp.log = function log(msg){
         Kiwapp.driver().trigger('callApp', {
             call: 'log',
@@ -364,21 +376,21 @@
               <div class="label label-info radius ctx-type">method</div><span>Kiwapp.getKDSWriterCredentials()</span> -><span>object</span>
             </p>
           </section>
-          <div class="description"><p>getKDSWriterCredentials getter for kds credential object</p> </div>
-          <pre><code class="language-javascript">Kiwapp.getKDSWriterCredentials = function getKDSCredentials(){
-    var object   = Kiwapp.get().webHooksParameters;
-    var kdsCredentials = {};
+          <div class="description"><p>KDS<br />GetKDSWriterCredentials getter for kds credential object</p> </div>
+          <pre><code class="language-javascript">Kiwapp.getKDSWriterCredentials = function getKDSWriterCredentials() {
+        var object = Kiwapp.get().webHooksParameters;
+        var kdsCredentials = {};
 
-    if(object.KDS_INSTANCIATE_RESPONSE!==undefined){
-        try {
-            kdsCredentials = object.KDS_INSTANCIATE_RESPONSE.app;
+        if (object.KDS_INSTANCIATE_RESPONSE !== undefined) {
+            try {
+                kdsCredentials = object.KDS_INSTANCIATE_RESPONSE.app;
             }
-        catch(e){
-                Kiwapp.log('please verify your credential for writing');
+            catch (e) {
+                Kiwapp.log('Please verify your credential for writing in KDS');
             }
         }
 
-    return kdsCredentials;
+        return kdsCredentials;
     };</code></pre>
           <section id="rotate">
             <h1>rotate</h1>
@@ -387,6 +399,22 @@
               <div class="label label-info radius ctx-type">method</div><span>Kiwapp.rotate()</span> -><span>Kiwapp</span>
             </p>
           </section>
+          <table class="table table-bordered table-striped">
+            <thead>
+              <tr>
+                <th style="width:20%">Option name</th>
+                <th style="width:20%">Type</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>orientation</td>
+                <td>string,number</td>
+                <td>the possible values are 'landscape', 'portrait', 'landscape-left', 'landscape-right', 'portrait-up', 'portrait-down':</td>
+              </tr>
+            </tbody>
+          </table>
           <div class="description"><p>Call the native to rotate the webview</p> </div>
           <pre><code class="language-javascript">Kiwapp.rotate = function rotate(orientation){
         Kiwapp.driver().rotate(orientation);
@@ -470,9 +498,9 @@
             </thead>
             <tbody>
               <tr>
-                <td>path</td>
-                <td>string,object</td>
-                <td>The path to a config file, or an object with the config</td>
+                <td>|</td>
+                <td>string</td>
+                <td>object} path The path to a config file, or an object with the config</td>
               </tr>
               <tr>
                 <td>callback</td>
@@ -502,13 +530,6 @@
         </div>
       </div>
     </div>
-    <footer class="footer">
-      <div class="container">
-        <p>Documentation generated with<a href="https://github.com/FGRibreau/doxx">Doxx</a>created by<a href="https://twitter.com/FGRibreau" data-show-count="false" class="twitter-follow-button">Francois-Guillaume Ribreau</a></p>
-        <p>Doxx is sponsored by<a href="http://bringr.net/?btt" title="Outil d'analyse des réseaux sociaux" class="bringr">Bringr</a>and<a href="https://redsmin.com/?btt" title="Full Redis GUI" class="redsmin">Redsmin</a></p>
-        <p>Theme borrowed from Twitter Bootstrap</p>
-      </div>
-    </footer>
     <script src="http://platform.twitter.com/widgets.js"></script>
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8/jquery.min.js"></script>
     <script src="http://leaverou.github.com/prefixfree/prefixfree.js"></script>

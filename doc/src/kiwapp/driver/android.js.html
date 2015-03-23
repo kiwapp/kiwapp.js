@@ -48,6 +48,18 @@
       }
       
       footer iframe{vertical-align:middle;}
+      .nav-list > .active > a, .nav-list > .active > a:hover, .nav-list > .active > a:focus {background-color:#0facad;}
+      .jumbotron {background:#0facad; box-shadow: none;}
+      
+      a {color:#f09e46}
+      a:hover, a:focus {color:#f09e46}
+      
+      .bs-docs-sidenav > .active > a {background-color#f09e46;}
+      
+      .navbar .brand {
+        display:none;
+      }
+      
       
     </style>
   </head>
@@ -71,17 +83,17 @@
       <div class="row">
         <div class="span3 bs-docs-sidebar">
           <ul class="nav nav-list bs-docs-sidenav affix-top">
-            <li><a href="kiwapp.js.html">kiwapp.js</a></li>
-            <li class="active"><a href="driver\android.js.html">driver\android.js</a></li>
-            <li><a href="driver\cordova.js.html">driver\cordova.js</a></li>
-            <li><a href="driver\driver.js.html">driver\driver.js</a></li>
-            <li><a href="driver\iOS.js.html">driver\iOS.js</a></li>
-            <li><a href="driver\web.js.html">driver\web.js</a></li>
-            <li><a href="stats\session.js.html">stats\session.js</a></li>
-            <li><a href="stats\stats.js.html">stats\stats.js</a></li>
-            <li><a href="storage\StorageBrowser.js.html">storage\StorageBrowser.js</a></li>
-            <li><a href="storage\StorageProxy.js.html">storage\StorageProxy.js</a></li>
-            <li><a href="storage\storage.js.html">storage\storage.js</a></li>
+            <li><a href="/kiwapp.js/doc\src\kiwapp\kiwapp.js.html">kiwapp.js</a></li>
+            <li class="active"><a href="/kiwapp.js/doc\src\kiwapp\driver\android.js.html">driver\android.js</a></li>
+            <li><a href="/kiwapp.js/doc\src\kiwapp\driver\cordova.js.html">driver\cordova.js</a></li>
+            <li><a href="/kiwapp.js/doc\src\kiwapp\driver\driver.js.html">driver\driver.js</a></li>
+            <li><a href="/kiwapp.js/doc\src\kiwapp\driver\iOS.js.html">driver\iOS.js</a></li>
+            <li><a href="/kiwapp.js/doc\src\kiwapp\driver\web.js.html">driver\web.js</a></li>
+            <li><a href="/kiwapp.js/doc\src\kiwapp\storage\StorageBrowser.js.html">storage\StorageBrowser.js</a></li>
+            <li><a href="/kiwapp.js/doc\src\kiwapp\storage\StorageProxy.js.html">storage\StorageProxy.js</a></li>
+            <li><a href="/kiwapp.js/doc\src\kiwapp\storage\storage.js.html">storage\storage.js</a></li>
+            <li><a href="/kiwapp.js/doc\src\kiwapp\stats\session.js.html">stats\session.js</a></li>
+            <li><a href="/kiwapp.js/doc\src\kiwapp\stats\stats.js.html">stats\stats.js</a></li>
           </ul>
           <div class="scrollspy">
             <ul class="nav nav-list bs-docs-sidenav affix-top">
@@ -100,8 +112,8 @@
               <div class="label label-info radius ctx-type">function</div><span>AndroidDriver()</span>
             </p>
           </section>
-          <div class="description"><p>The Android object</p> </div>
-          <pre><code class="language-javascript">function AndroidDriver(){
+          <div class="description"><p>The Android Driver object</p> </div>
+          <pre><code class="language-javascript">function AndroidDriver() {
         Driver.call(this);
     }</code></pre>
           <section id="exec">
@@ -127,8 +139,8 @@
               </tr>
             </tbody>
           </table>
-          <div class="description"><p>Final method to send call to native</p> </div>
-          <pre><code class="language-javascript">AndroidDriver.prototype.exec =  function exec(url){
+          <div class="description"><p>Final method to send call to native<br />This method will override the driver/driver.js method</p> </div>
+          <pre><code class="language-javascript">AndroidDriver.prototype.exec = function exec(url) {
         window.Android.execute(url);
     };
 
@@ -137,13 +149,6 @@
         </div>
       </div>
     </div>
-    <footer class="footer">
-      <div class="container">
-        <p>Documentation generated with<a href="https://github.com/FGRibreau/doxx">Doxx</a>created by<a href="https://twitter.com/FGRibreau" data-show-count="false" class="twitter-follow-button">Francois-Guillaume Ribreau</a></p>
-        <p>Doxx is sponsored by<a href="http://bringr.net/?btt" title="Outil d'analyse des réseaux sociaux" class="bringr">Bringr</a>and<a href="https://redsmin.com/?btt" title="Full Redis GUI" class="redsmin">Redsmin</a></p>
-        <p>Theme borrowed from Twitter Bootstrap</p>
-      </div>
-    </footer>
     <script src="http://platform.twitter.com/widgets.js"></script>
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8/jquery.min.js"></script>
     <script src="http://leaverou.github.com/prefixfree/prefixfree.js"></script>

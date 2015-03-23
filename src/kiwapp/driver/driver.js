@@ -1,15 +1,13 @@
 'use strict';
 (function () {
-    /**
-     *  Browserify modules dependencies
-     **/
+    //Browserify modules dependencies
     var increase = require('../../utils/increaseCapability');
     var extend = require('../../utils/extend');
     var EventEmitter = require('../../utils/event');
     var Model = require('../../utils/model');
 
     /**
-     * The Driver object
+     * The Driver object (this class is abstract and will be extended by AndroidDriver, iOSDriver, CordovaDriver or WebDriver)
      * @constructor
      */
     function Driver() {
@@ -19,25 +17,21 @@
         observeEvents(this);
     }
 
-    /**
-     * Adding capabilities to Driver prototype
-     */
+    // Adding capabilities to Driver prototype
     increase(Driver.prototype, EventEmitter.prototype);
     increase(Driver.prototype, Model.prototype);
 
-    /**
-     * Launch the event listening
-     */
+    //Launch the event listening
     function observeEvents(_self) {
         _self.on('callApp', _self.catchCallApp, _self);
     }
 
-    /**
+    /*!
      * Compute a right url to make a Kiwapp driver call
      * @param {*} config The config to compute the url
      * @return {string} The processed url
      */
-    Driver.prototype.getDriverUrl = function (config) {
+    Driver.prototype.getDriverUrl = function getDriverUrl(config) {
         var args = config.data;
         var url = 'kiwapp://' + config.call + '?';
         var i = 0;
@@ -81,11 +75,11 @@
         });
     };
 
-    /**
+    /*!
      * Catch the callApp event and send it to the native
      * @param  {*} config The call config
      */
-    Driver.prototype.catchCallApp = function (config) {
+    Driver.prototype.catchCallApp = function catchCallApp(config) {
         var _self = this;
 
         var defaults = {'data': {}};
@@ -103,7 +97,7 @@
      * @param {string} url if type is custom, define the url destination
      * @param {*} options if type is custom, define the send options
      */
-    Driver.prototype.post = function (data, type, url, options) {
+    Driver.prototype.post = function post(data, type, url, options) {
         window.Kiwapp.driver().trigger('callApp', {
             call: 'store_offline_entry',
             data: {
@@ -123,7 +117,7 @@
      * @param  {string} The identifier id for the print (this identifier will be send in the callback method and you can identify the cart what you trying to print)
      * @return {Driver} The driver object
      */
-    Driver.prototype.print = function (cardText, cardId) {
+    Driver.prototype.print = function print(cardText, cardId) {
 
         if (!cardText) {
             console.warn('No text to print');
@@ -149,7 +143,7 @@
      * @param {string} Orientation define the wanted orientation
      * @return {Driver} The driver object
      */
-    Driver.prototype.rotate = function (orientation) {
+    Driver.prototype.rotate = function rotate(orientation) {
         switch (orientation) {
             case 'landscape':
                 orientation = 10;
@@ -262,11 +256,11 @@
         return this;
     };
 
-    /**
+    /*!
      * Generate an unique key
      * @return {string}
      */
-    Driver.prototype.generateKey = function () {
+    Driver.prototype.generateKey = function generateKey() {
         var key = '';
         var possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
         for (var i = 0; i < 5; i++) {
