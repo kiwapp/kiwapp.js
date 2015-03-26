@@ -89,8 +89,8 @@
             <li><a href="/kiwapp.js/doc\src\kiwapp\driver\driver.js.html">driver\driver.js</a></li>
             <li><a href="/kiwapp.js/doc\src\kiwapp\driver\iOS.js.html">driver\iOS.js</a></li>
             <li><a href="/kiwapp.js/doc\src\kiwapp\driver\web.js.html">driver\web.js</a></li>
-              <li><a href="/kiwapp.js/doc\src\kiwapp\stats\session.js.html">stats\session.js</a></li>
-              <li><a href="/kiwapp.js/doc\src\kiwapp\stats\stats.js.html">stats\stats.js</a></li>
+            <li><a href="/kiwapp.js/doc\src\kiwapp\stats\session.js.html">stats\session.js</a></li>
+            <li><a href="/kiwapp.js/doc\src\kiwapp\stats\stats.js.html">stats\stats.js</a></li>
             <li><a href="/kiwapp.js/doc\src\kiwapp\storage\StorageBrowser.js.html">storage\StorageBrowser.js</a></li>
             <li><a href="/kiwapp.js/doc\src\kiwapp\storage\StorageProxy.js.html">storage\StorageProxy.js</a></li>
             <li><a href="/kiwapp.js/doc\src\kiwapp\storage\storage.js.html">storage\storage.js</a></li>
@@ -100,6 +100,8 @@
               <li><a href="#AndroidDriver"><i class="alert alert-info"></i><span>AndroidDriver</span></a>
               </li>
               <li><a href="#exec"><i class="alert alert-info"></i><span>exec</span></a>
+              </li>
+              <li><a href="#getDriverUrl"><i class="alert alert-info"></i><span>getDriverUrl</span></a>
               </li>
             </ul>
           </div>
@@ -142,6 +144,46 @@
           <div class="description"><p>Final method to send call to native<br />This method will override the driver/driver.js method</p> </div>
           <pre><code class="language-javascript">AndroidDriver.prototype.exec = function exec(url) {
         window.Android.execute(url);
+    };</code></pre>
+          <section id="getDriverUrl">
+            <h1>getDriverUrl</h1>
+            <h5 class="subheader"></h5>
+            <p>
+              <div class="label label-info radius ctx-type">method</div><span>AndroidDriver.prototype.getDriverUrl()</span> -><span>string</span>
+            </p>
+          </section>
+          <table class="table table-bordered table-striped">
+            <thead>
+              <tr>
+                <th style="width:20%">Option name</th>
+                <th style="width:20%">Type</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>config</td>
+                <td>object</td>
+                <td>The config to compute the url</td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="description"><p>Compute a right url to make a kiwapp driver call</p> </div>
+          <pre><code class="language-javascript">AndroidDriver.prototype.getDriverUrl = function (config) {
+        var args = config.data;
+        var url = 'kiwapp://' + config.call + '?';
+        var i = 0;
+        var tmp = '';
+
+        for (var k in args) {
+            if (i &gt; 0) tmp = '&amp;';
+
+            // We double urlencode for the android driver who need a double decode natif side
+            url = url + tmp + k + '=' + encodeURIComponent(encodeURIComponent(JSON.stringify(args[k])) || '');
+            i++;
+        }
+
+        return url;
     };
 
     module.exports = AndroidDriver;
