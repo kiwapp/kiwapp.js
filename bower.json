@@ -1,7 +1,7 @@
 {
     "name": "kiwapp.js",
     "main": "./kiwapp.js",
-    "version": "1.5.11",
+    "version": "1.6.0",
     "homepage": "kiwapp.github.io/kiwapp.js",
     "authors": ["Adrien Carta adrien@procheo.fr"],
     "description": "The powerful Kiwapp bridge to native.",
