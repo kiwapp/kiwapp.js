@@ -328,6 +328,36 @@ module.exports = function(val){
     };
 
     /**
+     * Open the Kiwapp drawer (draw and signature)
+     * @param {String} backgroundImage The background image what you want display on the background of your drawing
+     * @param {boolean} isSignature Put this boolean to true and the driver will display a special view designed for the signature
+     * @param {number} the callback Id this picker, this callback is useful when you have many drawer in your application, the response will contained this id
+     * @return {Driver} The driver object
+     */
+    Driver.prototype.openDrawer = function openDrawer(backgroundImage, isSignature, callbackId) {
+        if(callbackId) {
+            window.Kiwapp.driver().trigger('callApp', {
+                call: 'kw_open_drawer',
+                data: {
+                    background_image: backgroundImage,
+                    is_signature: isSignature,
+                    kw_drawer_id: callbackId
+                }
+            });
+        } else {
+            window.Kiwapp.driver().trigger('callApp', {
+                call: 'kw_open_drawer',
+                data: {
+                    background_image: backgroundImage,
+                    is_signature: isSignature
+                }
+            });
+        }
+
+        return this;
+    };
+
+    /**
      *
      * @param {Array<{file_type: string, file_id: number, file_path: string, file_url: string}>} the data to send, it will be contain the type of file, the path, an id, and the url where you want send this file
      * @return {Driver}
@@ -553,6 +583,42 @@ module.exports = function(val){
     };
 
     /**
+     * Open the Kiwapp drawer (draw and signature)
+     * @param {String} backgroundImage The background image what you want display on the background of your drawing
+     * @param {boolean} isSignature Put this boolean to true and the driver will display a special view designed for the signature
+     * @param {number} the callback Id this picker, this callback is useful when you have many drawer in your application, the response will contained this id
+     * @return {Driver} The driver object
+     */
+    IOS.prototype.openDrawer = function openDrawer(backgroundImage, isSignature, callbackId) {
+
+        var data = {};
+        if (callbackId) {
+            data = {
+                background_image: backgroundImage,
+                is_signature: isSignature,
+                kw_drawer_id: callbackId
+            };
+        } else {
+            data = {
+                background_image: backgroundImage,
+                is_signature: isSignature
+            };
+        }
+
+        var key = Kiwapp.driver().generateKey();
+
+        localStorage.setItem(key, JSON.stringify(data));
+
+        window.Kiwapp.driver().trigger('callApp', {
+            call: 'kw_open_drawer',
+            data: {
+                local_storage_key: key
+            }
+        });
+        return this;
+    };
+
+    /**
      * Send a file to the storage Kiwapp
      * @param data
      * @return {IOS}
@@ -710,7 +776,8 @@ module.exports = function(val){
      * The driver object getter, this driver Object is typed by OS (android, ios or webbrowser)
      * @return {Function} The bridge to communicate with native Kiwapp
      */
-    Kiwapp.driver = function driver(){
+    Kiwapp.driver = function(){
+        console.log(driver);
         if(driver === undefined) {
             loadDriver();
         }

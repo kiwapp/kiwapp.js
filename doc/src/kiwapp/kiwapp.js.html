@@ -174,7 +174,8 @@
             </p>
           </section>
           <div class="description"><p>The driver object getter, this driver Object is typed by OS (android, ios or webbrowser)</p> </div>
-          <pre><code class="language-javascript">Kiwapp.driver = function driver(){
+          <pre><code class="language-javascript">Kiwapp.driver = function(){
+        console.log(driver);
         if(driver === undefined) {
             loadDriver();
         }
