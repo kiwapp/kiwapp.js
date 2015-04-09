@@ -32,7 +32,7 @@
      * @return {Function} The bridge to communicate with native Kiwapp
      */
     Kiwapp.driver = function(){
-        console.log(driver);
+
         if(driver === undefined) {
             loadDriver();
         }
