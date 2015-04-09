@@ -31,7 +31,8 @@
      * The driver object getter, this driver Object is typed by OS (android, ios or webbrowser)
      * @return {Function} The bridge to communicate with native Kiwapp
      */
-    Kiwapp.driver = function driver(){
+    Kiwapp.driver = function(){
+
         if(driver === undefined) {
             loadDriver();
         }

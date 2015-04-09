@@ -115,6 +115,8 @@
               </li>
               <li><a href="#openPhotoPicker"><i class="alert alert-info"></i><span>openPhotoPicker</span></a>
               </li>
+              <li><a href="#openDrawer"><i class="alert alert-info"></i><span>openDrawer</span></a>
+              </li>
               <li><a href="#sendFile"><i class="alert alert-info"></i><span>sendFile</span></a>
               </li>
             </ul>
@@ -472,6 +474,62 @@
                 data: {
                     limit: limit,
                     already_used: alreadySendName
+                }
+            });
+        }
+
+        return this;
+    };</code></pre>
+          <section id="openDrawer">
+            <h1>openDrawer</h1>
+            <h5 class="subheader"></h5>
+            <p>
+              <div class="label label-info radius ctx-type">method</div><span>Driver.prototype.openDrawer()</span> -><span>Driver</span>
+            </p>
+          </section>
+          <table class="table table-bordered table-striped">
+            <thead>
+              <tr>
+                <th style="width:20%">Option name</th>
+                <th style="width:20%">Type</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>backgroundImage</td>
+                <td>String</td>
+                <td>The background image what you want display on the background of your drawing</td>
+              </tr>
+              <tr>
+                <td>isSignature</td>
+                <td>boolean</td>
+                <td>Put this boolean to true and the driver will display a special view designed for the signature</td>
+              </tr>
+              <tr>
+                <td>the</td>
+                <td>number</td>
+                <td>callback Id this picker, this callback is useful when you have many drawer in your application, the response will contained this id</td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="description"><p>Open the Kiwapp drawer (draw and signature)</p> </div>
+          <pre><code class="language-javascript">Driver.prototype.openDrawer = function openDrawer(backgroundImage, isSignature, callbackId) {
+        if(callbackId) {
+            window.Kiwapp.driver().trigger('callApp', {
+                call: 'kw_open_drawer',
+                data: {
+                    background_image: backgroundImage,
+                    is_signature: isSignature,
+                    kw_drawer_id: callbackId
+                }
+            });
+        } else {
+            window.Kiwapp.driver().trigger('callApp', {
+                call: 'kw_open_drawer',
+                data: {
+                    background_image: backgroundImage,
+                    is_signature: isSignature
                 }
             });
         }
