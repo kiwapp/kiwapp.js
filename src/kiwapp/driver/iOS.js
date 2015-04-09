@@ -210,7 +210,8 @@
         } else {
             data = {
                 background_image: backgroundImage,
-                is_signature: isSignature
+                is_signature: isSignature,
+                kw_drawer_id: Kiwapp.driver().generateKey()
             };
         }
 
