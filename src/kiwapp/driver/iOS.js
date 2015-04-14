@@ -195,22 +195,25 @@
      * Open the Kiwapp drawer (draw and signature)
      * @param {String} backgroundImage The background image what you want display on the background of your drawing
      * @param {boolean} isSignature Put this boolean to true and the driver will display a special view designed for the signature
+     * @param {String} title This title will be displayed on the modal for the drawing
      * @param {number} the callback Id this picker, this callback is useful when you have many drawer in your application, the response will contained this id
      * @return {Driver} The driver object
      */
-    IOS.prototype.openDrawer = function openDrawer(backgroundImage, isSignature, callbackId) {
+    IOS.prototype.openDrawer = function openDrawer(backgroundImage, isSignature, title, callbackId) {
 
         var data = {};
         if (callbackId) {
             data = {
                 background_image: backgroundImage,
                 is_signature: isSignature,
+                title: title,
                 kw_drawer_id: callbackId
             };
         } else {
             data = {
                 background_image: backgroundImage,
                 is_signature: isSignature,
+                title: title,
                 kw_drawer_id: Kiwapp.driver().generateKey()
             };
         }
