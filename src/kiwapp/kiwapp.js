@@ -140,7 +140,7 @@
      * @return {Kiwapp} Kiwapp
      */
     Kiwapp.log = function log(msg){
-        console.log("%c[Kiwapp-Log] %c" +msg, "color:red", "color:black");
+        console.log("%c[Kiwapp-Log]", "color:red", msg);
         Kiwapp.driver().trigger('callApp', {
             call: 'log',
             data: {
