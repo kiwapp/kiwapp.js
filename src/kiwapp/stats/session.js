@@ -16,6 +16,7 @@
     var callbackMethod;
     var timerIdentifier;
     var timeoutTime;
+    var sessionStartTime;
 
     /**
      * Session object
@@ -56,9 +57,13 @@
         } else if (!callbackMethod){
             callbackMethod = callback;
         }
+        
+        function callbackWrapper() {
+            var sessionDuration = Date.now() - sessionStartTime; 
+            callbackMethod(sessionDuration);
+        }
 
-
-        timerIdentifier = window.setTimeout(callbackMethod, timeoutTime);
+        timerIdentifier = window.setTimeout(callbackWrapper, timeoutTime);
     };
 
     /**
@@ -98,6 +103,7 @@
         if (currentIdentifier === undefined) {
             currentData = {};
             currentIdentifier = newIdentifier;
+            sessionStartTime = Date.now();
 
             console.debug('[Session@start] : New session fired !');
             if (window.Kiwapp !== undefined) {

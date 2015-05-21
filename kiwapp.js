@@ -893,6 +893,7 @@ module.exports = function(val){
      * @return {Kiwapp} Kiwapp
      */
     Kiwapp.log = function log(msg){
+        console.log("%c[Kiwapp-Log] %c" +msg, "color:red", "color:black");
         Kiwapp.driver().trigger('callApp', {
             call: 'log',
             data: {
@@ -1052,6 +1053,7 @@ module.exports = function(val){
     var callbackMethod;
     var timerIdentifier;
     var timeoutTime;
+    var sessionStartTime;
 
     /**
      * Session object
@@ -1092,9 +1094,13 @@ module.exports = function(val){
         } else if (!callbackMethod){
             callbackMethod = callback;
         }
+        
+        function callbackWrapper() {
+            var sessionDuration = Date.now() - sessionStartTime; 
+            callbackMethod(sessionDuration);
+        }
 
-
-        timerIdentifier = window.setTimeout(callbackMethod, timeoutTime);
+        timerIdentifier = window.setTimeout(callbackWrapper, timeoutTime);
     };
 
     /**
@@ -1134,6 +1140,7 @@ module.exports = function(val){
         if (currentIdentifier === undefined) {
             currentData = {};
             currentIdentifier = newIdentifier;
+            sessionStartTime = Date.now();
 
             console.debug('[Session@start] : New session fired !');
             if (window.Kiwapp !== undefined) {
