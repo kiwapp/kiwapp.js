@@ -338,6 +338,7 @@
           </section>
           <div class="description"><p>Log a message to the driver<br />This message will be displayed in the debug console on the device</p> </div>
           <pre><code class="language-javascript">Kiwapp.log = function log(msg){
+        console.log('%c[Kiwapp-Log]', 'color:red', msg);
         Kiwapp.driver().trigger('callApp', {
             call: 'log',
             data: {
