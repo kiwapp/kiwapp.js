@@ -142,7 +142,8 @@
     // The callback method
     var callbackMethod;
     var timerIdentifier;
-    var timeoutTime;</code></pre>
+    var timeoutTime;
+    var sessionStartTime;</code></pre>
           <section id="Session">
             <h1>Session</h1>
             <h5 class="subheader"></h5>
@@ -226,9 +227,13 @@
         } else if (!callbackMethod){
             callbackMethod = callback;
         }
+        
+        function callbackWrapper() {
+            var sessionDuration = Date.now() - sessionStartTime; 
+            callbackMethod(sessionDuration);
+        }
 
-
-        timerIdentifier = window.setTimeout(callbackMethod, timeoutTime);
+        timerIdentifier = window.setTimeout(callbackWrapper, timeoutTime);
     };</code></pre>
           <section id="resetTimeout">
             <h1>resetTimeout</h1>
@@ -290,6 +295,7 @@
         if (currentIdentifier === undefined) {
             currentData = {};
             currentIdentifier = newIdentifier;
+            sessionStartTime = Date.now();
 
             console.debug('[Session@start] : New session fired !');
             if (window.Kiwapp !== undefined) {

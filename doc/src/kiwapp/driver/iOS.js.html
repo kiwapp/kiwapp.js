@@ -117,6 +117,8 @@
               </li>
               <li><a href="#sendFile"><i class="alert alert-info"></i><span>sendFile</span></a>
               </li>
+              <li><a href="#openHTML5Application"><i class="alert alert-info"></i><span>openHTML5Application</span></a>
+              </li>
               <li><a href="#findLastId"><i class="alert alert-info"></i><span>findLastId</span></a>
               </li>
               <li><a href="#_self"><i class="alert alert-success"></i><span>_self</span></a>
@@ -552,6 +554,60 @@
 
         window.Kiwapp.driver().trigger('callApp', {
             call: 'kw_upload_files',
+            data: {
+                local_storage_key: key
+            }
+        });
+
+        return this;
+    };</code></pre>
+          <section id="openHTML5Application">
+            <h1>openHTML5Application</h1>
+            <h5 class="subheader"></h5>
+            <p>
+              <div class="label label-info radius ctx-type">method</div><span>IOS.prototype.openHTML5Application()</span>
+            </p>
+          </section>
+          <table class="table table-bordered table-striped">
+            <thead>
+              <tr>
+                <th style="width:20%">Option name</th>
+                <th style="width:20%">Type</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>urlQueryParams</td>
+                <td>Object</td>
+                <td>this params are injected as query string in the application you want open</td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="description"><p>@param {string} applicationIdentifier, the sharing key of the application you want open</p> </div>
+          <pre><code class="language-javascript">IOS.prototype.openHTML5Application = function openHTML5Application(applicationIdentifier, urlQueryParams) {
+
+        if(applicationIdentifier === undefined) {
+            Kiwapp.log('The applicationIdentifier params is required');
+        }
+
+        // Build the data to send in the localStorage
+        var data =  {};
+        if(urlQueryParams === undefined) {
+            data = {
+                'sharing_key': applicationIdentifier
+            };
+        } else {
+            data = {
+                'sharing_key': applicationIdentifier,
+                'params': urlQueryParams
+            };
+        }
+
+        var key = Kiwapp.driver().generateKey();
+        localStorage.setItem(key, JSON.stringify(data));
+        window.Kiwapp.driver().trigger('callApp', {
+            call: 'open_html5_app_webview',
             data: {
                 local_storage_key: key
             }

@@ -140,7 +140,7 @@
      * @return {Kiwapp} Kiwapp
      */
     Kiwapp.log = function log(msg){
-        console.log("%c[Kiwapp-Log]", "color:red", msg);
+        console.log('%c[Kiwapp-Log]', 'color:red', msg);
         Kiwapp.driver().trigger('callApp', {
             call: 'log',
             data: {
@@ -153,6 +153,7 @@
 
     /**
      * Enable or disable webview scrolling
+     * @param {boolean} send true if you want enabled the native scroll on webview, false if you won't, default value is true
      * @return {Kiwapp} Kiwapp itself
      */
     Kiwapp.scroll = function scroll(state){

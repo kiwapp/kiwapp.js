@@ -253,6 +253,42 @@
         return this;
     };
 
+    /**
+     * @param {string} applicationIdentifier, the sharing key of the application you want open
+     * @param {Object} urlQueryParams this params are injected as query string in the application you want open
+     * @returns {IOS}
+     */
+    IOS.prototype.openHTML5Application = function openHTML5Application(applicationIdentifier, urlQueryParams) {
+
+        if(applicationIdentifier === undefined) {
+            Kiwapp.log('The applicationIdentifier params is required');
+        }
+
+        // Build the data to send in the localStorage
+        var data =  {};
+        if(urlQueryParams === undefined) {
+            data = {
+                'sharing_key': applicationIdentifier
+            };
+        } else {
+            data = {
+                'sharing_key': applicationIdentifier,
+                'params': urlQueryParams
+            };
+        }
+
+        var key = Kiwapp.driver().generateKey();
+        localStorage.setItem(key, JSON.stringify(data));
+        window.Kiwapp.driver().trigger('callApp', {
+            call: 'open_html5_app_webview',
+            data: {
+                local_storage_key: key
+            }
+        });
+
+        return this;
+    };
+
     /*******************
      * PRIVATES METHODS
      ******************/

@@ -276,7 +276,6 @@
     };
 
     /**
-     *
      * @param {Array<{file_type: string, file_id: number, file_path: string, file_url: string}>} the data to send, it will be contain the type of file, the path, an id, and the url where you want send this file
      * @return {Driver}
      */
@@ -286,6 +285,37 @@
             call: 'kw_upload_files',
             data: data
         });
+
+        return this;
+    };
+
+    /**
+     * @param {string} applicationIdentifier, the sharing key of the application you want open
+     * @param {Object} urlQueryParams this params are injected as query string in the application you want open
+     * @returns {Driver}
+     */
+    Driver.prototype.openHTML5Application = function openHTML5Application(applicationIdentifier, urlQueryParams) {
+
+        if(applicationIdentifier === undefined) {
+            Kiwapp.log('The applicationIdentifier params is required');
+        }
+
+        if(urlQueryParams === undefined) {
+            window.Kiwapp.driver().trigger('callApp', {
+                call: 'open_html5_app_webview',
+                data: {
+                    'sharing_key': applicationIdentifier
+                }
+            });
+        } else {
+            window.Kiwapp.driver().trigger('callApp', {
+                call: 'open_html5_app_webview',
+                data: {
+                    'sharing_key': applicationIdentifier,
+                    'params': urlQueryParams
+                }
+            });
+        }
 
         return this;
     };

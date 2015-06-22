@@ -362,7 +362,6 @@ module.exports = function(val){
     };
 
     /**
-     *
      * @param {Array<{file_type: string, file_id: number, file_path: string, file_url: string}>} the data to send, it will be contain the type of file, the path, an id, and the url where you want send this file
      * @return {Driver}
      */
@@ -372,6 +371,37 @@ module.exports = function(val){
             call: 'kw_upload_files',
             data: data
         });
+
+        return this;
+    };
+
+    /**
+     * @param {string} applicationIdentifier, the sharing key of the application you want open
+     * @param {Object} urlQueryParams this params are injected as query string in the application you want open
+     * @returns {Driver}
+     */
+    Driver.prototype.openHTML5Application = function openHTML5Application(applicationIdentifier, urlQueryParams) {
+
+        if(applicationIdentifier === undefined) {
+            Kiwapp.log('The applicationIdentifier params is required');
+        }
+
+        if(urlQueryParams === undefined) {
+            window.Kiwapp.driver().trigger('callApp', {
+                call: 'open_html5_app_webview',
+                data: {
+                    'sharing_key': applicationIdentifier
+                }
+            });
+        } else {
+            window.Kiwapp.driver().trigger('callApp', {
+                call: 'open_html5_app_webview',
+                data: {
+                    'sharing_key': applicationIdentifier,
+                    'params': urlQueryParams
+                }
+            });
+        }
 
         return this;
     };
@@ -648,6 +678,42 @@ module.exports = function(val){
         return this;
     };
 
+    /**
+     * @param {string} applicationIdentifier, the sharing key of the application you want open
+     * @param {Object} urlQueryParams this params are injected as query string in the application you want open
+     * @returns {IOS}
+     */
+    IOS.prototype.openHTML5Application = function openHTML5Application(applicationIdentifier, urlQueryParams) {
+
+        if(applicationIdentifier === undefined) {
+            Kiwapp.log('The applicationIdentifier params is required');
+        }
+
+        // Build the data to send in the localStorage
+        var data =  {};
+        if(urlQueryParams === undefined) {
+            data = {
+                'sharing_key': applicationIdentifier
+            };
+        } else {
+            data = {
+                'sharing_key': applicationIdentifier,
+                'params': urlQueryParams
+            };
+        }
+
+        var key = Kiwapp.driver().generateKey();
+        localStorage.setItem(key, JSON.stringify(data));
+        window.Kiwapp.driver().trigger('callApp', {
+            call: 'open_html5_app_webview',
+            data: {
+                local_storage_key: key
+            }
+        });
+
+        return this;
+    };
+
     /*******************
      * PRIVATES METHODS
      ******************/
@@ -893,7 +959,7 @@ module.exports = function(val){
      * @return {Kiwapp} Kiwapp
      */
     Kiwapp.log = function log(msg){
-        console.log("%c[Kiwapp-Log]", "color:red", msg);
+        console.log('%c[Kiwapp-Log]', 'color:red', msg);
         Kiwapp.driver().trigger('callApp', {
             call: 'log',
             data: {
@@ -906,6 +972,7 @@ module.exports = function(val){
 
     /**
      * Enable or disable webview scrolling
+     * @param {boolean} send true if you want enabled the native scroll on webview, false if you won't, default value is true
      * @return {Kiwapp} Kiwapp itself
      */
     Kiwapp.scroll = function scroll(state){

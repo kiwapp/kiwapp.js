@@ -338,6 +338,7 @@
           </section>
           <div class="description"><p>Log a message to the driver<br />This message will be displayed in the debug console on the device</p> </div>
           <pre><code class="language-javascript">Kiwapp.log = function log(msg){
+        console.log('%c[Kiwapp-Log]', 'color:red', msg);
         Kiwapp.driver().trigger('callApp', {
             call: 'log',
             data: {
@@ -354,6 +355,22 @@
               <div class="label label-info radius ctx-type">method</div><span>Kiwapp.scroll()</span> -><span>Kiwapp</span>
             </p>
           </section>
+          <table class="table table-bordered table-striped">
+            <thead>
+              <tr>
+                <th style="width:20%">Option name</th>
+                <th style="width:20%">Type</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>send</td>
+                <td>boolean</td>
+                <td>true if you want enabled the native scroll on webview, false if you won't, default value is true</td>
+              </tr>
+            </tbody>
+          </table>
           <div class="description"><p>Enable or disable webview scrolling</p> </div>
           <pre><code class="language-javascript">Kiwapp.scroll = function scroll(state){
         if(state === true){
