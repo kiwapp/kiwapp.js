@@ -299,13 +299,13 @@ module.exports = function(val){
      */
     Driver.prototype.openPhotoPicker = function openPhotoPicker(limit, alreadySendName, callbackId) {
 
-        if(!limit) {
+        if (!limit) {
             limit = 5;
         } else if (limit > 15) {
             console.warn('Your limit of photo to send is very high you must be careful with this. Especialy if you want send them');
         }
 
-        if(callbackId) {
+        if (callbackId) {
             window.Kiwapp.driver().trigger('callApp', {
                 call: 'kw_open_photo_picker',
                 data: {
@@ -336,7 +336,7 @@ module.exports = function(val){
      * @return {Driver} The driver object
      */
     Driver.prototype.openDrawer = function openDrawer(backgroundImage, isSignature, title, callbackId) {
-        if(callbackId) {
+        if (callbackId) {
             window.Kiwapp.driver().trigger('callApp', {
                 call: 'kw_open_drawer',
                 data: {
@@ -382,11 +382,11 @@ module.exports = function(val){
      */
     Driver.prototype.openHTML5Application = function openHTML5Application(applicationIdentifier, urlQueryParams) {
 
-        if(applicationIdentifier === undefined) {
+        if (applicationIdentifier === undefined) {
             Kiwapp.log('The applicationIdentifier params is required');
         }
 
-        if(urlQueryParams === undefined) {
+        if (urlQueryParams === undefined) {
             window.Kiwapp.driver().trigger('callApp', {
                 call: 'open_html5_app_webview',
                 data: {
@@ -403,6 +403,25 @@ module.exports = function(val){
             });
         }
 
+        return this;
+    };
+
+    /**
+     * Open a document in Kiwapp (work with PDF)
+     * @param {string} url The document relative url
+     * @returns {Driver}
+     */
+    Driver.prototype.openPDF = function openPDF(url) {
+        if (url === undefined) {
+            Kiwapp.log('The url params is required');
+        }
+
+        window.Kiwapp.driver().trigger('callApp', {
+            call: 'open_document_reader',
+            data: {
+                file_path: url
+            }
+        });
         return this;
     };
 
@@ -704,8 +723,35 @@ module.exports = function(val){
 
         var key = Kiwapp.driver().generateKey();
         localStorage.setItem(key, JSON.stringify(data));
+
         window.Kiwapp.driver().trigger('callApp', {
             call: 'open_html5_app_webview',
+            data: {
+                local_storage_key: key
+            }
+        });
+
+        return this;
+    };
+
+    /**
+     * Open a document in Kiwapp (work with PDF)
+     * @param {string} url The document relative url
+     * @returns {Driver}
+     */
+    IOS.prototype.openPDF = function openPDF(url) {
+        if (url === undefined) {
+            Kiwapp.log('The url params is required');
+        }
+
+        var data =  {
+            file_path: url
+        };
+        var key = Kiwapp.driver().generateKey();
+        localStorage.setItem(key, JSON.stringify(data));
+
+        window.Kiwapp.driver().trigger('callApp', {
+            call: 'open_document_reader',
             data: {
                 local_storage_key: key
             }

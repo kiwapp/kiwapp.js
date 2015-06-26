@@ -279,8 +279,35 @@
 
         var key = Kiwapp.driver().generateKey();
         localStorage.setItem(key, JSON.stringify(data));
+
         window.Kiwapp.driver().trigger('callApp', {
             call: 'open_html5_app_webview',
+            data: {
+                local_storage_key: key
+            }
+        });
+
+        return this;
+    };
+
+    /**
+     * Open a document in Kiwapp (work with PDF)
+     * @param {string} url The document relative url
+     * @returns {Driver}
+     */
+    IOS.prototype.openPDF = function openPDF(url) {
+        if (url === undefined) {
+            Kiwapp.log('The url params is required');
+        }
+
+        var data =  {
+            file_path: url
+        };
+        var key = Kiwapp.driver().generateKey();
+        localStorage.setItem(key, JSON.stringify(data));
+
+        window.Kiwapp.driver().trigger('callApp', {
+            call: 'open_document_reader',
             data: {
                 local_storage_key: key
             }
