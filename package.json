@@ -1,6 +1,6 @@
 {
     "name": "kiwapp.js",
-    "version": "1.6.5",
+    "version": "1.6.6",
     "description": "The Kiwapp core bridge between javacript and native.",
     "main": "kiwapp.js",
     "scripts": {

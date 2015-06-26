@@ -121,6 +121,8 @@
               </li>
               <li><a href="#openHTML5Application"><i class="alert alert-info"></i><span>openHTML5Application</span></a>
               </li>
+              <li><a href="#openPDF"><i class="alert alert-info"></i><span>openPDF</span></a>
+              </li>
             </ul>
           </div>
         </div>
@@ -455,13 +457,13 @@
           <div class="description"><p>Open the photo picker (gallery)</p> </div>
           <pre><code class="language-javascript">Driver.prototype.openPhotoPicker = function openPhotoPicker(limit, alreadySendName, callbackId) {
 
-        if(!limit) {
+        if (!limit) {
             limit = 5;
         } else if (limit &gt; 15) {
             console.warn('Your limit of photo to send is very high you must be careful with this. Especialy if you want send them');
         }
 
-        if(callbackId) {
+        if (callbackId) {
             window.Kiwapp.driver().trigger('callApp', {
                 call: 'kw_open_photo_picker',
                 data: {
@@ -522,7 +524,7 @@
           </table>
           <div class="description"><p>Open the Kiwapp drawer (draw and signature)</p> </div>
           <pre><code class="language-javascript">Driver.prototype.openDrawer = function openDrawer(backgroundImage, isSignature, title, callbackId) {
-        if(callbackId) {
+        if (callbackId) {
             window.Kiwapp.driver().trigger('callApp', {
                 call: 'kw_open_drawer',
                 data: {
@@ -589,11 +591,11 @@
           <div class="description"><p>@param {string} applicationIdentifier, the sharing key of the application you want open</p> </div>
           <pre><code class="language-javascript">Driver.prototype.openHTML5Application = function openHTML5Application(applicationIdentifier, urlQueryParams) {
 
-        if(applicationIdentifier === undefined) {
+        if (applicationIdentifier === undefined) {
             Kiwapp.log('The applicationIdentifier params is required');
         }
 
-        if(urlQueryParams === undefined) {
+        if (urlQueryParams === undefined) {
             window.Kiwapp.driver().trigger('callApp', {
                 call: 'open_html5_app_webview',
                 data: {
@@ -610,6 +612,43 @@
             });
         }
 
+        return this;
+    };</code></pre>
+          <section id="openPDF">
+            <h1>openPDF</h1>
+            <h5 class="subheader"></h5>
+            <p>
+              <div class="label label-info radius ctx-type">method</div><span>Driver.prototype.openPDF()</span>
+            </p>
+          </section>
+          <table class="table table-bordered table-striped">
+            <thead>
+              <tr>
+                <th style="width:20%">Option name</th>
+                <th style="width:20%">Type</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>url</td>
+                <td>string</td>
+                <td>The document relative url</td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="description"><p>Open a document in Kiwapp (work with PDF)</p> </div>
+          <pre><code class="language-javascript">Driver.prototype.openPDF = function openPDF(url) {
+        if (url === undefined) {
+            Kiwapp.log('The url params is required');
+        }
+
+        window.Kiwapp.driver().trigger('callApp', {
+            call: 'open_document_reader',
+            data: {
+                file_path: url
+            }
+        });
         return this;
     };</code></pre>
         </div>

@@ -1,9 +1,9 @@
 {
     "name": "kiwapp.js",
     "main": "./kiwapp.js",
-    "version": "1.6.5",
+    "version": "1.6.6",
     "homepage": "kiwapp.github.io/kiwapp.js",
-    "authors": ["Adrien Carta adrien@procheo.fr"],
+    "authors": ["Kiwapp contact@kiwapp.com"],
     "description": "The powerful Kiwapp bridge to native.",
     "keywords": ["Kiwapp"],
     "license": "GPL v2",
