@@ -323,18 +323,24 @@
     /**
      * Open a document in Kiwapp (work with PDF)
      * @param {string} url The document relative url
+     * @param {*} list of option  (see wiki for the complete list)
      * @returns {Driver}
      */
-    Driver.prototype.openPDF = function openPDF(url) {
+    Driver.prototype.openPDF = function openPDF(url, opts) {
         if (url === undefined) {
             Kiwapp.log('The url params is required');
         }
 
+        // Use the option as data if they exist
+        var data = {};
+        if(opts) {
+            data = opts;
+        }
+        data.file_path = url;
+
         window.Kiwapp.driver().trigger('callApp', {
             call: 'open_document_reader',
-            data: {
-                file_path: url
-            }
+            data: data
         });
         return this;
     };

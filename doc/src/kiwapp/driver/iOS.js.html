@@ -639,15 +639,25 @@
                 <td>string</td>
                 <td>The document relative url</td>
               </tr>
+              <tr>
+                <td>list</td>
+                <td>*</td>
+                <td>of option (see wiki for the complete list)</td>
+              </tr>
             </tbody>
           </table>
           <div class="description"><p>Open a document in Kiwapp (work with PDF)</p> </div>
-          <pre><code class="language-javascript">IOS.prototype.openPDF = function openPDF(url) {
+          <pre><code class="language-javascript">IOS.prototype.openPDF = function openPDF(url, opts) {
         if (url === undefined) {
             Kiwapp.log('The url params is required');
         }
 
-        var data =  {
+        var data = {};
+        if(opts) {
+            data = opts;
+        }
+
+        data =  {
             file_path: url
         };
         var key = Kiwapp.driver().generateKey();

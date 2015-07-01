@@ -293,14 +293,20 @@
     /**
      * Open a document in Kiwapp (work with PDF)
      * @param {string} url The document relative url
+     * @param {*} list of option  (see wiki for the complete list)
      * @returns {Driver}
      */
-    IOS.prototype.openPDF = function openPDF(url) {
+    IOS.prototype.openPDF = function openPDF(url, opts) {
         if (url === undefined) {
             Kiwapp.log('The url params is required');
         }
 
-        var data =  {
+        var data = {};
+        if(opts) {
+            data = opts;
+        }
+
+        data =  {
             file_path: url
         };
         var key = Kiwapp.driver().generateKey();
