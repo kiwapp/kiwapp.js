@@ -635,19 +635,29 @@
                 <td>string</td>
                 <td>The document relative url</td>
               </tr>
+              <tr>
+                <td>list</td>
+                <td>*</td>
+                <td>of option (see wiki for the complete list)</td>
+              </tr>
             </tbody>
           </table>
           <div class="description"><p>Open a document in Kiwapp (work with PDF)</p> </div>
-          <pre><code class="language-javascript">Driver.prototype.openPDF = function openPDF(url) {
+          <pre><code class="language-javascript">Driver.prototype.openPDF = function openPDF(url, opts) {
         if (url === undefined) {
             Kiwapp.log('The url params is required');
         }
 
+        // Use the option as data if they exist
+        var data = {};
+        if(opts) {
+            data = opts;
+        }
+        data.file_path = url;
+
         window.Kiwapp.driver().trigger('callApp', {
             call: 'open_document_reader',
-            data: {
-                file_path: url
-            }
+            data: data
         });
         return this;
     };</code></pre>
