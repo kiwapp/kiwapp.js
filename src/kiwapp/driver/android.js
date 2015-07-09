@@ -23,6 +23,10 @@
      * @override
      */
     AndroidDriver.prototype.exec = function exec(url) {
+        if(!window.Android) {
+            console.log('Android native bridge is not found, if you dev on broswer, think to remove the UA override');
+            return;
+        }
         window.Android.execute(url);
     };
 
