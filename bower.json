@@ -1,7 +1,7 @@
 {
     "name": "kiwapp.js",
     "main": "./kiwapp.js",
-    "version": "1.6.7",
+    "version": "1.6.9",
     "homepage": "kiwapp.github.io/kiwapp.js",
     "authors": ["Kiwapp contact@kiwapp.com"],
     "description": "The powerful Kiwapp bridge to native.",

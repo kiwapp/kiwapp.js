@@ -1054,13 +1054,18 @@ module.exports = function(val){
      * GetKDSWriterCredentials getter for kds credential object
      * @return object
      */
-    Kiwapp.getKDSWriterCredentials = function getKDSWriterCredentials() {
+    Kiwapp.getKDSWriterCredentials = function getKDSWriterCredentials(tabClass) {
         var object = Kiwapp.get().webHooksParameters;
         var kdsCredentials = {};
 
         if (object.KDS_INSTANCIATE_RESPONSE !== undefined) {
             try {
-                kdsCredentials = object.KDS_INSTANCIATE_RESPONSE.app;
+                if(tabClass !== undefined){
+                    kdsCredentials = object.KDS_INSTANCIATE_RESPONSE[tabClass];  
+                }
+                else{
+                   kdsCredentials = object.KDS_INSTANCIATE_RESPONSE.app; 
+                }                
             }
             catch (e) {
                 Kiwapp.log('Please verify your credential for writing in KDS');

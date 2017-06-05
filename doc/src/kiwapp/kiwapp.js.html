@@ -391,17 +391,22 @@
             <h1>getKDSWriterCredentials</h1>
             <h5 class="subheader"></h5>
             <p>
-              <div class="label label-info radius ctx-type">method</div><span>Kiwapp.getKDSWriterCredentials()</span> -><span>object</span>
+              <div class="label label-info radius ctx-type">method</div><span>Kiwapp.getKDSWriterCredentials(tabClass)</span> -><span>object</span>
             </p>
           </section>
           <div class="description"><p>KDS<br />GetKDSWriterCredentials getter for kds credential object</p> </div>
-          <pre><code class="language-javascript">Kiwapp.getKDSWriterCredentials = function getKDSWriterCredentials() {
+          <pre><code class="language-javascript">Kiwapp.getKDSWriterCredentials = function getKDSWriterCredentials(tabClass) {
         var object = Kiwapp.get().webHooksParameters;
         var kdsCredentials = {};
 
         if (object.KDS_INSTANCIATE_RESPONSE !== undefined) {
             try {
-                kdsCredentials = object.KDS_INSTANCIATE_RESPONSE.app;
+                if(tabClass !== undefined){
+                    kdsCredentials = object.KDS_INSTANCIATE_RESPONSE[tabClass];  
+                }
+                else{
+                   kdsCredentials = object.KDS_INSTANCIATE_RESPONSE.app; 
+                }                
             }
             catch (e) {
                 Kiwapp.log('Please verify your credential for writing in KDS');
