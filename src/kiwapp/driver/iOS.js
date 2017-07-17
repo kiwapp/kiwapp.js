@@ -307,16 +307,15 @@
         }
 
         data =  {
-            file_path: url
+            file_path: url,
+            local_storage_key: key
         };
         var key = Kiwapp.driver().generateKey();
         localStorage.setItem(key, JSON.stringify(data));
 
         window.Kiwapp.driver().trigger('callApp', {
             call: 'open_document_reader',
-            data: {
-                local_storage_key: key
-            }
+            data: data
         });
 
         return this;
