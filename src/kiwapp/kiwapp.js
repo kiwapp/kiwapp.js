@@ -152,6 +152,18 @@
     };
 
     /**
+     * Send tablet logs 
+     * This function will send tablet logs by mail
+     * @return {Kiwapp} Kiwapp
+     */
+    Kiwapp.sendLog = function sendLog(){
+        Kiwapp.driver().trigger('callApp', {
+            call: 'send_logs'
+        });
+        return Kiwapp;
+    };
+
+    /**
      * Enable or disable webview scrolling
      * @param {boolean} send true if you want enabled the native scroll on webview, false if you won't, default value is true
      * @return {Kiwapp} Kiwapp itself
